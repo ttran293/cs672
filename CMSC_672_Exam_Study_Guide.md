@@ -1,10 +1,5 @@
 # CMSC 672 Computer Vision: Exam Study Guide
 
-**Coverage:** Lectures 1–18, with the lecture 18a text-to-image deck included as a companion to image synthesis.  
-**Sources:** The local [slide decks](Slides/), the seven photos in [exam_review_material](exam_review_material/), and quizzes 1–5. Prepared November 20, 2026; formatting revised November 21, 2026.
-
-This is a study aid, not an official exam outline or answer key. The photographed review board explicitly emphasizes six areas: image formation, filtering, features, ML for CV, single-camera geometry, and multi-camera geometry. Lecture 18 is included because your stated scope is lectures 1–18 even though synthesis is not listed on the photographed board. Practice problems and worked answers below are explanations prepared for this guide.
-
 ## How to study with this guide
 
 For each topic, practice four things: **explain the idea, draw the geometry or pipeline, calculate a small example, and state the assumptions or failure cases.** Lecture 1 emphasizes conceptual understanding and drawing; the quizzes also ask for calculations and algorithm order.
