@@ -225,7 +225,7 @@ the box-filter output at the center is 10. The Gaussian approximation above give
 ### Gradients, sharpening, and thresholding
 
 $$
-\nabla I=(I_x,I_y)^T,\qquad |\nabla I|=\sqrt{I_x^2+I_y^2},\qquad \theta=\operatorname{atan2}(I_y,I_x).
+\nabla I=(I_x,I_y)^T,\qquad |\nabla I|=\sqrt{I_x^2+I_y^2},\qquad \theta=\mathrm{atan2}(I_y,I_x).
 $$
 
 Finite differences approximate derivatives. Derivatives also amplify noise, so smoothing before differentiation often improves edge detection. At $I_x=3,I_y=4$, gradient magnitude is 5 and direction is about 53.1° from the positive x axis.
@@ -286,7 +286,7 @@ Multiply spectra point by point, then inverse transform. A DFT implements circul
 
 1. **Laplacian derivative:** $\nabla^2 I=I_{xx}+I_{yy}$, a second-derivative operator. A smoothed version is $(\nabla^2G_\sigma)*I$.
 2. **High-frequency residual used in this lecture:** $I-G_\sigma*I$, original minus blurred image. This is the expression to recognize for the quiz prompt that gives only an image and a Gaussian blur kernel.
-3. **Laplacian pyramid band:** $L_k=G_k-\operatorname{Expand}(G_{k+1})$, subtracting the expanded next Gaussian level.
+3. **Laplacian pyramid band:** $L_k=G_k-\mathrm{Expand}(G_{k+1})$, subtracting the expanded next Gaussian level.
 
 They are related ways to expose detail but are not identical formulas. Follow the construction specified in the question.
 
@@ -295,13 +295,13 @@ They are related ways to expose detail but are not identical formulas. Follow th
 **Gaussian pyramid:** blur, then downsample at each level. Blurring first reduces aliasing; blurring after subsampling cannot undo aliasing already introduced.
 
 $$
-G_0=I,\qquad G_{k+1}=\operatorname{Downsample}(G_\sigma*G_k).
+G_0=I,\qquad G_{k+1}=\mathrm{Downsample}(G_\sigma*G_k).
 $$
 
 **Laplacian pyramid:** store a band of detail at each scale and keep the coarsest Gaussian image.
 
 $$
-L_k=G_k-\operatorname{Expand}(G_{k+1}),\qquad G_k=L_k+\operatorname{Expand}(G_{k+1}).
+L_k=G_k-\mathrm{Expand}(G_{k+1}),\qquad G_k=L_k+\mathrm{Expand}(G_{k+1}).
 $$
 
 Expansion includes upsampling and the appropriate interpolation filter, not merely inserting zeros. Reconstruction works by expanding the coarse image and adding the stored residuals.
@@ -368,7 +368,7 @@ For level sets E = 1, the ellipse's principal semi-axis lengths are proportional
 1. Compute $I_x,I_y$.
 2. Form $I_x^2,I_xI_y,I_y^2$.
 3. Smooth/sum these products over a local window to form M at each pixel.
-4. Require both eigenvalues to be sufficiently large, or use a corner score such as $R=\det(M)-k\operatorname{tr}(M)^2$.
+4. Require both eigenvalues to be sufficiently large, or use a corner score such as $R=\det(M)-k\mathrm{tr}(M)^2$.
 5. Threshold and perform spatial non-maximum suppression to keep isolated response peaks.
 
 The photos and slides emphasize eigenvalue thresholding. The determinant/trace expression is a useful equivalent scoring approach, not a replacement for understanding both eigenvalues.
@@ -691,7 +691,7 @@ The lecture's original YOLO example uses a 7 × 7 grid, 20 class scores, and 2 b
 ### Evaluation and duplicate removal
 
 $$
-\mathrm{IoU}(A,B)=\frac{\operatorname{Area}(A\cap B)}{\operatorname{Area}(A\cup B)}.
+\mathrm{IoU}(A,B)=\frac{\mathrm{Area}(A\cap B)}{\mathrm{Area}(A\cup B)}.
 $$
 
 ![Intersection over union measures bounding-box overlap](graphics/11-iou.png)
@@ -1093,7 +1093,7 @@ The goal is both plausible individual samples and coverage of the data's variati
 ### Autoencoders
 
 $$
-z=\operatorname{Encoder}(x),\qquad \hat x=\operatorname{Decoder}(z),\qquad
+z=\mathrm{Encoder}(x),\qquad \hat x=\mathrm{Decoder}(z),\qquad
 L_{\mathrm{rec}}=\|x-\hat x\|^2.
 $$
 
@@ -1189,7 +1189,7 @@ $\mathcal{F}(I*k)=\mathcal{F}(I)\mathcal{F}(k)$.
 Blur, then downsample.
 
 **Laplacian pyramid**  
-$L_k=G_k-\operatorname{Expand}(G_{k+1})$.
+$L_k=G_k-\mathrm{Expand}(G_{k+1})$.
 
 **Harris**  
 $E(u,v)\approx[u\ v]M[u\ v]^T$, with $M=\sum w\nabla I\nabla I^T$.
