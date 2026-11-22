@@ -1,5 +1,7 @@
 # CMSC 672 Computer Vision: Exam Study Guide
 
+[Read the fully rendered guide](CMSC_672_Exam_Study_Guide.html)
+
 ## How to study with this guide
 
 For each topic, practice four things: **explain the idea, draw the geometry or pipeline, calculate a small example, and state the assumptions or failure cases.** Lecture 1 emphasizes conceptual understanding and drawing; the quizzes also ask for calculations and algorithm order.
@@ -46,11 +48,11 @@ The board highlights **depth estimation** and **optical flow** with boxes. The M
 | Symbol | Meaning in this guide |
 |---|---|
 | I(x,y) | Image intensity at a pixel; color images have multiple channels. |
-| <img src="equations/inline-550945e22461.png" alt="I_x,I_y,I_t" width="66"> | Spatial and temporal intensity derivatives. |
-| <img src="equations/inline-573e104c31d6.png" alt="G_σ" width="29"> | Gaussian kernel with standard deviation <img src="equations/inline-9c3245dfb4ac.png" alt="σ" width="17">. |
-| <img src="equations/inline-5853b1d74758.png" alt="x=(u,v,1)^T" width="125"> | Homogeneous image point in pixel coordinates. |
-| <img src="equations/inline-7c25081c7fc7.png" alt="x_hat=K^(-1)x" width="91"> | Image point expressed in normalized camera coordinates. |
-| <img src="equations/inline-a479fe229da9.png" alt="X=(X,Y,Z,1)^T" width="152"> | Homogeneous 3D point. |
+| $I_x,I_y,I_t$ | Spatial and temporal intensity derivatives. |
+| $G_\sigma$ | Gaussian kernel with standard deviation $\sigma$. |
+| $\mathbf{x}=(u,v,1)^T$ | Homogeneous image point in pixel coordinates. |
+| $\hat{\mathbf{x}}=K^{-1}\mathbf{x}$ | Image point expressed in normalized camera coordinates. |
+| $\mathbf{X}=(X,Y,Z,1)^T$ | Homogeneous 3D point. |
 | H | 3 × 3 homography; also image height when discussing tensor sizes. Context matters. |
 | P | 3 × 4 camera projection matrix. |
 | K,R,t,C | Intrinsics, rotation, translation, and camera center. |
@@ -60,8 +62,8 @@ The board highlights **depth estimation** and **optical flow** with boxes. The M
 **Three recurring mathematical ideas:**
 
 - **Taylor approximation:** replace a function after a small displacement by its value plus its first derivatives. This connects Harris corners to optical flow.
-- **Least squares:** solve <img src="equations/inline-9fd88af77359.png" alt="Aθ ≈ b" width="68"> by minimizing <img src="equations/inline-f01fd76e501d.png" alt="norm(Aθ-b)^2" width="97">. If A has full column rank, the formal solution is <img src="equations/inline-8862ce40df58.png" alt="(A^TA)^(-1)A^Tb" width="116">; QR/SVD solvers avoid explicitly forming this inverse.
-- **Homogeneous least squares:** solve <img src="equations/inline-0a2af39cdf3a.png" alt="Aθ ≈ 0" width="68"> subject to <img src="equations/inline-743e8b5e4c29.png" alt="norm(θ)=1" width="74">. If <img src="equations/inline-010d6308b33a.png" alt="A = U Σ V^T" width="94">, choose the last column of V from a full SVD, associated with the smallest singular value/nullspace. The norm constraint excludes the trivial zero solution. Homographies, cameras, triangulation, and the eight-point algorithm all use this pattern.
+- **Least squares:** solve $A\theta\approx b$ by minimizing $\Vert A\theta-b\Vert ^2$. If A has full column rank, the formal solution is $(A^TA)^{-1}A^Tb$; QR/SVD solvers avoid explicitly forming this inverse.
+- **Homogeneous least squares:** solve $A\theta\approx0$ subject to $\Vert \theta\Vert =1$. If $A=U\Sigma V^T$, choose the last column of V from a full SVD, associated with the smallest singular value/nullspace. The norm constraint excludes the trivial zero solution. Homographies, cameras, triangulation, and the eight-point algorithm all use this pattern.
 
 For a symmetric matrix M, eigenvectors identify principal directions and eigenvalues identify variation along them. A large Harris eigenvalue means a large intensity change for shifts in that direction; it does not mean the corner itself has a large spatial extent.
 
@@ -99,7 +101,9 @@ An image is a measurement, not a complete description of reality. Projecting a 3
 
 Light travels from a scene point through a small aperture to an image plane. Similar triangles relate projected position to depth. Using a **virtual image plane in front of the camera**:
 
-<img src="equations/display-01.png" alt="Equation: u = fX / Z v = fY / Z" width="83">
+$$
+u=\frac{fX}{Z},\qquad v=\frac{fY}{Z}.
+$$
 
 Here, **u and v** are the horizontal and vertical positions in the image. **X and Y** locate the scene point relative to the camera, **Z** is its depth, and **f** is the focal length. Divide each scene coordinate by depth, then multiply by focal length to obtain its projected image coordinate.
 
@@ -120,13 +124,17 @@ On the physical image plane behind the pinhole, the image is inverted and the co
 
 A lens gathers more light while bringing rays from a focused object point together on the sensor. For a real object and real image under the positive-distance convention:
 
-<img src="equations/display-02.png" alt="Equation: 1/f = 1/s_o + 1/s_i s_i = f × s_o / (s_o − f)" width="118">
+$$
+\frac{1}{f}=\frac{1}{s_o}+\frac{1}{s_i},\qquad s_i=\frac{fs_o}{s_o-f}.
+$$
 
-Here <img src="equations/inline-154dc0434c59.png" alt="s_o" width="24"> is object-to-lens distance and <img src="equations/inline-c8ea458b12d6.png" alt="s_i" width="19"> is image-to-lens distance. Signed magnification is <img src="equations/inline-f50a6eb5e156.png" alt="m=-s_i/s_o" width="81">; the minus sign represents inversion. As <img src="equations/inline-26af77a99fdf.png" alt="s_o → ∞" width="65">, <img src="equations/inline-ffe87eabcf2c.png" alt="s_i → f" width="51">.
+Here $s_o$ is object-to-lens distance and $s_i$ is image-to-lens distance. Signed magnification is $m=-\frac{s_i}{s_o}$; the minus sign represents inversion. As $s_o\to\infty$, $s_i\to f$.
 
-**Worked example:** f = 50 mm, <img src="equations/inline-bbfb1f8b2136.png" alt="s_o=1000" width="99"> mm:
+**Worked example:** f = 50 mm, $s_o=1000$ mm:
 
-<img src="equations/display-03.png" alt="Equation: s_i = 50 × 1000 / (1000 − 50) ≈ 52.63 mm abs(m) ≈ 0.0526" width="268">
+$$
+s_i=\frac{50(1000)}{1000-50}\approx52.63\text{ mm},\qquad |m|\approx0.0526.
+$$
 
 To derive the lens relationship, draw the central ray that passes through the lens center and the ray parallel to the optical axis that passes through the focal point. Use similar triangles to relate the two image-height expressions.
 
@@ -141,12 +149,12 @@ To derive the lens relationship, draw the central ray that passes through the le
 | Depth of field, DoF | Range of object depths that are acceptably sharp for a focus setting. | Smaller aperture → greater DoF, other conditions held fixed. |
 | Field of view, FoV | Angular extent of the scene captured. | Shorter focal length → wider FoV for a fixed sensor. |
 
-For sensor width w, horizontal FoV is approximately <img src="equations/inline-aea8dfa4f340.png" alt="2arctan(w/(2f))" width="156">. A lens can have a wide FoV while still having shallow DoF. The heading on Lecture 2 p. 48 concerns FoV; do not confuse the slide's “DoF” text there with the field-of-view relationship.
+For sensor width w, horizontal FoV is approximately $2\arctan(w/(2f))$. A lens can have a wide FoV while still having shallow DoF. The heading on Lecture 2 p. 48 concerns FoV; do not confuse the slide's “DoF” text there with the field-of-view relationship.
 
 ### Color, sampling, and the Bayer pattern
 
 - Color sensation depends on the spectrum of light and the responses of three cone types. RGB is a three-component representation, not a complete wavelength spectrum.
-- A grayscale image is a 2D array; an RGB image has three channels. Common layouts are <img src="equations/inline-067374067d83.png" alt="H × W × 3" width="101"> and <img src="equations/inline-4fcc74eb4d16.png" alt="3 × H × W" width="101">.
+- A grayscale image is a 2D array; an RGB image has three channels. Common layouts are $H\times W\times3$ and $3\times H\times W$.
 - An 8-bit channel has 256 possible integer values, 0–255. Three channels use 24 bits per uncompressed pixel, before file-format overhead.
 - A standard Bayer color filter array has **50% green, 25% red, 25% blue** sensor sites. A site initially measures one filtered channel, not all three.
 - **Demosaicing** estimates missing channels using neighboring measurements; nearest-neighbor and bilinear interpolation are simple methods.
@@ -167,7 +175,9 @@ A point operation changes a pixel using its own value, such as brightness adjust
 
 For a kernel k, discrete convolution is
 
-<img src="equations/display-04.png" alt="Equation: (I * k)(x, y) = Σ_i Σ_j k(i, j) × I(x − i, y − j)" width="354">
+$$
+(I*k)(x,y)=\sum_i\sum_j k(i,j)I(x-i,y-j).
+$$
 
 Correlation uses I(x+i,y+j) instead. Convolution flips the kernel in both spatial axes. Symmetric Gaussian/box kernels give the same result under either operation; an asymmetric derivative kernel can change response sign. Many CNN implementations use correlation while calling it convolution.
 
@@ -175,7 +185,14 @@ Correlation uses I(x+i,y+j) instead. Convolution flips the kernel in both spatia
 
 ### Kernels to recognize
 
-<img src="equations/display-05.png" alt="Equation: Box blur Small Gaussian approximation [1 1 1] [1 2 1] (1/9) [1 1 1] (1/16) [2 4 2] [1 1 1] [1 2 1] x-derivative / vertical edges y-derivative / horizontal edges [-1 0 1] [-1 -1 -1] [-1 0 1] [ 0 0 0] [-1 0 1] [ 1 1 1] Sobel x Sobel y [-1 0 1] [-1 -2 -1] [-2 0 2] [ 0 0 0] [-1 0 1] [ 1 2 1]" width="212">
+$$
+\mathrm{Box\ blur:}\quad\frac{1}{9}\begin{bmatrix}1&1&1\\1&1&1\\1&1&1\end{bmatrix}
+\mathrm{Gaussian:}\quad\frac{1}{16}\begin{bmatrix}1&2&1\\2&4&2\\1&2&1\end{bmatrix}
+\mathrm{Vertical\ edges:}\quad\begin{bmatrix}-1&0&1\\-1&0&1\\-1&0&1\end{bmatrix}
+\mathrm{Horizontal\ edges:}\quad\begin{bmatrix}-1&-1&-1\\0&0&0\\1&1&1\end{bmatrix}
+\mathrm{Sobel}\ x:\quad\begin{bmatrix}-1&0&1\\-2&0&2\\-1&0&1\end{bmatrix}
+\mathrm{Sobel}\ y:\quad\begin{bmatrix}-1&-2&-1\\0&0&0\\1&2&1\end{bmatrix}
+$$
 
 An x derivative responds to intensity changes across the horizontal direction, so it detects **vertical edges**. An edge's tangent direction is perpendicular to the gradient.
 
@@ -187,15 +204,19 @@ The slide names filters by derivative direction. A horizontal intensity derivati
 
 ### Gaussian smoothing
 
-<img src="equations/display-06.png" alt="Equation: G_σ(x, y) = exp(−(x² + y²) / (2σ²)) / (2πσ²)" width="293">
+$$
+G_\sigma(x,y)=\frac{1}{2\pi\sigma^2}\exp\left(-\frac{x^2+y^2}{2\sigma^2}\right).
+$$
 
-Nearby pixels receive larger weights. Increasing <img src="equations/inline-9c3245dfb4ac.png" alt="σ" width="17"> increases blur and removes more fine detail. Truncated discrete kernels should be normalized to sum to 1 to preserve constant intensity away from boundaries. A Gaussian is separable into horizontal and vertical 1D filters.
+Nearby pixels receive larger weights. Increasing $\sigma$ increases blur and removes more fine detail. Truncated discrete kernels should be normalized to sum to 1 to preserve constant intensity away from boundaries. A Gaussian is separable into horizontal and vertical 1D filters.
 
 **Worked patch:** For
 
-<img src="equations/display-07.png" alt="Equation: [0 0 0] [0 90 0] [0 0 0]" width="114">
+$$
+\begin{bmatrix}0&0&0\\0&90&0\\0&0&0\end{bmatrix}
+$$
 
-the box-filter output at the center is 10. The Gaussian approximation above gives <img src="equations/inline-797b7cdbaa89.png" alt="4(90)/16=22.5" width="160">, because it gives more weight to the center.
+the box-filter output at the center is 10. The Gaussian approximation above gives $4(90)/16=22.5$, because it gives more weight to the center.
 
 ![Gaussian filter weights emphasize nearby pixels](graphics/03-gaussian-kernel.png)
 
@@ -203,15 +224,19 @@ the box-filter output at the center is 10. The Gaussian approximation above give
 
 ### Gradients, sharpening, and thresholding
 
-<img src="equations/display-08.png" alt="Equation: ∇I = [I_x, I_y]^T norm(∇I) = sqrt(I_x² + I_y²) θ = atan2(I_y, I_x)" width="178">
+$$
+\nabla I=(I_x,I_y)^T,\qquad |\nabla I|=\sqrt{I_x^2+I_y^2},\qquad \theta=\operatorname{atan2}(I_y,I_x).
+$$
 
-Finite differences approximate derivatives. Derivatives also amplify noise, so smoothing before differentiation often improves edge detection. At <img src="equations/inline-2a47e7ae52e6.png" alt="I_x=3,I_y=4" width="119">, gradient magnitude is 5 and direction is about 53.1° from the positive x axis.
+Finite differences approximate derivatives. Derivatives also amplify noise, so smoothing before differentiation often improves edge detection. At $I_x=3,I_y=4$, gradient magnitude is 5 and direction is about 53.1° from the positive x axis.
 
 Unsharp masking isolates detail and adds it back:
 
-<img src="equations/display-09.png" alt="Equation: D = I − G_σ * I I_sharp = I + αD" width="158">
+$$
+D=I-G_\sigma*I,\qquad I_{\mathrm{sharp}}=I+\alpha D.
+$$
 
-Thresholding produces a mask, for example B(x,y) = 1 when <img src="equations/inline-613d9f655156.png" alt="I(x,y)&gt;T" width="97">, otherwise 0. It discards intensity detail. It can reduce storage when the output is actually stored as packed binary values.
+Thresholding produces a mask, for example B(x,y) = 1 when $I(x,y)>T$, otherwise 0. It discards intensity detail. It can reduce storage when the output is actually stored as packed binary values.
 
 **Common mistakes:** forgetting blur normalization; claiming derivatives detect changes along the edge; confusing smoothing with sharpening; ignoring boundary padding.
 
@@ -221,11 +246,13 @@ Thresholding produces a mask, for example B(x,y) = 1 when <img src="equations/in
 
 ### What the Fourier transform represents
 
-An image is expressed as a combination of sinusoidal patterns at different frequencies, orientations, amplitudes, and phases. The 2D DFT of an <img src="equations/inline-754bcee66fcc.png" alt="M × N" width="61"> image can be written
+An image is expressed as a combination of sinusoidal patterns at different frequencies, orientations, amplitudes, and phases. The 2D DFT of an $M\times N$ image can be written
 
-<img src="equations/display-10.png" alt="Equation: F(u, v) = Σ_(x=0 to M−1) Σ_(y=0 to N−1) I(x, y) × exp(−2πi × (ux/M + vy/N))" width="386">
+$$
+F(u,v)=\sum_{x=0}^{M-1}\sum_{y=0}^{N-1}I(x,y)e^{-2\pi i(ux/M+vy/N)}.
+$$
 
-Write <img src="equations/inline-143af0827cfd.png" alt="F=abs(F)e^(iφ)" width="92">. **Magnitude** describes the strength of each frequency component; **phase** describes its alignment and is crucial to spatial structure. Both are required for exact reconstruction.
+Write $F=\vert F\vert e^{i\phi}$. **Magnitude** describes the strength of each frequency component; **phase** describes its alignment and is crucial to spatial structure. Both are required for exact reconstruction.
 
 In a centered spectrum (fftshift):
 
@@ -241,7 +268,9 @@ In a centered spectrum (fftshift):
 
 ### Convolution theorem and frequency filtering
 
-<img src="equations/display-11.png" alt="Equation: FT(I * k) = FT(I) × FT(k)" width="221">
+$$
+\mathcal{F}\{I*k\}=\mathcal{F}\{I\}\mathcal{F}\{k\}.
+$$
 
 Multiply spectra point by point, then inverse transform. A DFT implements circular convolution unless padding is used to obtain the intended linear convolution.
 
@@ -255,9 +284,9 @@ Multiply spectra point by point, then inverse transform. A DFT implements circul
 
 ### Three meanings that must be kept distinct
 
-1. **Laplacian derivative:** <img src="equations/inline-f8271cf6bd11.png" alt="∇^2 I=I_xx+I_yy" width="129">, a second-derivative operator. A smoothed version is <img src="equations/inline-20da0a74d074.png" alt="(∇^2G_σ)*I" width="92">.
-2. **High-frequency residual used in this lecture:** <img src="equations/inline-63901831d28e.png" alt="I-G_σ*I" width="84">, original minus blurred image. This is the expression to recognize for the quiz prompt that gives only an image and a Gaussian blur kernel.
-3. **Laplacian pyramid band:** <img src="equations/inline-fc1db49a4aa3.png" alt="L_k=G_k-Expand(G_(k+1))" width="238">, subtracting the expanded next Gaussian level.
+1. **Laplacian derivative:** $\nabla^2 I=I_{xx}+I_{yy}$, a second-derivative operator. A smoothed version is $(\nabla^2G_\sigma)*I$.
+2. **High-frequency residual used in this lecture:** $I-G_\sigma*I$, original minus blurred image. This is the expression to recognize for the quiz prompt that gives only an image and a Gaussian blur kernel.
+3. **Laplacian pyramid band:** $L_k=G_k-\operatorname{Expand}(G_{k+1})$, subtracting the expanded next Gaussian level.
 
 They are related ways to expose detail but are not identical formulas. Follow the construction specified in the question.
 
@@ -265,11 +294,15 @@ They are related ways to expose detail but are not identical formulas. Follow th
 
 **Gaussian pyramid:** blur, then downsample at each level. Blurring first reduces aliasing; blurring after subsampling cannot undo aliasing already introduced.
 
-<img src="equations/display-12.png" alt="Equation: G_0 = I G_(k+1) = Downsample(G_σ * G_k)" width="315">
+$$
+G_0=I,\qquad G_{k+1}=\operatorname{Downsample}(G_\sigma*G_k).
+$$
 
 **Laplacian pyramid:** store a band of detail at each scale and keep the coarsest Gaussian image.
 
-<img src="equations/display-13.png" alt="Equation: L_k = G_k − Expand(G_(k+1)) G_k = L_k + Expand(G_(k+1))" width="262">
+$$
+L_k=G_k-\operatorname{Expand}(G_{k+1}),\qquad G_k=L_k+\operatorname{Expand}(G_{k+1}).
+$$
 
 Expansion includes upsampling and the appropriate interpolation filter, not merely inserting zeros. Reconstruction works by expanding the coarse image and adding the stored residuals.
 
@@ -277,7 +310,7 @@ Expansion includes upsampling and the appropriate interpolation filter, not mere
 
 *[Lecture 4, PDF p. 64](Slides/04_image-filtering-ii.pdf) — Gaussian pyramid levels and Laplacian detail bands.*
 
-**Multiscale blending:** build Laplacian pyramids of images A,B and a Gaussian pyramid of mask M; combine each level as <img src="equations/inline-31de47c92cba.png" alt="L_k=M_kL^A_k+(1-M_k)L^B_k" width="223">; reconstruct. Smooth masks at coarse scales blend broad illumination, while finer bands retain detail. This reduces the visible seam of a hard cut.
+**Multiscale blending:** build Laplacian pyramids of images A,B and a Gaussian pyramid of mask M; combine each level as $L_k=M_kL^A_k+(1-M_k)L^B_k$; reconstruct. Smooth masks at coarse scales blend broad illumination, while finer bands retain detail. This reduces the visible seam of a hard cut.
 
 ![Combine image bands using masks at matching scales](graphics/04-pyramid-blending.png)
 
@@ -301,13 +334,20 @@ The pipeline is **detect → describe → match**. A detector locates a point; a
 
 Compare a window to itself after a small shift (u,v):
 
-<img src="equations/display-14.png" alt="Equation: E(u, v) = Σ_(x,y) w(x, y) × [I(x+u, y+v) − I(x, y)]²" width="440">
+$$
+E(u,v)=\sum_{x,y}w(x,y)[I(x+u,y+v)-I(x,y)]^2.
+$$
 
-For small shifts, <img src="equations/inline-161ae8dc8f69.png" alt="I(x+u,y+v) ≈ I(x,y)+I_xu+I_yv" width="317">. Therefore
+For small shifts, $I(x+u,y+v)\approx I(x,y)+I_xu+I_yv$. Therefore
 
-<img src="equations/display-15.png" alt="Equation: E(u, v) ≈ Σ w × (I_x u + I_y v)² = [u v] × M × [u v]^T" width="255">
+$$
+E(u,v)\approx\sum w(I_xu+I_yv)^2
+=\begin{bmatrix}u&v\end{bmatrix}M\begin{bmatrix}u\\v\end{bmatrix},
+$$
 
-<img src="equations/display-16.png" alt="Equation: [ I_x² I_x I_y ] M = Σ w × [ ] [ I_x I_y I_y² ]" width="194">
+$$
+M=\sum w\begin{bmatrix}I_x^2&I_xI_y\\I_xI_y&I_y^2\end{bmatrix}.
+$$
 
 M is the second-moment/structure matrix. Do not substitute the image Hessian of second derivatives for it.
 
@@ -317,7 +357,7 @@ M is the second-moment/structure matrix. Do not substitute the image Hessian of 
 | One large, one small | Edge | Shifting along the edge changes little. |
 | Both large | Corner | Shifting in any direction changes substantially. |
 
-For level sets E = 1, the ellipse's principal semi-axis lengths are proportional to <img src="equations/inline-f3758b55ada6.png" alt="1/sqrt(λ_i)" width="59">. A narrow error bowl means high sensitivity to displacement.
+For level sets E = 1, the ellipse's principal semi-axis lengths are proportional to $1/\sqrt{\lambda_i}$. A narrow error bowl means high sensitivity to displacement.
 
 ![Harris eigenvalues distinguish flat patches, edges, and corners](graphics/05-harris-eigenvalues.png)
 
@@ -325,10 +365,10 @@ For level sets E = 1, the ellipse's principal semi-axis lengths are proportional
 
 ### Detection recipe
 
-1. Compute <img src="equations/inline-68d4d96a31c2.png" alt="I_x,I_y" width="44">.
-2. Form <img src="equations/inline-0d7cfb4076d8.png" alt="I_x^2,I_xI_y,I_y^2" width="88">.
+1. Compute $I_x,I_y$.
+2. Form $I_x^2,I_xI_y,I_y^2$.
 3. Smooth/sum these products over a local window to form M at each pixel.
-4. Require both eigenvalues to be sufficiently large, or use a corner score such as <img src="equations/inline-63e910431577.png" alt="R=det(M)-ktr(M)^2" width="203">.
+4. Require both eigenvalues to be sufficiently large, or use a corner score such as $R=\det(M)-k\operatorname{tr}(M)^2$.
 5. Threshold and perform spatial non-maximum suppression to keep isolated response peaks.
 
 The photos and slides emphasize eigenvalue thresholding. The determinant/trace expression is a useful equivalent scoring approach, not a replacement for understanding both eigenvalues.
@@ -346,9 +386,9 @@ The photos and slides emphasize eigenvalue thresholding. The determinant/trace e
 - **Geometric changes:** translation, rotation, scale, viewpoint, perspective.
 - **Photometric changes:** exposure, brightness, contrast, illumination, color balance.
 
-Harris detection is covariant to translation and rotation under ideal conditions. An additive constant in intensity leaves derivatives unchanged; multiplying intensity by a scales M by <img src="equations/inline-f8ccb1fd0b12.png" alt="a^2" width="27">, so fixed thresholds are not generally contrast-invariant. A fixed-size Harris window is not scale-invariant.
+Harris detection is covariant to translation and rotation under ideal conditions. An additive constant in intensity leaves derivatives unchanged; multiplying intensity by a scales M by $a^2$, so fixed thresholds are not generally contrast-invariant. A fixed-size Harris window is not scale-invariant.
 
-For scale selection, examine multiple scales and find extrema both spatially and across scale. A characteristic scale is where an appropriate scale-normalized response peaks. A common response is <img src="equations/inline-ce4d4e9d0e61.png" alt="σ^2∇^2(G_σ*I)" width="115">. Difference-of-Gaussians provides an efficient related scale-space construction.
+For scale selection, examine multiple scales and find extrema both spatially and across scale. A characteristic scale is where an appropriate scale-normalized response peaks. A common response is $\sigma^2\nabla^2(G_\sigma*I)$. Difference-of-Gaussians provides an efficient related scale-space construction.
 
 **Distinguish:** a Laplacian pyramid stores residual image bands; a scale-space blob detector searches responses for characteristic extrema. Both use multiple scales, but their outputs and purposes differ.
 
@@ -364,7 +404,7 @@ SIFT normalizes local appearance with respect to scale and orientation, then des
 4. Create an orientation histogram.
 5. Shift the histogram bins so that the dominant bin is first.
 
-The full descriptor uses a 4 × 4 grid of cells with 8 orientation bins each: **<img src="equations/inline-bdbf6e994261.png" alt="4 × 4 × 8=128" width="154"> dimensions**. Spatial cells preserve rough arrangement, improving distinctiveness compared with a single histogram. Orientation normalization handles rotation; scale selection handles resizing; descriptor normalization helps with contrast changes.
+The full descriptor uses a 4 × 4 grid of cells with 8 orientation bins each: **$4\times4\times8=128$ dimensions**. Spatial cells preserve rough arrangement, improving distinctiveness compared with a single histogram. Orientation normalization handles rotation; scale selection handles resizing; descriptor normalization helps with contrast changes.
 
 The slides describe edge orientation as gradient angle minus 90°. Standard descriptions often histogram gradient orientations instead. These directions differ by a fixed right angle; be consistent with the question's convention. The five-step quiz version is a simplified descriptor recipe, not the entire scale-space keypoint detector.
 
@@ -374,15 +414,17 @@ The slides describe edge orientation as gradient angle minus 90°. Standard desc
 
 ### Matching and ambiguity
 
-For descriptors f,g, Euclidean distance is <img src="equations/inline-b45cbf735c2e.png" alt="norm(f-g)_2" width="78">. A small absolute distance can still be ambiguous when many features look alike.
+For descriptors f,g, Euclidean distance is $\Vert f-g\Vert _2$. A small absolute distance can still be ambiguous when many features look alike.
 
 The nearest-neighbor ratio is
 
-<img src="equations/display-17.png" alt="Equation: r = d(f, g_best) / d(f, g_second)" width="140">
+$$
+r=\frac{d(f,g_{\mathrm{best}})}{d(f,g_{\mathrm{second}})}.
+$$
 
-Accept if <img src="equations/inline-d4ccdadd9a27.png" alt="r&lt;τ" width="49">. A small ratio means the best candidate is substantially better than the runner-up; a ratio near 1 indicates ambiguity. A ratio threshold is not a probability. Keep distance definitions consistent: a threshold for Euclidean distances is not numerically the same as one for squared distances.
+Accept if $r<\tau$. A small ratio means the best candidate is substantially better than the runner-up; a ratio near 1 indicates ambiguity. A ratio threshold is not a probability. Keep distance definitions consistent: a threshold for Euclidean distances is not numerically the same as one for squared distances.
 
-**Example:** distances 10 and 12 give <img src="equations/inline-e153267f923a.png" alt="r ≈ 0.833" width="94">; distances 10 and 40 give r = 0.25. At <img src="equations/inline-8f16c76e03a0.png" alt="τ=0.7" width="71">, only the second pair is accepted. RANSAC later checks geometric consistency of accepted matches.
+**Example:** distances 10 and 12 give $r\approx0.833$; distances 10 and 40 give r = 0.25. At $\tau=0.7$, only the second pair is accepted. RANSAC later checks geometric consistency of accepted matches.
 
 ![Compare the best descriptor match with the runner-up to reject ambiguity](graphics/06-ratio-test.png)
 
@@ -390,13 +432,17 @@ Accept if <img src="equations/inline-d4ccdadd9a27.png" alt="r&lt;τ" width="49">
 
 ### Evaluation
 
-<img src="equations/display-18.png" alt="Equation: Precision = TP / (TP + FP) Recall = TPR = TP / (TP + FN) FPR = FP / (FP + TN)" width="232">
+$$
+\mathrm{Precision}=\frac{TP}{TP+FP},\qquad
+\mathrm{Recall}=\mathrm{TPR}=\frac{TP}{TP+FN},\qquad
+\mathrm{FPR}=\frac{FP}{FP+TN}.
+$$
 
 An ROC curve plots TPR against FPR as the acceptance threshold varies. Higher ROC AUC is better; 1 is ideal. Precision–recall curves instead show the fraction of accepted matches that are correct versus the fraction of true matches recovered.
 
 When accepting distances **below** a threshold, increasing that threshold admits more matches, so both TP and FP counts can increase. Recall cannot decrease for a fixed scored candidate set; precision need not change monotonically.
 
-**Slide example:** Of 800 true and 200 false candidate matches, accept 600 true and 100 false. Recall <img src="equations/inline-dc5b73c75440.png" alt="=600/800=0.75" width="179">, FPR <img src="equations/inline-47eb5ede8607.png" alt="=100/200=0.5" width="168">, precision <img src="equations/inline-c64a2c3193fb.png" alt="=600/700 ≈ 0.857" width="189">. FPR and 1-precision have different denominators.
+**Slide example:** Of 800 true and 200 false candidate matches, accept 600 true and 100 false. Recall $=600/800=0.75$, FPR $=100/200=0.5$, precision $=600/700\approx0.857$. FPR and 1-precision have different denominators.
 
 ## Lecture 7: Machine learning for computer vision
 
@@ -415,13 +461,15 @@ Nearest-neighbor classification predicts using a nearby training example under a
 
 ### Linear and polynomial regression
 
-For <img src="equations/inline-1e23b3befecb.png" alt="y_hat = w^T x + b" width="117">, least squares minimizes
+For $\hat y=w^Tx+b$, least squares minimizes
 
-<img src="equations/display-19.png" alt="Equation: L(w, b) = (1/N) × Σ_(i=1 to N) (y_hat_i − y_i)²" width="245">
+$$
+L(w,b)=\frac{1}{N}\sum_{i=1}^N(\hat y_i-y_i)^2.
+$$
 
-Put a constant 1 into each feature vector to absorb the bias, then use a design matrix X. The least-squares solution is <img src="equations/inline-db59b7da0e58.png" alt="X^+y" width="49">; if <img src="equations/inline-9e27e4763f42.png" alt="X^TX" width="42"> is invertible, it is <img src="equations/inline-b45e7e05d34c.png" alt="(X^TX)^(-1)X^Ty" width="115">.
+Put a constant 1 into each feature vector to absorb the bias, then use a design matrix X. The least-squares solution is $X^+y$; if $X^TX$ is invertible, it is $(X^TX)^{-1}X^Ty$.
 
-Polynomial regression uses features such as <img src="equations/inline-01999b891fe2.png" alt="[1,x,x^2,...,x^d]" width="150">. It is nonlinear in the input x but linear in its learned coefficients. Increasing degree increases capacity and can cause overfitting.
+Polynomial regression uses features such as $[1,x,x^2,\ldots,x^d]$. It is nonlinear in the input x but linear in its learned coefficients. Increasing degree increases capacity and can cause overfitting.
 
 ![Learning selects parameters by minimizing prediction error](graphics/07-least-squares.png)
 
@@ -429,11 +477,13 @@ Polynomial regression uses features such as <img src="equations/inline-01999b891
 
 ### Classification and loss
 
-A linear classifier computes scores z = Wx+b. For C classes, W has shape <img src="equations/inline-3142a3d1b1e7.png" alt="C × D" width="58"> when <img src="equations/inline-8c9c7d96cc31.png" alt="x ∈ R^D" width="68"> is a column vector.
+A linear classifier computes scores z = Wx+b. For C classes, W has shape $C\times D$ when $x\in\mathbb{R}^D$ is a column vector.
 
-<img src="equations/display-20.png" alt="Equation: p_c = exp(z_c) / Σ_j exp(z_j) L = −Σ_c y_c × log(p_c)" width="174">
+$$
+p_c=\frac{e^{z_c}}{\sum_j e^{z_j}},\qquad L=-\sum_c y_c\log p_c.
+$$
 
-For a one-hot target, cross-entropy is <img src="equations/inline-05c3eb63a912.png" alt="-log p_true" width="97">. A correct-class probability of 0.8 gives loss about 0.223; 0.1 gives about 2.303. Softmax converts logits to a probability vector; cross-entropy compares that vector with the target. Cross-entropy being a useful surrogate does not make neural-network training convex in all network parameters.
+For a one-hot target, cross-entropy is $-\log p_{\mathrm{true}}$. A correct-class probability of 0.8 gives loss about 0.223; 0.1 gives about 2.303. Softmax converts logits to a probability vector; cross-entropy compares that vector with the target. Cross-entropy being a useful surrogate does not make neural-network training convex in all network parameters.
 
 ### Generalization
 
@@ -457,13 +507,17 @@ Training data fit parameters; validation data guide choices such as learning rat
 
 A neuron computes
 
-<img src="equations/display-21.png" alt="Equation: z = w^T x + b a = φ(z)" width="139">
+$$
+z=w^Tx+b,\qquad a=\phi(z).
+$$
 
 The weights select a direction in feature space, the bias shifts the threshold, and the activation introduces nonlinearity. Common activations are the step function, sigmoid, tanh, and ReLU max(0,z).
 
 Stacked layers form a composition. For example,
 
-<img src="equations/display-22.png" alt="Equation: f(x) = W_2 × φ(W_1 x + b_1) + b_2" width="280">
+$$
+f(x)=W_2\phi(W_1x+b_1)+b_2.
+$$
 
 Without nonlinear activations, multiple affine layers collapse into one affine map. Depth alone would not create nonlinear decision boundaries. XOR illustrates the need: its two positive examples cannot be separated from its two negative examples by one line, but a network with nonlinear hidden units can represent it.
 
@@ -473,13 +527,15 @@ Without nonlinear activations, multiple affine layers collapse into one affine m
 
 ### Parameter counting
 
-A fully connected layer from <img src="equations/inline-471804aeef88.png" alt="n_in" width="30"> to <img src="equations/inline-416f1ae178bc.png" alt="n_out" width="41"> has
+A fully connected layer from $n_{\mathrm{in}}$ to $n_{\mathrm{out}}$ has
 
-<img src="equations/display-23.png" alt="Equation: Parameters = n_in × n_out + n_out = (n_in + 1) × n_out" width="291">
+$$
+n_{\mathrm{in}}n_{\mathrm{out}}+n_{\mathrm{out}}=(n_{\mathrm{in}}+1)n_{\mathrm{out}}
+$$
 
 trainable parameters when each output has a bias. The input values themselves are not trainable parameters.
 
-**Examples:** A <img src="equations/inline-581881cdc1b2.png" alt="256 → 128" width="105"> layer has 256(128)+128 = 32,896 parameters. A <img src="equations/inline-d071f895820b.png" alt="3 → 4 → 2" width="92"> network has (3+1)4+(4+1)2 = 26. Count each layer separately, including each layer's biases.
+**Examples:** A $256\to128$ layer has 256(128)+128 = 32,896 parameters. A $3\to4\to2$ network has (3+1)4+(4+1)2 = 26. Count each layer separately, including each layer's biases.
 
 **ImageNet/AlexNet:** Understand why a large labeled dataset, computation, and trainable hierarchical representations helped image recognition. The exam-relevant idea is the learned representation and training setup, rather than memorizing every historical detail.
 
@@ -495,9 +551,11 @@ trainable parameters when each output has a bias. The input values themselves ar
 4. Optimizer step: update parameters.
 5. Repeat over training batches; check validation behavior.
 
-<img src="equations/display-24.png" alt="Equation: θ_new = θ − η × ∇_θ L" width="178">
+$$
+\theta_{\mathrm{new}}=\theta-\eta\nabla_\theta L.
+$$
 
-The gradient points toward local steepest increase; its negative points toward decrease. The learning rate <img src="equations/inline-59a94416a2a3.png" alt="η" width="17"> controls step size. Too small can make progress slow; too large can overshoot, oscillate, or diverge. Slow progress alone does not prove the learning rate is the only problem.
+The gradient points toward local steepest increase; its negative points toward decrease. The learning rate $\eta$ controls step size. Too small can make progress slow; too large can overshoot, oscillate, or diverge. Slow progress alone does not prove the learning rate is the only problem.
 
 - Batch GD uses the full dataset per update.
 - SGD uses one example per update in its strict meaning.
@@ -509,13 +567,20 @@ The gradient points toward local steepest increase; its negative points toward d
 
 ### Backpropagation is the chain rule
 
-For a scalar neuron z = wx+b, <img src="equations/inline-00e3bee005d4.png" alt="a=φ(z)" width="81">, <img src="equations/inline-f6af1d0f7963.png" alt="L=(1/2)(a-y)^2" width="125">:
+For a scalar neuron z = wx+b, $a=\phi(z)$, $L=\frac{1}{2}(a-y)^2$:
 
-<img src="equations/display-25.png" alt="Equation: ∂L/∂w = (a − y) × φ&#x27;(z) × x ∂L/∂b = (a − y) × φ&#x27;(z)" width="196">
+$$
+\frac{\partial L}{\partial w}=(a-y)\phi'(z)x,\qquad
+\frac{\partial L}{\partial b}=(a-y)\phi'(z).
+$$
 
-For an affine layer z = Wx+b with upstream derivative <img src="equations/inline-ca4e4a62255e.png" alt="δ=∂ L/∂ z" width="59">:
+For an affine layer z = Wx+b with upstream derivative $\delta=\frac{\partial L}{\partial z}$:
 
-<img src="equations/display-26.png" alt="Equation: ∂L/∂W = δ x^T ∂L/∂b = δ ∂L/∂x = W^T δ" width="114">
+$$
+\frac{\partial L}{\partial W}=\delta x^T,\qquad
+\frac{\partial L}{\partial b}=\delta,\qquad
+\frac{\partial L}{\partial x}=W^T\delta.
+$$
 
 At a branch in a computation graph, sum the gradient contributions from all downstream paths. Backprop computes gradients; gradient descent uses them to change parameters. They are not synonymous.
 
@@ -523,9 +588,9 @@ At a branch in a computation graph, sum the gradient contributions from all down
 
 *[Lecture 9, PDF p. 80](Slides/09_ml-for-cv-iii.pdf) — The chain rule reuses downstream derivatives during backpropagation.*
 
-**Worked update:** Let <img src="equations/inline-b896c82c0888.png" alt="y_hat=wx+b" width="107">, x = 2, y = 5, w = 1, b = 0, and <img src="equations/inline-6151d58eb6e6.png" alt="L=(1/2)(y_hat-y)^2" width="126">. Then <img src="equations/inline-9c6130449cee.png" alt="y_hat=2" width="54">, L = 4.5, <img src="equations/inline-33c6c94f95a1.png" alt="∂ L/∂ w=-6" width="80">, and <img src="equations/inline-296902b575fa.png" alt="∂ L/∂ b=-3" width="77">. With <img src="equations/inline-78dc49d4d7e9.png" alt="η=0.1" width="74">, the simultaneous updates are w = 1.6, b = 0.3. The new prediction is 3.5, closer to 5.
+**Worked update:** Let $\hat y=wx+b$, x = 2, y = 5, w = 1, b = 0, and $L=\frac{1}{2}(\hat y-y)^2$. Then $\hat y=2$, L = 4.5, $\frac{\partial L}{\partial w}=-6$, and $\frac{\partial L}{\partial b}=-3$. With $\eta=0.1$, the simultaneous updates are w = 1.6, b = 0.3. The new prediction is 3.5, closer to 5.
 
-**Common mistakes:** adding the gradient; dropping the learning rate; forgetting an activation derivative; mixing loss conventions with and without the <img src="equations/inline-d939926f0544.png" alt="1/2" width="36"> factor; updating one parameter before computing the other gradient from the same forward pass.
+**Common mistakes:** adding the gradient; dropping the learning rate; forgetting an activation derivative; mixing loss conventions with and without the $1/2$ factor; updating one parameter before computing the other gradient from the same forward pass.
 
 ## Lecture 10: Convolutional neural networks
 
@@ -543,25 +608,33 @@ Early layers can learn edges/textures; later layers combine features into more t
 
 ### Output dimensions and parameters
 
-For input <img src="equations/inline-27f3c384c32b.png" alt="H × W × C_in" width="116">, kernel <img src="equations/inline-49fff4943a1d.png" alt="K_h × K_w" width="77">, symmetric padding <img src="equations/inline-8aba55730045.png" alt="P_h,P_w" width="60">, strides <img src="equations/inline-2c3e3fa94835.png" alt="S_h,S_w" width="62">, and dilation 1:
+For input $H\times W\times C_{\mathrm{in}}$, kernel $K_h\times K_w$, symmetric padding $P_h,P_w$, strides $S_h,S_w$, and dilation 1:
 
-<img src="equations/display-27.png" alt="Equation: H_out = floor((H + 2P_h − K_h) / S_h) + 1" width="234">
+$$
+H_{\mathrm{out}}=\left\lfloor\frac{H+2P_h-K_h}{S_h}\right\rfloor+1,
+$$
 
-<img src="equations/display-28.png" alt="Equation: W_out = floor((W + 2P_w − K_w) / S_w) + 1" width="246">
+$$
+W_{\mathrm{out}}=\left\lfloor\frac{W+2P_w-K_w}{S_w}\right\rfloor+1.
+$$
 
-Output channels equal the number of filters, <img src="equations/inline-a0a1c6308a53.png" alt="C_out" width="42">. Trainable parameters are
+Output channels equal the number of filters, $C_{\mathrm{out}}$. Trainable parameters are
 
-<img src="equations/display-29.png" alt="Equation: Parameters = (K_h × K_w × C_in + 1) × C_out" width="194">
+$$
+(K_hK_wC_{\mathrm{in}}+1)C_{\mathrm{out}}.
+$$
 
 Use the floor when the last stride does not land exactly at the boundary. Padding is added on both sides. Parameter count does not grow with input image width/height, because weights are shared.
 
 **Quiz-sized example:** H = W = 7, K = 4, S = 3, P = 2:
 
-<img src="equations/display-30.png" alt="Equation: H_out = W_out = floor((7 + 4 − 4) / 3) + 1 = 3" width="372">
+$$
+H_{\mathrm{out}}=W_{\mathrm{out}}=\lfloor(7+4-4)/3\rfloor+1=3.
+$$
 
 The padded input has width 11; valid kernel starts are 0, 3, and 6. The output is 3 × 3 per filter.
 
-**Full example:** 32 × 32 × 3 input, sixteen 3 × 3 filters, stride 1, padding 1 → 32 × 32 × 16 output and <img src="equations/inline-7a057e1e1db4.png" alt="(3 × 3 × 3+1)16=448" width="212"> parameters. A following 2 × 2 max-pool with stride 2 gives 16 × 16 × 16 and no learned weights. Flattening gives 4,096 values; a dense layer to 10 classes has 4096(10)+10 = 40,970 parameters.
+**Full example:** 32 × 32 × 3 input, sixteen 3 × 3 filters, stride 1, padding 1 → 32 × 32 × 16 output and $(3\cdot3\cdot3+1)16=448$ parameters. A following 2 × 2 max-pool with stride 2 gives 16 × 16 × 16 and no learned weights. Flattening gives 4,096 values; a dense layer to 10 classes has 4096(10)+10 = 40,970 parameters.
 
 ### Pooling and convolution variants
 
@@ -609,7 +682,7 @@ Detection predicts **what** and **where**, potentially for multiple objects. A p
 
 **RoI pooling** divides a proposed feature-map region into a fixed grid and pools each bin. Different region sizes become fixed-size features. An **anchor** is a reference box used for objectness and box-offset predictions; it is not the 3 × 3 feature window itself.
 
-The lecture's original YOLO example uses a 7 × 7 grid, 20 class scores, and 2 boxes with 5 values each: <img src="equations/inline-d494102ead1a.png" alt="7 × 7 × [20+2(5)]=7 × 7 × 30" width="310">.
+The lecture's original YOLO example uses a 7 × 7 grid, 20 class scores, and 2 boxes with 5 values each: $7\times7\times[20+2(5)]=7\times7\times30$.
 
 ![Fast R-CNN shares convolutional features across region proposals](graphics/11-fast-rcnn.png)
 
@@ -617,7 +690,9 @@ The lecture's original YOLO example uses a 7 × 7 grid, 20 class scores, and 2 b
 
 ### Evaluation and duplicate removal
 
-<img src="equations/display-31.png" alt="Equation: IoU(A, B) = Area(A ∩ B) / Area(A ∪ B)" width="220">
+$$
+\mathrm{IoU}(A,B)=\frac{\operatorname{Area}(A\cap B)}{\operatorname{Area}(A\cup B)}.
+$$
 
 ![Intersection over union measures bounding-box overlap](graphics/11-iou.png)
 
@@ -632,7 +707,7 @@ A correct detection requires the correct class and sufficient overlap under the 
 
 **Greedy non-maximum suppression:** within a class, keep the highest-score box, suppress remaining boxes with excessive IoU with it, and repeat. NMS reduces duplicate detections. Its overlap threshold and the evaluation IoU threshold serve different purposes.
 
-**IoU example:** Two 2 × 2 boxes overlap in a 1 × 2 rectangle. Intersection = 2; union = 4+4-2 = 6; IoU = <img src="equations/inline-0d7f0e336166.png" alt="1/3" width="37">.
+**IoU example:** Two 2 × 2 boxes overlap in a 1 × 2 rectangle. Intersection = 2; union = 4+4-2 = 6; IoU = $1/3$.
 
 ## Lecture 12: Image transformations
 
@@ -640,19 +715,25 @@ A correct detection requires the correct class and sufficient overlap under the 
 
 ### Homogeneous coordinates
 
-Represent (x,y) by <img src="equations/inline-45e59c6d4dc8.png" alt="(x,y,1)^T" width="86">. Any nonzero scalar multiple represents the same point: <img src="equations/inline-9dbd436274c0.png" alt="(2x,2y,2)^T ∼ (x,y,1)^T" width="218">. Convert <img src="equations/inline-8f385476ff0b.png" alt="(a,b,c)^T" width="86"> back to Cartesian coordinates as <img src="equations/inline-f0409d69f608.png" alt="(a/c,b/c)" width="91"> if <img src="equations/inline-cedacecd0f8b.png" alt="c ≠ 0" width="53">. A nonzero vector with last coordinate 0 represents a point at infinity; the all-zero vector is invalid.
+Represent (x,y) by $(x,y,1)^T$. Any nonzero scalar multiple represents the same point: $(2x,2y,2)^T\sim(x,y,1)^T$. Convert $(a,b,c)^T$ back to Cartesian coordinates as $(a/c,b/c)$ if $c\ne0$. A nonzero vector with last coordinate 0 represents a point at infinity; the all-zero vector is invalid.
 
 Translation cannot be represented by a 2 × 2 linear matrix acting on (x,y) because a linear map must send the origin to the origin. Adding the homogeneous coordinate makes translation a matrix operation.
 
 ### Matrices to write from memory
 
-<img src="equations/display-32.png" alt="Equation: Translation: Scaling: T = [ 1 0 t_x ] S = [ s_x 0 0 ] [ 0 1 t_y ] [ 0 s_y 0 ] [ 0 0 1 ] [ 0 0 1 ]" width="221">
+$$
+T(t_x,t_y)=\begin{bmatrix}1&0&t_x\\0&1&t_y\\0&0&1\end{bmatrix},\quad
+S(s_x,s_y)=\begin{bmatrix}s_x&0&0\\0&s_y&0\\0&0&1\end{bmatrix},
+$$
 
-<img src="equations/display-33.png" alt="Equation: Rotation: Horizontal shear: R = [ cos θ −sin θ 0 ] Shear_x = [ 1 a 0 ] [ sin θ cos θ 0 ] [ 0 1 0 ] [ 0 0 1 ] [ 0 0 1 ]" width="257">
+$$
+R(\theta)=\begin{bmatrix}\cos\theta&-\sin\theta&0\\\sin\theta&\cos\theta&0\\0&0&1\end{bmatrix},\quad
+\mathrm{Shear}_x(a)=\begin{bmatrix}1&a&0\\0&1&0\\0&0&1\end{bmatrix}.
+$$
 
 The rotation above is counterclockwise in mathematical coordinates with y increasing upward. Displayed image coordinates often increase downward, which changes the visual interpretation of the sign.
 
-With column vectors, the **rightmost transform acts first**. Scale, then rotate, then translate is <img src="equations/inline-21556bd4232c.png" alt="x&#x27;=TRSx" width="98">. Rotation about a point c is T(c)RT(-c). In general, <img src="equations/inline-560da1742c40.png" alt="TR ≠ RT" width="81">.
+With column vectors, the **rightmost transform acts first**. Scale, then rotate, then translate is $\mathbf{x}'=TRS\mathbf{x}$. Rotation about a point c is T(c)RT(-c). In general, $TR\ne RT$.
 
 ![With column vectors, the rightmost transformation acts first](graphics/12-transform-composition.png)
 
@@ -664,11 +745,11 @@ With column vectors, the **rightmost transform acts first**. Scale, then rotate,
 
 | Family | Form | Degrees of freedom | What is preserved? |
 |---|---|---:|---|
-| Translation | <img src="equations/inline-72d4043b01a6.png" alt="x&#x27;=x+t" width="90"> | 2 | Lengths, angles, orientation, parallelism. |
-| Euclidean/rigid | <img src="equations/inline-281e635a4418.png" alt="x&#x27;=Rx+t" width="104"> | 3 | Lengths, angles, parallelism. |
-| Similarity | <img src="equations/inline-7785f66a9def.png" alt="x&#x27;=sRx+t" width="115"> | 4 | Angles, length ratios, parallelism, circles. |
-| Affine | <img src="equations/inline-c152458638b5.png" alt="x&#x27;=Ax+t" width="104"> | 6 | Lines, parallelism, ratios along a line. Angles/lengths generally change. |
-| Projective/homography | <img src="equations/inline-90b4b14b0b49.png" alt="x&#x27; ∼ Hx" width="73"> | 8 | Lines and incidence; cross-ratios along a line. Parallelism generally changes. |
+| Translation | $x'=x+t$ | 2 | Lengths, angles, orientation, parallelism. |
+| Euclidean/rigid | $x'=Rx+t$ | 3 | Lengths, angles, parallelism. |
+| Similarity | $x'=sRx+t$ | 4 | Angles, length ratios, parallelism, circles. |
+| Affine | $x'=Ax+t$ | 6 | Lines, parallelism, ratios along a line. Angles/lengths generally change. |
+| Projective/homography | $x'\sim Hx$ | 8 | Lines and incidence; cross-ratios along a line. Parallelism generally changes. |
 
 The similarity family has **4** DoF in 2D: scale 1 + rotation 1 + translation 2. Some overview slide labels are inconsistent; count independent parameters rather than memorizing the label.
 
@@ -680,25 +761,32 @@ Assume nonsingular transforms. General projective transforms need not preserve c
 
 ### Affine estimation
 
-For a correspondence <img src="equations/inline-38c86021fb83.png" alt="(x,y) ↔ (u,v)" width="129">,
+For a correspondence $(x,y)\leftrightarrow(u,v)$,
 
-<img src="equations/display-34.png" alt="Equation: u = ax + by + t_x v = cx + dy + t_y" width="180">
+$$
+u=ax+by+t_x,\qquad v=cx+dy+t_y.
+$$
 
-Stack equations for the six unknowns <img src="equations/inline-5e3d4eb518d1.png" alt="(a,b,t_x,c,d,t_y)" width="153">. Each pair supplies two equations. **Three non-collinear pairs** suffice in the ideal case; use more and least squares with noisy data. Collinear data do not constrain a general 2D affine transformation fully.
+Stack equations for the six unknowns $(a,b,t_x,c,d,t_y)$. Each pair supplies two equations. **Three non-collinear pairs** suffice in the ideal case; use more and least squares with noisy data. Collinear data do not constrain a general 2D affine transformation fully.
 
 ### Applying and estimating a homography
 
-Let <img src="equations/inline-af016ae43814.png" alt="H=[h_ij]" width="81">. Then
+Let $H=[h_{ij}]$. Then
 
-<img src="equations/display-35.png" alt="Equation: u = (h_11 x + h_12 y + h_13) / (h_31 x + h_32 y + h_33) v = (h_21 x + h_22 y + h_23) / (h_31 x + h_32 y + h_33)" width="184">
+$$
+u=\frac{h_{11}x+h_{12}y+h_{13}}{h_{31}x+h_{32}y+h_{33}},\qquad
+v=\frac{h_{21}x+h_{22}y+h_{23}}{h_{31}x+h_{32}y+h_{33}}.
+$$
 
 The denominator is essential. A 3 × 3 matrix has 9 entries but overall scale is irrelevant, so a homography has 8 DoF. **Four pairs in general position** provide the minimum: no three of the four should be collinear, in either image.
 
-For row-major <img src="equations/inline-c6ed45797697.png" alt="h=(h_11,h_12,h_13,h_21,h_22,h_23,h_31,h_32,h_33)^T" width="428">, each pair contributes two DLT rows:
+For row-major $h=(h_{11},h_{12},h_{13},h_{21},h_{22},h_{23},h_{31},h_{32},h_{33})^T$, each pair contributes two DLT rows:
 
-<img src="equations/display-36.png" alt="Equation: [x y 1 0 0 0 -u*x -u*y -u] [0 0 0 x y 1 -v*x -v*y -v]" width="313">
+$$
+\begin{bmatrix}x&y&1&0&0&0&-ux&-uy&-u\\0&0&0&x&y&1&-vx&-vy&-v\end{bmatrix}
+$$
 
-Stack rows into A, solve <img src="equations/inline-47ee9fdbc83d.png" alt="Ah ≈ 0" width="68"> with SVD and a norm constraint, and reshape h into H. Coordinate normalization improves conditioning. The map is rational in point coordinates, but cross-multiplication gives equations linear in the entries of H.
+Stack rows into A, solve $Ah\approx0$ with SVD and a norm constraint, and reshape h into H. Coordinate normalization improves conditioning. The map is rational in point coordinates, but cross-multiplication gives equations linear in the entries of H.
 
 **When one homography is appropriate:** a planar scene, or camera rotation about a common optical center. General camera translation through a 3D scene causes depth-dependent parallax, so one homography usually cannot align everything.
 
@@ -721,7 +809,9 @@ For homography fitting, sample four pairs. For translation alone, one pair deter
 
 An optional useful trial-count relationship is
 
-<img src="equations/display-37.png" alt="Equation: N ≥ log(1 − p) / log(1 − w^s)" width="146">
+$$
+N\geq\frac{\log(1-p)}{\log(1-w^s)},
+$$
 
 where p is desired probability of at least one all-inlier sample, w is inlier fraction, and s is sample size. More outliers or a larger minimal sample requires more trials.
 
@@ -733,7 +823,7 @@ where p is desired probability of at least one all-inlier sample, w is inlier fr
 
 **Detect → describe → match → reject ambiguous matches → estimate H robustly → warp → blend.**
 
-Geometric alignment and photometric blending solve different problems. A perfect seam cannot repair large parallax errors. For inverse warping, visit an output pixel, map it back through <img src="equations/inline-daaa917c98a2.png" alt="H^(-1)" width="42">, and interpolate the source image. This helps avoid the holes that forward mapping can leave.
+Geometric alignment and photometric blending solve different problems. A perfect seam cannot repair large parallax errors. For inverse warping, visit an output pixel, map it back through $H^{-1}$, and interpolate the source image. This helps avoid the holes that forward mapping can leave.
 
 **Matrix distinction:** A homography maps an image point to another image point. The fundamental matrix later maps an image point to a line of possible matches.
 
@@ -743,19 +833,23 @@ Geometric alignment and photometric blending solve different problems. A perfect
 
 ### World → camera → image
 
-<img src="equations/display-38.png" alt="Equation: x ∼ PX P = K [R ∣ t] t = −RC" width="134">
+$$
+\mathbf{x}\sim P\mathbf{X},\qquad P=K[R\mid\mathbf{t}],\qquad \mathbf{t}=-R\mathbf{C}.
+$$
 
-In Cartesian 3D coordinates, <img src="equations/inline-b7aec596b400.png" alt="X_c=R(X_w-C)=RX_w+t" width="241">. The intrinsic matrix is commonly
+In Cartesian 3D coordinates, $X_c=R(X_w-C)=RX_w+t$. The intrinsic matrix is commonly
 
-<img src="equations/display-39.png" alt="Equation: K = [ f_x s c_x ] [ 0 f_y c_y ] [ 0 0 1 ]" width="156">
+$$
+K=\begin{bmatrix}f_x&s&c_x\\0&f_y&c_y\\0&0&1\end{bmatrix}.
+$$
 
 - **Extrinsics:** R,t locate and orient the camera relative to a world frame. R is 3 × 3 and has 3 rotational DoF; t is 3 × 1.
 - **Intrinsics:** focal scales in pixels, principal point, and optional skew. They convert normalized camera coordinates into pixel coordinates.
 - P is 3 × 4, K is 3 × 3, and homogeneous X is 4 × 1.
 
-For zero skew, <img src="equations/inline-4a5117da84cb.png" alt="u=f_xX_c/Z_c+c_x" width="153"> and <img src="equations/inline-c801e3c73601.png" alt="v=f_yY_c/Z_c+c_y" width="150">. The perspective divide loses depth: one image pixel defines a viewing ray rather than a unique 3D point.
+For zero skew, $u=f_xX_c/Z_c+c_x$ and $v=f_yY_c/Z_c+c_y$. The perspective divide loses depth: one image pixel defines a viewing ray rather than a unique 3D point.
 
-**Worked example:** <img src="equations/inline-5b3c6bd4da68.png" alt="f_x=f_y=800" width="124"> px, <img src="equations/inline-848cb6881aa0.png" alt="(c_x,c_y)=(320,240)" width="197">, <img src="equations/inline-862e9277785e.png" alt="X_c=(1,0.5,4)" width="144"> → (u,v) = (520,340) px. Keep focal length units consistent: millimeters cannot be substituted directly for focal length in pixels.
+**Worked example:** $f_x=f_y=800$ px, $(c_x,c_y)=(320,240)$, $X_c=(1,0.5,4)$ → (u,v) = (520,340) px. Keep focal length units consistent: millimeters cannot be substituted directly for focal length in pixels.
 
 ![Intrinsics and extrinsics combine in the camera projection matrix](graphics/14-camera-matrix.png)
 
@@ -763,16 +857,16 @@ For zero skew, <img src="equations/inline-4a5117da84cb.png" alt="u=f_xX_c/Z_c+c_
 
 ### Perspective versus weak perspective
 
-Perspective divides by each point's own Z. Weak perspective replaces that depth by a representative <img src="equations/inline-e8394415f576.png" alt="Z_0" width="28">, giving approximately a uniform scale <img src="equations/inline-ddc9b7bfccb3.png" alt="f/Z_0" width="41"> across an object. It is appropriate when depth variation is small relative to mean viewing distance. Orthographic projection is a special parallel-projection case; in aligned normalized coordinates it keeps X,Y and drops Z.
+Perspective divides by each point's own Z. Weak perspective replaces that depth by a representative $Z_0$, giving approximately a uniform scale $f/Z_0$ across an object. It is appropriate when depth variation is small relative to mean viewing distance. Orthographic projection is a special parallel-projection case; in aligned normalized coordinates it keeps X,Y and drops Z.
 
 ### Geometric calibration
 
 Given known 3D points and their image correspondences, estimate P, then recover intrinsic/extrinsic parameters. A general P has 11 DoF up to scale; each 3D–2D pair gives two independent constraints, so the linear formulation needs at least **six suitably arranged pairs**. Degenerate configurations, such as all points on a single plane for unconstrained one-view estimation of a general P, cannot determine everything.
 
-Write <img src="equations/inline-be222c4d933b.png" alt="x × PX=0" width="107">, keep two independent equations per pair, and solve the homogeneous system. After estimating <img src="equations/inline-71ed01c38969.png" alt="P=[M ∣ p_4]" width="114">:
+Write $\mathbf{x}\times P\mathbf{X}=0$, keep two independent equations per pair, and solve the homogeneous system. After estimating $P=[M\mid p_4]$:
 
-- The homogeneous camera center satisfies <img src="equations/inline-5ad00143c624.png" alt="PC_h=0" width="77">; find its right nullspace using SVD.
-- If M is invertible, the Cartesian center is <img src="equations/inline-55ca84d7f351.png" alt="C=-M^(-1)p_4" width="122">.
+- The homogeneous camera center satisfies $PC_h=0$; find its right nullspace using SVD.
+- If M is invertible, the Cartesian center is $C=-M^{-1}p_4$.
 - Factor M = KR, with K upper triangular and R orthogonal, then choose consistent signs/scales.
 
 **Notation clarification:** Lecture 14 p. 80 labels the decomposition “QR.” The required factor order is upper-triangular then orthogonal, so it is normally called **RQ decomposition**; QR can be adapted by reversing/transposing axes. The camera center is a right-nullspace/singular-vector calculation, not an eigenvector of the rectangular P itself.
@@ -785,11 +879,13 @@ Practical checkerboard calibration uses a known planar pattern viewed from sever
 
 ### Triangulation: recover a point from two rays
 
-Given camera matrices <img src="equations/inline-2af9dbfe8293.png" alt="P,P&#x27;" width="45"> and corresponding image points <img src="equations/inline-50517a257ce5.png" alt="x,x&#x27;" width="44">, estimate 3D X. Ideally the two viewing rays intersect; with noise, they usually do not intersect exactly.
+Given camera matrices $P,P'$ and corresponding image points $x,x'$, estimate 3D X. Ideally the two viewing rays intersect; with noise, they usually do not intersect exactly.
 
-For image point (u,v) and camera rows <img src="equations/inline-bcd3e40755a0.png" alt="p_1^T,p_2^T,p_3^T" width="93">:
+For image point (u,v) and camera rows $p_1^T,p_2^T,p_3^T$:
 
-<img src="equations/display-40.png" alt="Equation: (u p_3^T − p_1^T) X = 0 (v p_3^T − p_2^T) X = 0" width="177">
+$$
+(u p_3^T-p_1^T)X=0,\qquad(v p_3^T-p_2^T)X=0.
+$$
 
 Two views provide four rows of a 4 × 4 homogeneous system. Solve with SVD and dehomogenize X. Reprojection-error refinement can improve the linear estimate. Small baseline or nearly parallel viewing rays makes depth poorly constrained. Pure camera rotation does not provide a triangulation baseline.
 
@@ -808,11 +904,13 @@ The corresponding point in the second image must lie on the epipolar line. This 
 
 ### Essential and fundamental matrices
 
-For normalized camera coordinates, <img src="equations/inline-ea0cd618b005.png" alt="x_hat&#x27;^T × E × x_hat = 0" width="93">. For pixel coordinates,
+For normalized camera coordinates, $\hat x'^TE\hat x=0$. For pixel coordinates,
 
-<img src="equations/display-41.png" alt="Equation: x&#x27;^T F x = 0 F = K&#x27;^(-T) E K^(-1)" width="153">
+$$
+x'^TFx=0,\qquad F=K'^{-T}EK^{-1}.
+$$
 
-Then <img src="equations/inline-bdc6eb718a17.png" alt="l&#x27;=Fx" width="64"> is the corresponding line in image 2 and <img src="equations/inline-2df4381b65de.png" alt="l=F^Tx&#x27;" width="74"> is the line in image 1. A line <img src="equations/inline-7198e75af8a2.png" alt="l&#x27;=(a,b,c)^T" width="122"> contains points satisfying <img src="equations/inline-09f14c1ce06c.png" alt="au&#x27;+bv&#x27;+c=0" width="162">.
+Then $l'=Fx$ is the corresponding line in image 2 and $l=F^Tx'$ is the line in image 1. A line $l'=(a,b,c)^T$ contains points satisfying $au'+bv'+c=0$.
 
 | Matrix | Size | Input/output meaning | Important property |
 |---|---|---|---|
@@ -821,7 +919,7 @@ Then <img src="equations/inline-bdc6eb718a17.png" alt="l&#x27;=Fx" width="64"> i
 | F | 3 × 3 | Pixel point → epipolar line. | Rank 2; 7 DoF. |
 | P | 3 × 4 | 3D homogeneous point → image point. | General projection, 11 DoF up to scale. |
 
-**Essential matrix conventions:** If camera-2 coordinates satisfy <img src="equations/inline-20ed425fc228.png" alt="X_2=RX_1+t" width="122">, use <img src="equations/inline-91f2d39c5514.png" alt="E=[t]_ × R" width="97">, where <img src="equations/inline-714f3e2853bf.png" alt="[t]_ × a=t × a" width="127">. The lecture instead writes <img src="equations/inline-70b48f814b25.png" alt="X&#x27;=R(X-t_center)" width="170"> and obtains <img src="equations/inline-0d0dfb306925.png" alt="E ∼ R[t_center]_ ×" width="143"> (p. 69). These are consistent after changing the meaning of translation and allowing overall sign. Do not mix one convention's t with the other's formula.
+**Essential matrix conventions:** If camera-2 coordinates satisfy $X_2=RX_1+t$, use $E=[t]_\times R$, where $[t]_\times a=t\times a$. The lecture instead writes $X'=R(X-t_{\mathrm{center}})$ and obtains $E\sim R[t_{\mathrm{center}}]_\times$ (p. 69). These are consistent after changing the meaning of translation and allowing overall sign. Do not mix one convention's t with the other's formula.
 
 To understand the derivation, draw the two rays and the baseline in one plane. A cross product gives a normal to that plane; dotting with the other coplanar ray gives zero. This scalar triple product becomes the epipolar constraint.
 
@@ -831,20 +929,22 @@ To understand the derivation, draw the two rays and the baseline in one plane. A
 
 ### Normalized eight-point algorithm
 
-For <img src="equations/inline-8029ff2df42e.png" alt="(u,v,1)^T ↔ (u&#x27;,v&#x27;,1)^T" width="205">, one row of A is
+For $(u,v,1)^T\leftrightarrow(u',v',1)^T$, one row of A is
 
-<img src="equations/display-42.png" alt="Equation: [u&#x27;*u u&#x27;*v u&#x27; v&#x27;*u v&#x27;*v v&#x27; u v 1]" width="316">
+$$
+\begin{bmatrix}u^{\prime}u&u^{\prime}v&u^{\prime}&v^{\prime}u&v^{\prime}v&v^{\prime}&u&v&1\end{bmatrix}
+$$
 
 1. Normalize coordinates in each image for numerical conditioning, typically centering them and scaling their average distance from the origin to sqrt(2).
 2. Build A from at least eight correspondences in a nondegenerate configuration.
-3. Solve <img src="equations/inline-f3497f64799e.png" alt="Af ≈ 0" width="62"> using SVD and reshape into a 3 × 3 estimate.
+3. Solve $Af\approx0$ using SVD and reshape into a 3 × 3 estimate.
 4. Enforce rank 2 by replacing the smallest singular value of that matrix with zero.
-5. Undo coordinate normalization: if <img src="equations/inline-079d0e05a5a0.png" alt="x_n=Tx" width="74"> and <img src="equations/inline-10f8f9af2d03.png" alt="x&#x27;_n=T&#x27;x&#x27;" width="91">, then <img src="equations/inline-bae442bdfdd3.png" alt="F=T&#x27;^TF_nT" width="101">.
+5. Undo coordinate normalization: if $x_n=Tx$ and $x'_n=T'x'$, then $F=T'^TF_nT$.
 6. Use RANSAC to handle mismatches.
 
 **Why eight pairs if F has seven DoF?** The linear solver treats 9 entries up to scale and uses eight linear constraints, then enforces rank 2. A different seven-point method exists; it is not the linear eight-point algorithm in the review.
 
-**Critical contrast:** Homography estimation obtains **two** independent equations per matched pair; the epipolar constraint gives **one**. Eight-point coordinate normalization is numerical preprocessing; <img src="equations/inline-74393d34f9c3.png" alt="K^(-1)x" width="52"> normalization uses camera calibration. They are different operations.
+**Critical contrast:** Homography estimation obtains **two** independent equations per matched pair; the epipolar constraint gives **one**. Eight-point coordinate normalization is numerical preprocessing; $K^{-1}x$ normalization uses camera calibration. They are different operations.
 
 ## Lecture 16: Stereo vision and depth
 
@@ -854,22 +954,26 @@ For <img src="equations/inline-8029ff2df42e.png" alt="(u,v,1)^T ↔ (u&#x27;,v&#
 
 Rectification warps the two views so corresponding epipolar lines become horizontal, allowing same-row correspondence search. It does not mean the original cameras must have been physically parallel. After rectification, use the intrinsics/focal scales appropriate to the rectified views.
 
-For parallel rectified views with common focal length f, baseline B, and compatible principal-point coordinates, define disparity <img src="equations/inline-2578aba0be9c.png" alt="d=u_L-u_R" width="110">. Then
+For parallel rectified views with common focal length f, baseline B, and compatible principal-point coordinates, define disparity $d=u_L-u_R$. Then
 
-<img src="equations/display-43.png" alt="Equation: Z = fB / d" width="84">
+$$
+Z=\frac{fB}{d}.
+$$
 
-Derivation: <img src="equations/inline-ca51b3323f33.png" alt="u_L=fX/Z" width="91">, <img src="equations/inline-679401e044a3.png" alt="u_R=f(X-B)/Z" width="147">; subtract to get <img src="equations/inline-3aa396426c83.png" alt="d=fB/Z" width="83">. Use coordinates with the principal-point offsets removed, or include their correction if the two offsets differ.
+Derivation: $u_L=fX/Z$, $u_R=f(X-B)/Z$; subtract to get $d=fB/Z$. Use coordinates with the principal-point offsets removed, or include their correction if the two offsets differ.
 
 - Larger disparity means a nearer point.
 - Small disparity means large depth.
-- If <img src="equations/inline-04be72645d04.png" alt="d → 0" width="54">, depth tends to infinity in the ideal model.
+- If $d\to0$, depth tends to infinity in the ideal model.
 - f in pixels and d in pixels give Z in the units used for B.
 
 **Worked example:** f = 800 px, B = 0.12 m, d = 24 px → Z = 4 m. At d = 12 px the depth is 8 m.
 
 Depth sensitivity follows
 
-<img src="equations/display-44.png" alt="Equation: abs(∂Z/∂d) = fB / d² = Z² / (fB)" width="154">
+$$
+\left|\frac{\partial Z}{\partial d}\right|=\frac{fB}{d^2}=\frac{Z^2}{fB}.
+$$
 
 Thus a one-pixel disparity error is much more harmful for distant objects. A larger baseline can improve depth sensitivity but also makes matching and occlusion harder.
 
@@ -912,9 +1016,12 @@ Typical pipeline:
 
 Bundle adjustment minimizes reprojection error:
 
-<img src="equations/display-45.png" alt="Equation: Minimize over {R_j, t_j, X_i}: Σ_((i,j) in O) norm(x_ij − π(K_j [R_j ∣ t_j] X_i))²" width="230">
+$$
+\min_{\{R_j,t_j,X_i\}}\sum_{(i,j)\in\mathcal{O}}
+\|x_{ij}-\pi(K_j[R_j\mid t_j]X_i)\|^2,
+$$
 
-where O is the observed point–image set and <img src="equations/inline-f1cf04093d08.png" alt="π" width="17"> includes the perspective divide. It is a nonlinear optimization problem. With calibrated cameras, reconstruction is generally ambiguous up to a global similarity transform, including absolute scale, unless extra information fixes it. Static-scene assumptions, overlap, texture, and useful camera translation matter.
+where O is the observed point–image set and $\pi$ includes the perspective divide. It is a nonlinear optimization problem. With calibrated cameras, reconstruction is generally ambiguous up to a global similarity transform, including absolute scale, unless extra information fixes it. Static-scene assumptions, overlap, texture, and useful camera translation matter.
 
 ![Bundle adjustment jointly refines cameras and structure using reprojection error](graphics/17-bundle-adjustment.png)
 
@@ -931,11 +1038,15 @@ They can differ. Changing illumination can move a brightness pattern without mov
 
 Assume a point's intensity is approximately unchanged between frames:
 
-<img src="equations/display-46.png" alt="Equation: I(x, y, t) ≈ I(x+u, y+v, t+1)" width="311">
+$$
+I(x,y,t)\approx I(x+u,y+v,t+1).
+$$
 
 For small motion, first-order Taylor expansion gives
 
-<img src="equations/display-47.png" alt="Equation: I_x u + I_y v + I_t = 0" width="181">
+$$
+I_xu+I_yv+I_t=0.
+$$
 
 There is one equation for two unknowns. Along a straight edge, motion parallel to the edge is not determined by local brightness changes. This is the **aperture problem**.
 
@@ -943,11 +1054,17 @@ There is one equation for two unknowns. Along a straight edge, motion parallel t
 
 Assume neighboring pixels have the same displacement (u,v). Stack their equations:
 
-<img src="equations/display-48.png" alt="Equation: A [u v]^T = b A = [ I_x(p_1) I_y(p_1) ] b = −[ I_t(p_1) ] [ ... ... ] [ ... ] [ I_x(p_n) I_y(p_n) ] [ I_t(p_n) ]" width="201">
+$$
+A\begin{bmatrix}u\\v\end{bmatrix}=b,\qquad
+A=\begin{bmatrix}I_x(p_1)&I_y(p_1)\\\vdots&\vdots\\I_x(p_n)&I_y(p_n)\end{bmatrix},\quad
+b=-\begin{bmatrix}I_t(p_1)\\\vdots\\I_t(p_n)\end{bmatrix}.
+$$
 
 Then solve least squares. The normal matrix is
 
-<img src="equations/display-49.png" alt="Equation: A^T A = [ Σ I_x² Σ I_x I_y ] [ Σ I_x I_y Σ I_y² ]" width="217">
+$$
+A^TA=\begin{bmatrix}\sum I_x^2&\sum I_xI_y\\\sum I_xI_y&\sum I_y^2\end{bmatrix}.
+$$
 
 ![Neighboring brightness-constancy constraints form a least-squares motion estimate](graphics/17-optical-flow.png)
 
@@ -967,15 +1084,18 @@ Applications include tracking, stabilization, frame interpolation, restoration, 
 
 ### Discriminative versus generative modeling
 
-- A discriminative model estimates <img src="equations/inline-962d5f137d64.png" alt="p(y ∣ x)" width="74">, such as an object class given an image.
+- A discriminative model estimates $p(y\mid x)$, such as an object class given an image.
 - An unconditional generative model represents/generates from p(x).
-- A conditional generative model generates from <img src="equations/inline-257f9cf26a52.png" alt="p(x ∣ y)" width="74">, where y might be a label, image, or text description.
+- A conditional generative model generates from $p(x\mid y)$, where y might be a label, image, or text description.
 
 The goal is both plausible individual samples and coverage of the data's variation. Generating a few realistic examples does not show that the full distribution has been learned.
 
 ### Autoencoders
 
-<img src="equations/display-50.png" alt="Equation: z = Encoder(x) x_hat = Decoder(z) L_rec = norm(x − x_hat)²" width="176">
+$$
+z=\operatorname{Encoder}(x),\qquad \hat x=\operatorname{Decoder}(z),\qquad
+L_{\mathrm{rec}}=\|x-\hat x\|^2.
+$$
 
 A bottleneck encourages compression/useful features. A denoising autoencoder takes a corrupted image and predicts the clean target. A convolutional decoder can upsample using transposed convolution or other upsampling methods.
 
@@ -999,9 +1119,12 @@ For this lecture, focus on **why a latent prior enables sampling** and how an AE
 
 The original minimax objective is
 
-<img src="equations/display-51.png" alt="Equation: min_G max_D: E_(x ∼ p_data)[log D(x)] + E_(z ∼ p(z))[log(1 − D(G(z)))]" width="282">
+$$
+\min_G\max_D\ \mathbb{E}_{x\sim p_{data}}[\log D(x)]
++\mathbb{E}_{z\sim p(z)}[\log(1-D(G(z)))].
+$$
 
-Alternate discriminator and generator updates. With D fixed during a generator update, gradients still flow through D to the generator. A common practical generator loss is <img src="equations/inline-8a5869f7609c.png" alt="-E_zlog D(G(z))" width="148">, which gives a more useful signal when the discriminator confidently rejects generated samples. At generation time, use G; a discriminator is not required to produce samples.
+Alternate discriminator and generator updates. With D fixed during a generator update, gradients still flow through D to the generator. A common practical generator loss is $-\mathbb{E}_z\log D(G(z))$, which gives a more useful signal when the discriminator confidently rejects generated samples. At generation time, use G; a discriminator is not required to produce samples.
 
 | Failure | Meaning |
 |---|---|
@@ -1022,7 +1145,7 @@ The lecture mentions Wasserstein GANs as an alternative objective/framework for 
 | Model family | How generation works | Main idea to explain |
 |---|---|---|
 | Conditional GAN | Generator receives noise plus a text representation; discriminator supplies an adversarial signal. | Condition image generation on the prompt. |
-| Autoregressive | Generate pixels or discrete image tokens one after another, conditioned on previous ones and text. | Factorize <img src="equations/inline-3d161436856c.png" alt="p(x ∣ c)=Π_i p(x_i ∣ x_(&lt;i),c)" width="232">; sequential sampling can be slow. |
+| Autoregressive | Generate pixels or discrete image tokens one after another, conditioned on previous ones and text. | Factorize $p(x\mid c)=\prod_i p(x_i\mid x_{<i},c)$; sequential sampling can be slow. |
 | VQ-based latent model | Encode images into a smaller grid of discrete codebook tokens; model that grid and decode it. | Shorter latent sequence makes modeling more manageable. |
 | Diffusion | Add noise gradually during training; learn to reverse corruption by repeated denoising. | Generate by starting from noise and iterating learned denoising steps. |
 | Latent diffusion | Perform diffusion in a compressed learned space, then decode to pixels. | Reduce computation compared with denoising full-resolution pixels. |
@@ -1042,100 +1165,100 @@ Evaluation must consider prompt alignment, object presence, attributes, spatial 
 Know what each variable means, which units apply, and which assumptions make the formula valid.
 
 **Pinhole projection**  
-<img src="equations/inline-d68522a825c5.png" alt="u=fX/Z" width="59">, <img src="equations/inline-ee5536d383d6.png" alt="v=fY/Z" width="57"> on the virtual plane.
+$u=\frac{fX}{Z}$, $v=\frac{fY}{Z}$ on the virtual plane.
 
 **Thin lens**  
-<img src="equations/inline-0331a19d40de.png" alt="1/f=1/s_o+1/s_i" width="153">; <img src="equations/inline-9b152c4ad165.png" alt="abs(m)=s_i/s_o" width="78">.
+$1/f=1/s_o+1/s_i$; $\vert m\vert =\frac{s_i}{s_o}$.
 
 **Field of view**  
-<img src="equations/inline-aea8dfa4f340.png" alt="2arctan(w/(2f))" width="156"> for sensor width w.
+$2\arctan(w/(2f))$ for sensor width w.
 
 **Gaussian**  
-<img src="equations/inline-b7cf2dc458d7.png" alt="G_σ ∝ e^(-(x^2+y^2)/(2σ^2))" width="177">; normalize the discrete kernel.
+$G_\sigma\propto e^{-(x^2+y^2)/(2\sigma^2)}$; normalize the discrete kernel.
 
 **Gradient**  
-<img src="equations/inline-aea262d3821d.png" alt="∇ I=(I_x,I_y)" width="104">, magnitude <img src="equations/inline-7bbef1ffc197.png" alt="sqrt(I_x^2+I_y^2)" width="86">.
+$\nabla I=(I_x,I_y)$, magnitude $\sqrt{I_x^2+I_y^2}$.
 
 **Detail/sharpening**  
-<img src="equations/inline-33b9f82f681d.png" alt="D=I-G*I" width="114">; <img src="equations/inline-699cd9f0c7f2.png" alt="I_sharp=I+α D" width="134">.
+$D=I-G*I$; $I_{\mathrm{sharp}}=I+\alpha D$.
 
 **Convolution theorem**  
-<img src="equations/inline-da5d84426c4c.png" alt="FT(I * k) = FT(I) × FT(k)" width="168">.
+$\mathcal{F}(I*k)=\mathcal{F}(I)\mathcal{F}(k)$.
 
 **Gaussian pyramid**  
 Blur, then downsample.
 
 **Laplacian pyramid**  
-<img src="equations/inline-fc1db49a4aa3.png" alt="L_k=G_k-Expand(G_(k+1))" width="238">.
+$L_k=G_k-\operatorname{Expand}(G_{k+1})$.
 
 **Harris**  
-<img src="equations/inline-e5af92321992.png" alt="E(u,v) ≈ [u v] × M × [u v]^T" width="212">, with <img src="equations/inline-291b1a75dc72.png" alt="M = Σ w × (∇I)(∇I)^T" width="131">.
+$E(u,v)\approx[u\ v]M[u\ v]^T$, with $M=\sum w\nabla I\nabla I^T$.
 
 **SIFT length**  
-<img src="equations/inline-bdbf6e994261.png" alt="4 × 4 × 8=128" width="154">.
+$4\times4\times8=128$.
 
 **Ratio test**  
 Best descriptor distance / second-best distance; accept small ratios.
 
 **Precision / recall**  
-<img src="equations/inline-fc5f9c7fa598.png" alt="TP/(TP+FP)" width="58"> / <img src="equations/inline-d8490f2e1980.png" alt="TP/(TP+FN)" width="60">.
+$\frac{TP}{TP+FP}$ / $\frac{TP}{TP+FN}$.
 
 **FPR**  
-<img src="equations/inline-296ce8180711.png" alt="FP/(FP+TN)" width="60">.
+$\frac{FP}{FP+TN}$.
 
 **Linear prediction**  
-<img src="equations/inline-1e23b3befecb.png" alt="y_hat = w^T x + b" width="117">.
+$\hat y=w^Tx+b$.
 
 **Softmax / CE**  
-<img src="equations/inline-ce991fb02e19.png" alt="p_c=e^(z_c)/Σ_j e^(z_j)" width="126">; <img src="equations/inline-06ce67978100.png" alt="L=-log p_true" width="133">.
+$p_c=e^{z_c}/\sum_j e^{z_j}$; $L=-\log p_{\mathrm{true}}$.
 
 **Dense parameters**  
-<img src="equations/inline-4bfc14bc45b9.png" alt="(n_in + 1) × n_out" width="120">, including bias.
+$(n_{\mathrm{in}}+1)n_{\mathrm{out}}$, including bias.
 
 **GD**  
-<img src="equations/inline-7356cd7df515.png" alt="θ ← θ − η × ∇L" width="115">.
+$\theta\leftarrow\theta-\eta\nabla L$.
 
 **Conv output, one axis**  
-<img src="equations/inline-2908a6821736.png" alt="floor((N+2P-D(K-1)-1)/S)+1" width="300">.
+$\lfloor(N+2P-D(K-1)-1)/S\rfloor+1$.
 
 **Conv parameters**  
-<img src="equations/inline-b155f1f19bad.png" alt="(K_h × K_w × C_in + 1) × C_out" width="170"> for standard convolution with biases.
+$(K_hK_wC_{\mathrm{in}}+1)C_{\mathrm{out}}$ for standard convolution with biases.
 
 **IoU**  
 Intersection area / union area.
 
 **Homogeneous point**  
-<img src="equations/inline-be2cf2631531.png" alt="(x,y) ↔ (x,y,1)" width="151">; divide by final coordinate to return.
+$(x,y)\leftrightarrow(x,y,1)$; divide by final coordinate to return.
 
 **Homography**  
-<img src="equations/inline-90b4b14b0b49.png" alt="x&#x27; ∼ Hx" width="73">; 8 DoF; minimum 4 suitable point pairs.
+$x'\sim Hx$; 8 DoF; minimum 4 suitable point pairs.
 
 **Camera**  
-<img src="equations/inline-9802d6092412.png" alt="x ∼ K[R ∣ t]X" width="122">, t = -RC.
+$x\sim K[R\mid t]X$, t = -RC.
 
 **Camera center**  
-<img src="equations/inline-5ad00143c624.png" alt="PC_h=0" width="77">.
+$PC_h=0$.
 
 **Epipolar constraint**  
-<img src="equations/inline-ea0cd618b005.png" alt="x_hat&#x27;^T × E × x_hat = 0" width="93">; <img src="equations/inline-4607431bba58.png" alt="x&#x27;^T × F × x = 0" width="92">.
+$\hat x'^TE\hat x=0$; $x'^TFx=0$.
 
 **Intrinsics conversion**  
-<img src="equations/inline-3589a5a5f71f.png" alt="F = K&#x27;^(-T) × E × K^(-1)" width="129">.
+$F=K'^{-T}EK^{-1}$.
 
 **Epipolar lines**  
-<img src="equations/inline-bdc6eb718a17.png" alt="l&#x27;=Fx" width="64">, <img src="equations/inline-2df4381b65de.png" alt="l=F^Tx&#x27;" width="74">.
+$l'=Fx$, $l=F^Tx'$.
 
 **Rectified stereo depth**  
-<img src="equations/inline-02a1d43aab82.png" alt="Z=fB/d" width="60">.
+$Z=\frac{fB}{d}$.
 
 **Optical flow**  
-<img src="equations/inline-e7bf3cce6e66.png" alt="I_x u + I_y v + I_t = 0" width="157">.
+$I_xu+I_yv+I_t=0$.
 
 **Lucas–Kanade**  
-Solve <img src="equations/inline-4b7c942c310c.png" alt="A^T A × [u v]^T = A^T b" width="163">.
+Solve $A^TA\,[u\ v]^T=A^Tb$.
 
 **AE**  
-z = E(x), <img src="equations/inline-c90722f9a309.png" alt="x_hat=D(z)" width="83">, reconstruction loss.
+z = E(x), $\hat x=D(z)$, reconstruction loss.
 
 **GAN**  
 Generator versus discriminator; alternate adversarial updates.
@@ -1160,7 +1283,7 @@ These are derived study explanations, **not an instructor-provided solution key*
 **Source:** [Quiz 1](exam_review_material/quizzes/quiz_1.pdf).
 
 1. The misconduct question contrasts using AI to complete work or finding answers online with using permitted late days. Under the policy described on the sheet/course materials, the first and third actions are the violations. This is a course-policy item rather than a vision derivation.
-2. Thin lens: <img src="equations/inline-a631ec11db58.png" alt="1/s_o+1/s_i=1/f" width="153"> → **b**.
+2. Thin lens: $1/s_o+1/s_i=1/f$ → **b**.
 3. Bayer: 25% red, 50% green, 25% blue → **b**.
 4. Gaussian filtering blurs/smooths → **b**.
 5. Vertical-edge detector: opposite signs in the left/right columns → **b**. Reversing all signs changes polarity, not which edge orientation is detected.
@@ -1172,7 +1295,7 @@ These are derived study explanations, **not an instructor-provided solution key*
 1. Fourier representation uses a sum of sinusoidal waves → **C**.
 2. Transform of convolution is product of transforms → **True**.
 3. Gaussian pyramid: blur before downsampling → **B**.
-4. For the course's image-minus-Gaussian detail construction: <img src="equations/inline-f3fe71aa6ec5.png" alt="X-G*X" width="90">. If asked specifically for a Laplacian pyramid level, subtract the expanded next Gaussian level. A mathematical Laplacian derivative is <img src="equations/inline-0d40ea04210c.png" alt="∇^2X" width="41">; do not treat the three expressions as identical.
+4. For the course's image-minus-Gaussian detail construction: $X-G*X$. If asked specifically for a Laplacian pyramid level, subtract the expanded next Gaussian level. A mathematical Laplacian derivative is $\nabla^2X$; do not treat the three expressions as identical.
 5. Centered low-pass mask: pass/white near the center and reject/black outside. If drawing a Gaussian low-pass, use a smooth falloff.
 
 ### Quiz 3: SIFT and appearance changes
@@ -1186,20 +1309,22 @@ These are derived study explanations, **not an instructor-provided solution key*
 
 **Source:** [Quiz 4](exam_review_material/quizzes/quiz_4.pdf).
 
-1. Dense parameters: <img src="equations/inline-9004148fbb90.png" alt="256 × 128+128=32,896" width="252"> → **c**.
+1. Dense parameters: $256\cdot128+128=32{,}896$ → **c**.
 2. The plotted curve oscillates strongly between training samples relative to the dotted true trend: **overfitting** → **a**.
 3. Learning rate is the relevant listed hyperparameter → **c**. Increasing it cautiously can speed progress if it was too small; an excessive increase can destabilize training.
 4. Stride is the number of input positions the kernel moves between adjacent output positions.
-5. Output height and width are both <img src="equations/inline-b825aa70b40d.png" alt="floor((7+2 × 2-4)/3)+1=3" width="244"> → **3 × 3**.
+5. Output height and width are both $\lfloor(7+2\cdot2-4)/3\rfloor+1=3$ → **3 × 3**.
 
 ### Quiz 5: projective properties and translation
 
 **Source:** [Quiz 5](exam_review_material/quizzes/quiz_5.pdf).
 
 1. Under a nonsingular projective transformation: lines remain lines; parallel lines need not stay parallel; circles need not stay circles; squares need not stay squares. Draw converging tracks, a tilted circular disk, and a square seen obliquely as counterexamples. A line may map to the line at infinity in the projective plane.
-2. The diagram translates by <img src="equations/inline-5ec23ba3023b.png" alt="t_x=2,t_y=1" width="123">. With homogeneous column vectors:
+2. The diagram translates by $t_x=2,t_y=1$. With homogeneous column vectors:
 
-<img src="equations/display-52.png" alt="Equation: [ x&#x27; ] [ 1 0 2 ] [ x ] [ y&#x27; ] = [ 0 1 1 ] [ y ] [ 1 ] [ 0 0 1 ] [ 1 ]" width="197">
+$$
+\begin{bmatrix}x'\\y'\\1\end{bmatrix}=\begin{bmatrix}1&0&2\\0&1&1\\0&0&1\end{bmatrix}\begin{bmatrix}x\\y\\1\end{bmatrix}.
+$$
 
 ## Self-test: try before reading the answers
 
@@ -1217,8 +1342,8 @@ These are new practice questions, not predictions or copied exam questions.
 10. How long is a SIFT descriptor with 4 × 4 cells and 8 bins? A candidate's best/second-best distances are 12 and 15; would a 0.7 ratio threshold accept it?
 11. There are 80 true and 20 false candidate matches. A threshold accepts 60 true and 5 false. Compute precision, recall, and FPR.
 12. Explain why stacking linear layers without nonlinear activations cannot solve XOR.
-13. Count parameters in a dense <img src="equations/inline-c87e4081fb2a.png" alt="20 → 10 → 3" width="117"> network, including biases.
-14. Compute one GD step for <img src="equations/inline-4e9b99b97096.png" alt="L(w)=(1/2)(w-4)^2" width="162">, starting at w = 1 with <img src="equations/inline-8f6a69814a7a.png" alt="η=0.2" width="72">.
+13. Count parameters in a dense $20\to10\to3$ network, including biases.
+14. Compute one GD step for $L(w)=\frac{1}{2}(w-4)^2$, starting at w = 1 with $\eta=0.2$.
 15. A 28 × 28 × 3 input passes through eight 5 × 5 filters, stride 1, no padding. Find output shape and parameter count. Then apply 2 × 2 pooling with stride 2.
 16. Explain the improvement from R-CNN to Fast R-CNN, then to Faster R-CNN. What does NMS remove?
 17. Two boxes have areas 100 and 120, with intersection 60. Find IoU. If two correct-class boxes both match the same ground-truth object, are both necessarily TP?
@@ -1235,27 +1360,27 @@ These are new practice questions, not predictions or copied exam questions.
 ### Answer sketches
 
 1. Projection removes depth; all points along a viewing ray have the same ideal pixel projection.
-2. <img src="equations/inline-32c9b457a4f5.png" alt="s_i=40(400)/(400-40)=44.44" width="315"> mm; <img src="equations/inline-18ebe31d8535.png" alt="abs(m)=44.44/400 ≈ 0.111" width="246">.
+2. $s_i=40(400)/(400-40)=44.44$ mm; $\vert m\vert =44.44/400\approx0.111$.
 3. Smaller aperture increases DoF; shorter focal length increases FoV under the stated conditions.
-4. <img src="equations/inline-974640fde89d.png" alt="81/9=9" width="84">. The value's position within the patch does not matter for a box filter.
+4. $81/9=9$. The value's position within the patch does not matter for a box filter.
 5. A vertical edge changes intensity horizontally. Sign reversal swaps positive/negative response polarity.
 6. Pass near zero frequency for low-pass. Suppressing low frequencies and retaining high ones produces a high-pass/detail effect.
 7. Begin with the coarsest Gaussian image; repeatedly expand it and add the corresponding residual band.
 8. Expand the shifted intensity to first order, square the difference, and collect gradient-product terms in M. The three cases are flat, edge, corner.
 9. Harris and Lucas–Kanade both use a second-moment matrix. A corner has informative gradients in two independent directions, so both motion components are constrained.
-10. 128 dimensions; <img src="equations/inline-b7f51399e6c0.png" alt="12/15=0.8" width="118">, so reject at threshold 0.7.
-11. Precision <img src="equations/inline-f9a2176c3ee2.png" alt="=60/65 ≈ 0.923" width="168">; recall <img src="equations/inline-09cccb9f4f26.png" alt="=60/80=0.75" width="153">; FPR <img src="equations/inline-8e49a80bb10b.png" alt="=5/20=0.25" width="141">.
+10. 128 dimensions; $12/15=0.8$, so reject at threshold 0.7.
+11. Precision $=60/65\approx0.923$; recall $=60/80=0.75$; FPR $=5/20=0.25$.
 12. Their composition remains affine, with a linear decision boundary. XOR is not linearly separable.
 13. (20+1)10+(10+1)3 = 210+33 = 243.
-14. Gradient is w-4 = -3, so <img src="equations/inline-7fa16f090fab.png" alt="w_new=1-0.2(-3)=1.6" width="244">.
-15. Conv output 24 × 24 × 8; parameters <img src="equations/inline-332912281285.png" alt="(5 × 5 × 3+1)8=608" width="199">. Pool output 12 × 12 × 8 with zero additional parameters.
+14. Gradient is w-4 = -3, so $w_{\mathrm{new}}=1-0.2(-3)=1.6$.
+15. Conv output 24 × 24 × 8; parameters $(5\cdot5\cdot3+1)8=608$. Pool output 12 × 12 × 8 with zero additional parameters.
 16. Fast shares full-image convolutional features; Faster replaces external proposals with an RPN. NMS removes highly overlapping lower-score duplicate candidates within a class.
-17. Union  = 100+120-60 = 160; IoU <img src="equations/inline-fbb6949cdd02.png" alt="=60/160=0.375" width="181">. Under standard one-to-one matching, a duplicate detection of an already matched ground-truth instance is FP.
-18. <img src="equations/inline-a89b5d249044.png" alt="TS=[[2, 0, 3]; [0, 2, -1]; [0, 0, 1]]" width="148">; output (5,3).
+17. Union  = 100+120-60 = 160; IoU $=60/160=0.375$. Under standard one-to-one matching, a duplicate detection of an already matched ground-truth instance is FP.
+18. $TS=\begin{bmatrix}2&0&3\\0&2&-1\\0&0&1\end{bmatrix}$; output (5,3).
 19. Each homography pair provides two independent constraints; each epipolar pair provides one. Collinear homography data are degenerate and do not determine a general planar map.
 20. K describes internal pixel projection; R,t transform world coordinates to camera coordinates; P is 3 × 4; t = -RC.
 21. Depth is unknown, so the corresponding ray projects to a line in the other view. Rectification aligns those lines with rows.
-22. <img src="equations/inline-3021243ddd9d.png" alt="Z=600(0.2)/30=4" width="197"> m. Halving disparity doubles depth to 8 m.
+22. $Z=600(0.2)/30=4$ m. Halving disparity doubles depth to 8 m.
 23. Brightness constancy, small motion, and shared local motion. Pyramids reduce pixel displacement at coarse scales so linearization becomes more reasonable, then refine the estimate.
 24. Camera parameters and 3D point locations are jointly refined to minimize reprojection error. Scaling all scene coordinates and translations together leaves projections unchanged without a known metric reference.
 25. AE reconstructs through a latent code; VAE structures a probabilistic latent space with a prior for sampling; GAN learns through a generator–discriminator game. Sample with the generator.
@@ -1269,7 +1394,7 @@ These are new practice questions, not predictions or copied exam questions.
 
 **Pass 2: learning and detection.** Work one regression update and one backprop chain; calculate every shape/parameter count in a small CNN; explain R-CNN → Fast → Faster; compute IoU and distinguish precision, recall, AP, and NMS.
 
-**Pass 3: geometry and motion.** Write transformation matrices and composition order; derive two homography rows; explain RANSAC; label <img src="equations/inline-9f58d1c4a8e8.png" alt="K[R|t]" width="61">; draw epipolar geometry; derive stereo depth and the flow constraint; connect Harris to Lucas–Kanade.
+**Pass 3: geometry and motion.** Write transformation matrices and composition order; derive two homography rows; explain RANSAC; label $K[R\vert t]$; draw epipolar geometry; derive stereo depth and the flow constraint; connect Harris to Lucas–Kanade.
 
 **Pass 4: synthesis and retrieval practice.** Compare AE/VAE/GAN/diffusion; complete the self-test without notes; check mistakes against the linked slides and quiz explanations.
 
@@ -1292,7 +1417,7 @@ These are new practice questions, not predictions or copied exam questions.
 - [ ] Estimate a homography conceptually, state its validity conditions, and explain RANSAC.
 - [ ] Distinguish H,P,K,R,t,E,F by dimensions, inputs, outputs, and coordinate conventions.
 - [ ] Explain calibration, triangulation, and eight-point estimation as different unknown-parameter problems.
-- [ ] Derive <img src="equations/inline-02a1d43aab82.png" alt="Z=fB/d" width="60">, explain rectification, and identify correspondence failure cases.
+- [ ] Derive $Z=\frac{fB}{d}$, explain rectification, and identify correspondence failure cases.
 - [ ] Explain SfM/bundle adjustment and the limits of absolute scale recovery.
 - [ ] Derive brightness constancy, explain the aperture problem, and outline Lucas–Kanade.
 - [ ] Compare AE, VAE, GAN, and diffusion, including generation-time inputs and failure cases.
