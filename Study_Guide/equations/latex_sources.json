@@ -1,0 +1,1436 @@
+[
+  {
+    "file": "display-01.png",
+    "latex": "u=\\frac{fX}{Z},\\qquad v=\\frac{fY}{Z}.",
+    "width": 83,
+    "display": true
+  },
+  {
+    "file": "display-02.png",
+    "latex": "\\frac{1}{f}=\\frac{1}{s_o}+\\frac{1}{s_i},\\qquad s_i=\\frac{fs_o}{s_o-f}.",
+    "width": 118,
+    "display": true
+  },
+  {
+    "file": "display-03.png",
+    "latex": "s_i=\\frac{50(1000)}{1000-50}\\approx52.63\\text{ mm},\\qquad |m|\\approx0.0526.",
+    "width": 268,
+    "display": true
+  },
+  {
+    "file": "display-04.png",
+    "latex": "(I*k)(x,y)=\\sum_i\\sum_j k(i,j)I(x-i,y-j).",
+    "width": 354,
+    "display": true
+  },
+  {
+    "file": "display-05.png",
+    "latex": "\\mathrm{Box\\ blur:}\\quad\\frac{1}{9}\\begin{bmatrix}1&1&1\\\\1&1&1\\\\1&1&1\\end{bmatrix}\n\\mathrm{Gaussian:}\\quad\\frac{1}{16}\\begin{bmatrix}1&2&1\\\\2&4&2\\\\1&2&1\\end{bmatrix}\n\\mathrm{Vertical\\ edges:}\\quad\\begin{bmatrix}-1&0&1\\\\-1&0&1\\\\-1&0&1\\end{bmatrix}\n\\mathrm{Horizontal\\ edges:}\\quad\\begin{bmatrix}-1&-1&-1\\\\0&0&0\\\\1&1&1\\end{bmatrix}\n\\mathrm{Sobel}\\ x:\\quad\\begin{bmatrix}-1&0&1\\\\-2&0&2\\\\-1&0&1\\end{bmatrix}\n\\mathrm{Sobel}\\ y:\\quad\\begin{bmatrix}-1&-2&-1\\\\0&0&0\\\\1&2&1\\end{bmatrix}",
+    "width": 212,
+    "display": true
+  },
+  {
+    "file": "display-06.png",
+    "latex": "G_\\sigma(x,y)=\\frac{1}{2\\pi\\sigma^2}\\exp\\left(-\\frac{x^2+y^2}{2\\sigma^2}\\right).",
+    "width": 293,
+    "display": true
+  },
+  {
+    "file": "display-07.png",
+    "latex": "\\begin{bmatrix}0&0&0\\\\0&90&0\\\\0&0&0\\end{bmatrix}",
+    "width": 114,
+    "display": true
+  },
+  {
+    "file": "display-08.png",
+    "latex": "\\nabla I=(I_x,I_y)^T,\\qquad |\\nabla I|=\\sqrt{I_x^2+I_y^2},\\qquad \\theta=\\operatorname{atan2}(I_y,I_x).",
+    "width": 178,
+    "display": true
+  },
+  {
+    "file": "display-09.png",
+    "latex": "D=I-G_\\sigma*I,\\qquad I_{\\mathrm{sharp}}=I+\\alpha D.",
+    "width": 158,
+    "display": true
+  },
+  {
+    "file": "display-10.png",
+    "latex": "F(u,v)=\\sum_{x=0}^{M-1}\\sum_{y=0}^{N-1}I(x,y)e^{-2\\pi i(ux/M+vy/N)}.",
+    "width": 386,
+    "display": true
+  },
+  {
+    "file": "display-11.png",
+    "latex": "\\mathcal{F}\\{I*k\\}=\\mathcal{F}\\{I\\}\\mathcal{F}\\{k\\}.",
+    "width": 221,
+    "display": true
+  },
+  {
+    "file": "display-12.png",
+    "latex": "G_0=I,\\qquad G_{k+1}=\\operatorname{Downsample}(G_\\sigma*G_k).",
+    "width": 315,
+    "display": true
+  },
+  {
+    "file": "display-13.png",
+    "latex": "L_k=G_k-\\operatorname{Expand}(G_{k+1}),\\qquad G_k=L_k+\\operatorname{Expand}(G_{k+1}).",
+    "width": 262,
+    "display": true
+  },
+  {
+    "file": "display-14.png",
+    "latex": "E(u,v)=\\sum_{x,y}w(x,y)[I(x+u,y+v)-I(x,y)]^2.",
+    "width": 440,
+    "display": true
+  },
+  {
+    "file": "display-15.png",
+    "latex": "E(u,v)\\approx\\sum w(I_xu+I_yv)^2\n=\\begin{bmatrix}u&v\\end{bmatrix}M\\begin{bmatrix}u\\\\v\\end{bmatrix},",
+    "width": 255,
+    "display": true
+  },
+  {
+    "file": "display-16.png",
+    "latex": "M=\\sum w\\begin{bmatrix}I_x^2&I_xI_y\\\\I_xI_y&I_y^2\\end{bmatrix}.",
+    "width": 194,
+    "display": true
+  },
+  {
+    "file": "display-17.png",
+    "latex": "r=\\frac{d(f,g_{\\mathrm{best}})}{d(f,g_{\\mathrm{second}})}.",
+    "width": 140,
+    "display": true
+  },
+  {
+    "file": "display-18.png",
+    "latex": "\\mathrm{Precision}=\\frac{TP}{TP+FP},\\qquad\n\\mathrm{Recall}=\\mathrm{TPR}=\\frac{TP}{TP+FN},\\qquad\n\\mathrm{FPR}=\\frac{FP}{FP+TN}.",
+    "width": 232,
+    "display": true
+  },
+  {
+    "file": "display-19.png",
+    "latex": "L(w,b)=\\frac{1}{N}\\sum_{i=1}^N(\\hat y_i-y_i)^2.",
+    "width": 245,
+    "display": true
+  },
+  {
+    "file": "display-20.png",
+    "latex": "p_c=\\frac{e^{z_c}}{\\sum_j e^{z_j}},\\qquad L=-\\sum_c y_c\\log p_c.",
+    "width": 174,
+    "display": true
+  },
+  {
+    "file": "display-21.png",
+    "latex": "z=w^Tx+b,\\qquad a=\\phi(z).",
+    "width": 139,
+    "display": true
+  },
+  {
+    "file": "display-22.png",
+    "latex": "f(x)=W_2\\phi(W_1x+b_1)+b_2.",
+    "width": 280,
+    "display": true
+  },
+  {
+    "file": "display-23.png",
+    "latex": "n_{\\mathrm{in}}n_{\\mathrm{out}}+n_{\\mathrm{out}}=(n_{\\mathrm{in}}+1)n_{\\mathrm{out}}",
+    "width": 291,
+    "display": true
+  },
+  {
+    "file": "display-24.png",
+    "latex": "\\theta_{\\mathrm{new}}=\\theta-\\eta\\nabla_\\theta L.",
+    "width": 178,
+    "display": true
+  },
+  {
+    "file": "display-25.png",
+    "latex": "\\frac{\\partial L}{\\partial w}=(a-y)\\phi'(z)x,\\qquad\n\\frac{\\partial L}{\\partial b}=(a-y)\\phi'(z).",
+    "width": 196,
+    "display": true
+  },
+  {
+    "file": "display-26.png",
+    "latex": "\\frac{\\partial L}{\\partial W}=\\delta x^T,\\qquad\n\\frac{\\partial L}{\\partial b}=\\delta,\\qquad\n\\frac{\\partial L}{\\partial x}=W^T\\delta.",
+    "width": 114,
+    "display": true
+  },
+  {
+    "file": "display-27.png",
+    "latex": "H_{\\mathrm{out}}=\\left\\lfloor\\frac{H+2P_h-K_h}{S_h}\\right\\rfloor+1,",
+    "width": 234,
+    "display": true
+  },
+  {
+    "file": "display-28.png",
+    "latex": "W_{\\mathrm{out}}=\\left\\lfloor\\frac{W+2P_w-K_w}{S_w}\\right\\rfloor+1.",
+    "width": 246,
+    "display": true
+  },
+  {
+    "file": "display-29.png",
+    "latex": "(K_hK_wC_{\\mathrm{in}}+1)C_{\\mathrm{out}}.",
+    "width": 194,
+    "display": true
+  },
+  {
+    "file": "display-30.png",
+    "latex": "H_{\\mathrm{out}}=W_{\\mathrm{out}}=\\lfloor(7+4-4)/3\\rfloor+1=3.",
+    "width": 372,
+    "display": true
+  },
+  {
+    "file": "display-31.png",
+    "latex": "\\mathrm{IoU}(A,B)=\\frac{\\operatorname{Area}(A\\cap B)}{\\operatorname{Area}(A\\cup B)}.",
+    "width": 220,
+    "display": true
+  },
+  {
+    "file": "display-32.png",
+    "latex": "T(t_x,t_y)=\\begin{bmatrix}1&0&t_x\\\\0&1&t_y\\\\0&0&1\\end{bmatrix},\\quad\nS(s_x,s_y)=\\begin{bmatrix}s_x&0&0\\\\0&s_y&0\\\\0&0&1\\end{bmatrix},",
+    "width": 221,
+    "display": true
+  },
+  {
+    "file": "display-33.png",
+    "latex": "R(\\theta)=\\begin{bmatrix}\\cos\\theta&-\\sin\\theta&0\\\\\\sin\\theta&\\cos\\theta&0\\\\0&0&1\\end{bmatrix},\\quad\n\\mathrm{Shear}_x(a)=\\begin{bmatrix}1&a&0\\\\0&1&0\\\\0&0&1\\end{bmatrix}.",
+    "width": 257,
+    "display": true
+  },
+  {
+    "file": "display-34.png",
+    "latex": "u=ax+by+t_x,\\qquad v=cx+dy+t_y.",
+    "width": 180,
+    "display": true
+  },
+  {
+    "file": "display-35.png",
+    "latex": "u=\\frac{h_{11}x+h_{12}y+h_{13}}{h_{31}x+h_{32}y+h_{33}},\\qquad\nv=\\frac{h_{21}x+h_{22}y+h_{23}}{h_{31}x+h_{32}y+h_{33}}.",
+    "width": 184,
+    "display": true
+  },
+  {
+    "file": "display-36.png",
+    "latex": "\\begin{bmatrix}x&y&1&0&0&0&-ux&-uy&-u\\\\0&0&0&x&y&1&-vx&-vy&-v\\end{bmatrix}",
+    "width": 313,
+    "display": true
+  },
+  {
+    "file": "display-37.png",
+    "latex": "N\\geq\\frac{\\log(1-p)}{\\log(1-w^s)},",
+    "width": 146,
+    "display": true
+  },
+  {
+    "file": "display-38.png",
+    "latex": "\\mathbf{x}\\sim P\\mathbf{X},\\qquad P=K[R\\mid\\mathbf{t}],\\qquad \\mathbf{t}=-R\\mathbf{C}.",
+    "width": 134,
+    "display": true
+  },
+  {
+    "file": "display-39.png",
+    "latex": "K=\\begin{bmatrix}f_x&s&c_x\\\\0&f_y&c_y\\\\0&0&1\\end{bmatrix}.",
+    "width": 156,
+    "display": true
+  },
+  {
+    "file": "display-40.png",
+    "latex": "(u p_3^T-p_1^T)X=0,\\qquad(v p_3^T-p_2^T)X=0.",
+    "width": 177,
+    "display": true
+  },
+  {
+    "file": "display-41.png",
+    "latex": "x'^TFx=0,\\qquad F=K'^{-T}EK^{-1}.",
+    "width": 153,
+    "display": true
+  },
+  {
+    "file": "display-42.png",
+    "latex": "\\begin{bmatrix}u^{\\prime}u&u^{\\prime}v&u^{\\prime}&v^{\\prime}u&v^{\\prime}v&v^{\\prime}&u&v&1\\end{bmatrix}",
+    "width": 316,
+    "display": true
+  },
+  {
+    "file": "display-43.png",
+    "latex": "Z=\\frac{fB}{d}.",
+    "width": 84,
+    "display": true
+  },
+  {
+    "file": "display-44.png",
+    "latex": "\\left|\\frac{\\partial Z}{\\partial d}\\right|=\\frac{fB}{d^2}=\\frac{Z^2}{fB}.",
+    "width": 154,
+    "display": true
+  },
+  {
+    "file": "display-45.png",
+    "latex": "\\min_{\\{R_j,t_j,X_i\\}}\\sum_{(i,j)\\in\\mathcal{O}}\n\\|x_{ij}-\\pi(K_j[R_j\\mid t_j]X_i)\\|^2,",
+    "width": 230,
+    "display": true
+  },
+  {
+    "file": "display-46.png",
+    "latex": "I(x,y,t)\\approx I(x+u,y+v,t+1).",
+    "width": 311,
+    "display": true
+  },
+  {
+    "file": "display-47.png",
+    "latex": "I_xu+I_yv+I_t=0.",
+    "width": 181,
+    "display": true
+  },
+  {
+    "file": "display-48.png",
+    "latex": "A\\begin{bmatrix}u\\\\v\\end{bmatrix}=b,\\qquad\nA=\\begin{bmatrix}I_x(p_1)&I_y(p_1)\\\\\\vdots&\\vdots\\\\I_x(p_n)&I_y(p_n)\\end{bmatrix},\\quad\nb=-\\begin{bmatrix}I_t(p_1)\\\\\\vdots\\\\I_t(p_n)\\end{bmatrix}.",
+    "width": 201,
+    "display": true
+  },
+  {
+    "file": "display-49.png",
+    "latex": "A^TA=\\begin{bmatrix}\\sum I_x^2&\\sum I_xI_y\\\\\\sum I_xI_y&\\sum I_y^2\\end{bmatrix}.",
+    "width": 217,
+    "display": true
+  },
+  {
+    "file": "display-50.png",
+    "latex": "z=\\operatorname{Encoder}(x),\\qquad \\hat x=\\operatorname{Decoder}(z),\\qquad\nL_{\\mathrm{rec}}=\\|x-\\hat x\\|^2.",
+    "width": 176,
+    "display": true
+  },
+  {
+    "file": "display-51.png",
+    "latex": "\\min_G\\max_D\\ \\mathbb{E}_{x\\sim p_{data}}[\\log D(x)]\n+\\mathbb{E}_{z\\sim p(z)}[\\log(1-D(G(z)))].",
+    "width": 282,
+    "display": true
+  },
+  {
+    "file": "display-52.png",
+    "latex": "\\begin{bmatrix}x'\\\\y'\\\\1\\end{bmatrix}=\\begin{bmatrix}1&0&2\\\\0&1&1\\\\0&0&1\\end{bmatrix}\\begin{bmatrix}x\\\\y\\\\1\\end{bmatrix}.",
+    "width": 197,
+    "display": true
+  },
+  {
+    "file": "inline-550945e22461.png",
+    "latex": "I_x,I_y,I_t",
+    "width": 66,
+    "display": false
+  },
+  {
+    "file": "inline-573e104c31d6.png",
+    "latex": "G_\\sigma",
+    "width": 29,
+    "display": false
+  },
+  {
+    "file": "inline-9c3245dfb4ac.png",
+    "latex": "\\sigma",
+    "width": 17,
+    "display": false
+  },
+  {
+    "file": "inline-5853b1d74758.png",
+    "latex": "\\mathbf{x}=(u,v,1)^T",
+    "width": 125,
+    "display": false
+  },
+  {
+    "file": "inline-7c25081c7fc7.png",
+    "latex": "\\hat{\\mathbf{x}}=K^{-1}\\mathbf{x}",
+    "width": 91,
+    "display": false
+  },
+  {
+    "file": "inline-a479fe229da9.png",
+    "latex": "\\mathbf{X}=(X,Y,Z,1)^T",
+    "width": 152,
+    "display": false
+  },
+  {
+    "file": "inline-9fd88af77359.png",
+    "latex": "A\\theta\\approx b",
+    "width": 68,
+    "display": false
+  },
+  {
+    "file": "inline-f01fd76e501d.png",
+    "latex": "\\|A\\theta-b\\|^2",
+    "width": 97,
+    "display": false
+  },
+  {
+    "file": "inline-8862ce40df58.png",
+    "latex": "(A^TA)^{-1}A^Tb",
+    "width": 116,
+    "display": false
+  },
+  {
+    "file": "inline-0a2af39cdf3a.png",
+    "latex": "A\\theta\\approx0",
+    "width": 68,
+    "display": false
+  },
+  {
+    "file": "inline-743e8b5e4c29.png",
+    "latex": "\\|\\theta\\|=1",
+    "width": 74,
+    "display": false
+  },
+  {
+    "file": "inline-010d6308b33a.png",
+    "latex": "A=U\\Sigma V^T",
+    "width": 94,
+    "display": false
+  },
+  {
+    "file": "inline-154dc0434c59.png",
+    "latex": "s_o",
+    "width": 24,
+    "display": false
+  },
+  {
+    "file": "inline-c8ea458b12d6.png",
+    "latex": "s_i",
+    "width": 19,
+    "display": false
+  },
+  {
+    "file": "inline-f50a6eb5e156.png",
+    "latex": "m=-\\frac{s_i}{s_o}",
+    "width": 81,
+    "display": false
+  },
+  {
+    "file": "inline-26af77a99fdf.png",
+    "latex": "s_o\\to\\infty",
+    "width": 65,
+    "display": false
+  },
+  {
+    "file": "inline-ffe87eabcf2c.png",
+    "latex": "s_i\\to f",
+    "width": 51,
+    "display": false
+  },
+  {
+    "file": "inline-bbfb1f8b2136.png",
+    "latex": "s_o=1000",
+    "width": 99,
+    "display": false
+  },
+  {
+    "file": "inline-aea8dfa4f340.png",
+    "latex": "2\\arctan(w/(2f))",
+    "width": 156,
+    "display": false
+  },
+  {
+    "file": "inline-067374067d83.png",
+    "latex": "H\\times W\\times3",
+    "width": 101,
+    "display": false
+  },
+  {
+    "file": "inline-4fcc74eb4d16.png",
+    "latex": "3\\times H\\times W",
+    "width": 101,
+    "display": false
+  },
+  {
+    "file": "inline-797b7cdbaa89.png",
+    "latex": "4(90)/16=22.5",
+    "width": 160,
+    "display": false
+  },
+  {
+    "file": "inline-2a47e7ae52e6.png",
+    "latex": "I_x=3,I_y=4",
+    "width": 119,
+    "display": false
+  },
+  {
+    "file": "inline-613d9f655156.png",
+    "latex": "I(x,y)>T",
+    "width": 97,
+    "display": false
+  },
+  {
+    "file": "inline-754bcee66fcc.png",
+    "latex": "M\\times N",
+    "width": 61,
+    "display": false
+  },
+  {
+    "file": "inline-143af0827cfd.png",
+    "latex": "F=|F|e^{i\\phi}",
+    "width": 92,
+    "display": false
+  },
+  {
+    "file": "inline-f8271cf6bd11.png",
+    "latex": "\\nabla^2 I=I_{xx}+I_{yy}",
+    "width": 129,
+    "display": false
+  },
+  {
+    "file": "inline-20da0a74d074.png",
+    "latex": "(\\nabla^2G_\\sigma)*I",
+    "width": 92,
+    "display": false
+  },
+  {
+    "file": "inline-63901831d28e.png",
+    "latex": "I-G_\\sigma*I",
+    "width": 84,
+    "display": false
+  },
+  {
+    "file": "inline-fc1db49a4aa3.png",
+    "latex": "L_k=G_k-\\operatorname{Expand}(G_{k+1})",
+    "width": 238,
+    "display": false
+  },
+  {
+    "file": "inline-31de47c92cba.png",
+    "latex": "L_k=M_kL^A_k+(1-M_k)L^B_k",
+    "width": 223,
+    "display": false
+  },
+  {
+    "file": "inline-161ae8dc8f69.png",
+    "latex": "I(x+u,y+v)\\approx I(x,y)+I_xu+I_yv",
+    "width": 317,
+    "display": false
+  },
+  {
+    "file": "inline-f3758b55ada6.png",
+    "latex": "1/\\sqrt{\\lambda_i}",
+    "width": 59,
+    "display": false
+  },
+  {
+    "file": "inline-68d4d96a31c2.png",
+    "latex": "I_x,I_y",
+    "width": 44,
+    "display": false
+  },
+  {
+    "file": "inline-0d7cfb4076d8.png",
+    "latex": "I_x^2,I_xI_y,I_y^2",
+    "width": 88,
+    "display": false
+  },
+  {
+    "file": "inline-63e910431577.png",
+    "latex": "R=\\det(M)-k\\operatorname{tr}(M)^2",
+    "width": 203,
+    "display": false
+  },
+  {
+    "file": "inline-f8ccb1fd0b12.png",
+    "latex": "a^2",
+    "width": 27,
+    "display": false
+  },
+  {
+    "file": "inline-ce4d4e9d0e61.png",
+    "latex": "\\sigma^2\\nabla^2(G_\\sigma*I)",
+    "width": 115,
+    "display": false
+  },
+  {
+    "file": "inline-bdbf6e994261.png",
+    "latex": "4\\times4\\times8=128",
+    "width": 154,
+    "display": false
+  },
+  {
+    "file": "inline-b45cbf735c2e.png",
+    "latex": "\\|f-g\\|_2",
+    "width": 78,
+    "display": false
+  },
+  {
+    "file": "inline-d4ccdadd9a27.png",
+    "latex": "r<\\tau",
+    "width": 49,
+    "display": false
+  },
+  {
+    "file": "inline-e153267f923a.png",
+    "latex": "r\\approx0.833",
+    "width": 94,
+    "display": false
+  },
+  {
+    "file": "inline-8f16c76e03a0.png",
+    "latex": "\\tau=0.7",
+    "width": 71,
+    "display": false
+  },
+  {
+    "file": "inline-dc5b73c75440.png",
+    "latex": "=600/800=0.75",
+    "width": 179,
+    "display": false
+  },
+  {
+    "file": "inline-47eb5ede8607.png",
+    "latex": "=100/200=0.5",
+    "width": 168,
+    "display": false
+  },
+  {
+    "file": "inline-c64a2c3193fb.png",
+    "latex": "=600/700\\approx0.857",
+    "width": 189,
+    "display": false
+  },
+  {
+    "file": "inline-1e23b3befecb.png",
+    "latex": "\\hat y=w^Tx+b",
+    "width": 117,
+    "display": false
+  },
+  {
+    "file": "inline-db59b7da0e58.png",
+    "latex": "X^+y",
+    "width": 49,
+    "display": false
+  },
+  {
+    "file": "inline-9e27e4763f42.png",
+    "latex": "X^TX",
+    "width": 42,
+    "display": false
+  },
+  {
+    "file": "inline-b45e7e05d34c.png",
+    "latex": "(X^TX)^{-1}X^Ty",
+    "width": 115,
+    "display": false
+  },
+  {
+    "file": "inline-01999b891fe2.png",
+    "latex": "[1,x,x^2,\\ldots,x^d]",
+    "width": 150,
+    "display": false
+  },
+  {
+    "file": "inline-3142a3d1b1e7.png",
+    "latex": "C\\times D",
+    "width": 58,
+    "display": false
+  },
+  {
+    "file": "inline-8c9c7d96cc31.png",
+    "latex": "x\\in\\mathbb{R}^D",
+    "width": 68,
+    "display": false
+  },
+  {
+    "file": "inline-05c3eb63a912.png",
+    "latex": "-\\log p_{\\mathrm{true}}",
+    "width": 97,
+    "display": false
+  },
+  {
+    "file": "inline-471804aeef88.png",
+    "latex": "n_{\\mathrm{in}}",
+    "width": 30,
+    "display": false
+  },
+  {
+    "file": "inline-416f1ae178bc.png",
+    "latex": "n_{\\mathrm{out}}",
+    "width": 41,
+    "display": false
+  },
+  {
+    "file": "inline-581881cdc1b2.png",
+    "latex": "256\\to128",
+    "width": 105,
+    "display": false
+  },
+  {
+    "file": "inline-d071f895820b.png",
+    "latex": "3\\to4\\to2",
+    "width": 92,
+    "display": false
+  },
+  {
+    "file": "inline-59a94416a2a3.png",
+    "latex": "\\eta",
+    "width": 17,
+    "display": false
+  },
+  {
+    "file": "inline-00e3bee005d4.png",
+    "latex": "a=\\phi(z)",
+    "width": 81,
+    "display": false
+  },
+  {
+    "file": "inline-f6af1d0f7963.png",
+    "latex": "L=\\frac{1}{2}(a-y)^2",
+    "width": 125,
+    "display": false
+  },
+  {
+    "file": "inline-ca4e4a62255e.png",
+    "latex": "\\delta=\\frac{\\partial L}{\\partial z}",
+    "width": 59,
+    "display": false
+  },
+  {
+    "file": "inline-b896c82c0888.png",
+    "latex": "\\hat y=wx+b",
+    "width": 107,
+    "display": false
+  },
+  {
+    "file": "inline-6151d58eb6e6.png",
+    "latex": "L=\\frac{1}{2}(\\hat y-y)^2",
+    "width": 126,
+    "display": false
+  },
+  {
+    "file": "inline-9c6130449cee.png",
+    "latex": "\\hat y=2",
+    "width": 54,
+    "display": false
+  },
+  {
+    "file": "inline-33c6c94f95a1.png",
+    "latex": "\\frac{\\partial L}{\\partial w}=-6",
+    "width": 80,
+    "display": false
+  },
+  {
+    "file": "inline-296902b575fa.png",
+    "latex": "\\frac{\\partial L}{\\partial b}=-3",
+    "width": 77,
+    "display": false
+  },
+  {
+    "file": "inline-78dc49d4d7e9.png",
+    "latex": "\\eta=0.1",
+    "width": 74,
+    "display": false
+  },
+  {
+    "file": "inline-d939926f0544.png",
+    "latex": "1/2",
+    "width": 36,
+    "display": false
+  },
+  {
+    "file": "inline-27f3c384c32b.png",
+    "latex": "H\\times W\\times C_{\\mathrm{in}}",
+    "width": 116,
+    "display": false
+  },
+  {
+    "file": "inline-49fff4943a1d.png",
+    "latex": "K_h\\times K_w",
+    "width": 77,
+    "display": false
+  },
+  {
+    "file": "inline-8aba55730045.png",
+    "latex": "P_h,P_w",
+    "width": 60,
+    "display": false
+  },
+  {
+    "file": "inline-2c3e3fa94835.png",
+    "latex": "S_h,S_w",
+    "width": 62,
+    "display": false
+  },
+  {
+    "file": "inline-a0a1c6308a53.png",
+    "latex": "C_{\\mathrm{out}}",
+    "width": 42,
+    "display": false
+  },
+  {
+    "file": "inline-7a057e1e1db4.png",
+    "latex": "(3\\cdot3\\cdot3+1)16=448",
+    "width": 212,
+    "display": false
+  },
+  {
+    "file": "inline-d494102ead1a.png",
+    "latex": "7\\times7\\times[20+2(5)]=7\\times7\\times30",
+    "width": 310,
+    "display": false
+  },
+  {
+    "file": "inline-0d7f0e336166.png",
+    "latex": "1/3",
+    "width": 37,
+    "display": false
+  },
+  {
+    "file": "inline-45e59c6d4dc8.png",
+    "latex": "(x,y,1)^T",
+    "width": 86,
+    "display": false
+  },
+  {
+    "file": "inline-9dbd436274c0.png",
+    "latex": "(2x,2y,2)^T\\sim(x,y,1)^T",
+    "width": 218,
+    "display": false
+  },
+  {
+    "file": "inline-8f385476ff0b.png",
+    "latex": "(a,b,c)^T",
+    "width": 86,
+    "display": false
+  },
+  {
+    "file": "inline-f0409d69f608.png",
+    "latex": "(a/c,b/c)",
+    "width": 91,
+    "display": false
+  },
+  {
+    "file": "inline-cedacecd0f8b.png",
+    "latex": "c\\ne0",
+    "width": 53,
+    "display": false
+  },
+  {
+    "file": "inline-21556bd4232c.png",
+    "latex": "\\mathbf{x}'=TRS\\mathbf{x}",
+    "width": 98,
+    "display": false
+  },
+  {
+    "file": "inline-560da1742c40.png",
+    "latex": "TR\\ne RT",
+    "width": 81,
+    "display": false
+  },
+  {
+    "file": "inline-72d4043b01a6.png",
+    "latex": "x'=x+t",
+    "width": 90,
+    "display": false
+  },
+  {
+    "file": "inline-281e635a4418.png",
+    "latex": "x'=Rx+t",
+    "width": 104,
+    "display": false
+  },
+  {
+    "file": "inline-7785f66a9def.png",
+    "latex": "x'=sRx+t",
+    "width": 115,
+    "display": false
+  },
+  {
+    "file": "inline-c152458638b5.png",
+    "latex": "x'=Ax+t",
+    "width": 104,
+    "display": false
+  },
+  {
+    "file": "inline-90b4b14b0b49.png",
+    "latex": "x'\\sim Hx",
+    "width": 73,
+    "display": false
+  },
+  {
+    "file": "inline-38c86021fb83.png",
+    "latex": "(x,y)\\leftrightarrow(u,v)",
+    "width": 129,
+    "display": false
+  },
+  {
+    "file": "inline-5e3d4eb518d1.png",
+    "latex": "(a,b,t_x,c,d,t_y)",
+    "width": 153,
+    "display": false
+  },
+  {
+    "file": "inline-af016ae43814.png",
+    "latex": "H=[h_{ij}]",
+    "width": 81,
+    "display": false
+  },
+  {
+    "file": "inline-c6ed45797697.png",
+    "latex": "h=(h_{11},h_{12},h_{13},h_{21},h_{22},h_{23},h_{31},h_{32},h_{33})^T",
+    "width": 428,
+    "display": false
+  },
+  {
+    "file": "inline-47ee9fdbc83d.png",
+    "latex": "Ah\\approx0",
+    "width": 68,
+    "display": false
+  },
+  {
+    "file": "inline-daaa917c98a2.png",
+    "latex": "H^{-1}",
+    "width": 42,
+    "display": false
+  },
+  {
+    "file": "inline-b7aec596b400.png",
+    "latex": "X_c=R(X_w-C)=RX_w+t",
+    "width": 241,
+    "display": false
+  },
+  {
+    "file": "inline-4a5117da84cb.png",
+    "latex": "u=f_xX_c/Z_c+c_x",
+    "width": 153,
+    "display": false
+  },
+  {
+    "file": "inline-c801e3c73601.png",
+    "latex": "v=f_yY_c/Z_c+c_y",
+    "width": 150,
+    "display": false
+  },
+  {
+    "file": "inline-5b3c6bd4da68.png",
+    "latex": "f_x=f_y=800",
+    "width": 124,
+    "display": false
+  },
+  {
+    "file": "inline-848cb6881aa0.png",
+    "latex": "(c_x,c_y)=(320,240)",
+    "width": 197,
+    "display": false
+  },
+  {
+    "file": "inline-862e9277785e.png",
+    "latex": "X_c=(1,0.5,4)",
+    "width": 144,
+    "display": false
+  },
+  {
+    "file": "inline-e8394415f576.png",
+    "latex": "Z_0",
+    "width": 28,
+    "display": false
+  },
+  {
+    "file": "inline-ddc9b7bfccb3.png",
+    "latex": "f/Z_0",
+    "width": 41,
+    "display": false
+  },
+  {
+    "file": "inline-be222c4d933b.png",
+    "latex": "\\mathbf{x}\\times P\\mathbf{X}=0",
+    "width": 107,
+    "display": false
+  },
+  {
+    "file": "inline-71ed01c38969.png",
+    "latex": "P=[M\\mid p_4]",
+    "width": 114,
+    "display": false
+  },
+  {
+    "file": "inline-5ad00143c624.png",
+    "latex": "PC_h=0",
+    "width": 77,
+    "display": false
+  },
+  {
+    "file": "inline-55ca84d7f351.png",
+    "latex": "C=-M^{-1}p_4",
+    "width": 122,
+    "display": false
+  },
+  {
+    "file": "inline-2af9dbfe8293.png",
+    "latex": "P,P'",
+    "width": 45,
+    "display": false
+  },
+  {
+    "file": "inline-50517a257ce5.png",
+    "latex": "x,x'",
+    "width": 44,
+    "display": false
+  },
+  {
+    "file": "inline-bcd3e40755a0.png",
+    "latex": "p_1^T,p_2^T,p_3^T",
+    "width": 93,
+    "display": false
+  },
+  {
+    "file": "inline-ea0cd618b005.png",
+    "latex": "\\hat x'^TE\\hat x=0",
+    "width": 93,
+    "display": false
+  },
+  {
+    "file": "inline-bdc6eb718a17.png",
+    "latex": "l'=Fx",
+    "width": 64,
+    "display": false
+  },
+  {
+    "file": "inline-2df4381b65de.png",
+    "latex": "l=F^Tx'",
+    "width": 74,
+    "display": false
+  },
+  {
+    "file": "inline-7198e75af8a2.png",
+    "latex": "l'=(a,b,c)^T",
+    "width": 122,
+    "display": false
+  },
+  {
+    "file": "inline-09f14c1ce06c.png",
+    "latex": "au'+bv'+c=0",
+    "width": 162,
+    "display": false
+  },
+  {
+    "file": "inline-20ed425fc228.png",
+    "latex": "X_2=RX_1+t",
+    "width": 122,
+    "display": false
+  },
+  {
+    "file": "inline-91f2d39c5514.png",
+    "latex": "E=[t]_\\times R",
+    "width": 97,
+    "display": false
+  },
+  {
+    "file": "inline-714f3e2853bf.png",
+    "latex": "[t]_\\times a=t\\times a",
+    "width": 127,
+    "display": false
+  },
+  {
+    "file": "inline-70b48f814b25.png",
+    "latex": "X'=R(X-t_{\\mathrm{center}})",
+    "width": 170,
+    "display": false
+  },
+  {
+    "file": "inline-0d0dfb306925.png",
+    "latex": "E\\sim R[t_{\\mathrm{center}}]_\\times",
+    "width": 143,
+    "display": false
+  },
+  {
+    "file": "inline-8029ff2df42e.png",
+    "latex": "(u,v,1)^T\\leftrightarrow(u',v',1)^T",
+    "width": 205,
+    "display": false
+  },
+  {
+    "file": "inline-f3497f64799e.png",
+    "latex": "Af\\approx0",
+    "width": 62,
+    "display": false
+  },
+  {
+    "file": "inline-079d0e05a5a0.png",
+    "latex": "x_n=Tx",
+    "width": 74,
+    "display": false
+  },
+  {
+    "file": "inline-10f8f9af2d03.png",
+    "latex": "x'_n=T'x'",
+    "width": 91,
+    "display": false
+  },
+  {
+    "file": "inline-bae442bdfdd3.png",
+    "latex": "F=T'^TF_nT",
+    "width": 101,
+    "display": false
+  },
+  {
+    "file": "inline-74393d34f9c3.png",
+    "latex": "K^{-1}x",
+    "width": 52,
+    "display": false
+  },
+  {
+    "file": "inline-2578aba0be9c.png",
+    "latex": "d=u_L-u_R",
+    "width": 110,
+    "display": false
+  },
+  {
+    "file": "inline-ca51b3323f33.png",
+    "latex": "u_L=fX/Z",
+    "width": 91,
+    "display": false
+  },
+  {
+    "file": "inline-679401e044a3.png",
+    "latex": "u_R=f(X-B)/Z",
+    "width": 147,
+    "display": false
+  },
+  {
+    "file": "inline-3aa396426c83.png",
+    "latex": "d=fB/Z",
+    "width": 83,
+    "display": false
+  },
+  {
+    "file": "inline-04be72645d04.png",
+    "latex": "d\\to0",
+    "width": 54,
+    "display": false
+  },
+  {
+    "file": "inline-f1cf04093d08.png",
+    "latex": "\\pi",
+    "width": 17,
+    "display": false
+  },
+  {
+    "file": "inline-962d5f137d64.png",
+    "latex": "p(y\\mid x)",
+    "width": 74,
+    "display": false
+  },
+  {
+    "file": "inline-257f9cf26a52.png",
+    "latex": "p(x\\mid y)",
+    "width": 74,
+    "display": false
+  },
+  {
+    "file": "inline-8a5869f7609c.png",
+    "latex": "-\\mathbb{E}_z\\log D(G(z))",
+    "width": 148,
+    "display": false
+  },
+  {
+    "file": "inline-3d161436856c.png",
+    "latex": "p(x\\mid c)=\\prod_i p(x_i\\mid x_{<i},c)",
+    "width": 232,
+    "display": false
+  },
+  {
+    "file": "inline-d68522a825c5.png",
+    "latex": "u=\\frac{fX}{Z}",
+    "width": 59,
+    "display": false
+  },
+  {
+    "file": "inline-ee5536d383d6.png",
+    "latex": "v=\\frac{fY}{Z}",
+    "width": 57,
+    "display": false
+  },
+  {
+    "file": "inline-0331a19d40de.png",
+    "latex": "1/f=1/s_o+1/s_i",
+    "width": 153,
+    "display": false
+  },
+  {
+    "file": "inline-9b152c4ad165.png",
+    "latex": "|m|=\\frac{s_i}{s_o}",
+    "width": 78,
+    "display": false
+  },
+  {
+    "file": "inline-b7cf2dc458d7.png",
+    "latex": "G_\\sigma\\propto e^{-(x^2+y^2)/(2\\sigma^2)}",
+    "width": 177,
+    "display": false
+  },
+  {
+    "file": "inline-aea262d3821d.png",
+    "latex": "\\nabla I=(I_x,I_y)",
+    "width": 104,
+    "display": false
+  },
+  {
+    "file": "inline-7bbef1ffc197.png",
+    "latex": "\\sqrt{I_x^2+I_y^2}",
+    "width": 86,
+    "display": false
+  },
+  {
+    "file": "inline-33b9f82f681d.png",
+    "latex": "D=I-G*I",
+    "width": 114,
+    "display": false
+  },
+  {
+    "file": "inline-699cd9f0c7f2.png",
+    "latex": "I_{\\mathrm{sharp}}=I+\\alpha D",
+    "width": 134,
+    "display": false
+  },
+  {
+    "file": "inline-da5d84426c4c.png",
+    "latex": "\\mathcal{F}(I*k)=\\mathcal{F}(I)\\mathcal{F}(k)",
+    "width": 168,
+    "display": false
+  },
+  {
+    "file": "inline-e5af92321992.png",
+    "latex": "E(u,v)\\approx[u\\ v]M[u\\ v]^T",
+    "width": 212,
+    "display": false
+  },
+  {
+    "file": "inline-291b1a75dc72.png",
+    "latex": "M=\\sum w\\nabla I\\nabla I^T",
+    "width": 131,
+    "display": false
+  },
+  {
+    "file": "inline-fc5f9c7fa598.png",
+    "latex": "\\frac{TP}{TP+FP}",
+    "width": 58,
+    "display": false
+  },
+  {
+    "file": "inline-d8490f2e1980.png",
+    "latex": "\\frac{TP}{TP+FN}",
+    "width": 60,
+    "display": false
+  },
+  {
+    "file": "inline-296ce8180711.png",
+    "latex": "\\frac{FP}{FP+TN}",
+    "width": 60,
+    "display": false
+  },
+  {
+    "file": "inline-ce991fb02e19.png",
+    "latex": "p_c=e^{z_c}/\\sum_j e^{z_j}",
+    "width": 126,
+    "display": false
+  },
+  {
+    "file": "inline-06ce67978100.png",
+    "latex": "L=-\\log p_{\\mathrm{true}}",
+    "width": 133,
+    "display": false
+  },
+  {
+    "file": "inline-4bfc14bc45b9.png",
+    "latex": "(n_{\\mathrm{in}}+1)n_{\\mathrm{out}}",
+    "width": 120,
+    "display": false
+  },
+  {
+    "file": "inline-7356cd7df515.png",
+    "latex": "\\theta\\leftarrow\\theta-\\eta\\nabla L",
+    "width": 115,
+    "display": false
+  },
+  {
+    "file": "inline-2908a6821736.png",
+    "latex": "\\lfloor(N+2P-D(K-1)-1)/S\\rfloor+1",
+    "width": 300,
+    "display": false
+  },
+  {
+    "file": "inline-b155f1f19bad.png",
+    "latex": "(K_hK_wC_{\\mathrm{in}}+1)C_{\\mathrm{out}}",
+    "width": 170,
+    "display": false
+  },
+  {
+    "file": "inline-be2cf2631531.png",
+    "latex": "(x,y)\\leftrightarrow(x,y,1)",
+    "width": 151,
+    "display": false
+  },
+  {
+    "file": "inline-9802d6092412.png",
+    "latex": "x\\sim K[R\\mid t]X",
+    "width": 122,
+    "display": false
+  },
+  {
+    "file": "inline-4607431bba58.png",
+    "latex": "x'^TFx=0",
+    "width": 92,
+    "display": false
+  },
+  {
+    "file": "inline-3589a5a5f71f.png",
+    "latex": "F=K'^{-T}EK^{-1}",
+    "width": 129,
+    "display": false
+  },
+  {
+    "file": "inline-02a1d43aab82.png",
+    "latex": "Z=\\frac{fB}{d}",
+    "width": 60,
+    "display": false
+  },
+  {
+    "file": "inline-e7bf3cce6e66.png",
+    "latex": "I_xu+I_yv+I_t=0",
+    "width": 157,
+    "display": false
+  },
+  {
+    "file": "inline-4b7c942c310c.png",
+    "latex": "A^TA\\,[u\\ v]^T=A^Tb",
+    "width": 163,
+    "display": false
+  },
+  {
+    "file": "inline-c90722f9a309.png",
+    "latex": "\\hat x=D(z)",
+    "width": 83,
+    "display": false
+  },
+  {
+    "file": "inline-a631ec11db58.png",
+    "latex": "1/s_o+1/s_i=1/f",
+    "width": 153,
+    "display": false
+  },
+  {
+    "file": "inline-f3fe71aa6ec5.png",
+    "latex": "X-G*X",
+    "width": 90,
+    "display": false
+  },
+  {
+    "file": "inline-0d40ea04210c.png",
+    "latex": "\\nabla^2X",
+    "width": 41,
+    "display": false
+  },
+  {
+    "file": "inline-9004148fbb90.png",
+    "latex": "256\\cdot128+128=32{,}896",
+    "width": 252,
+    "display": false
+  },
+  {
+    "file": "inline-b825aa70b40d.png",
+    "latex": "\\lfloor(7+2\\cdot2-4)/3\\rfloor+1=3",
+    "width": 244,
+    "display": false
+  },
+  {
+    "file": "inline-5ec23ba3023b.png",
+    "latex": "t_x=2,t_y=1",
+    "width": 123,
+    "display": false
+  },
+  {
+    "file": "inline-c87e4081fb2a.png",
+    "latex": "20\\to10\\to3",
+    "width": 117,
+    "display": false
+  },
+  {
+    "file": "inline-4e9b99b97096.png",
+    "latex": "L(w)=\\frac{1}{2}(w-4)^2",
+    "width": 162,
+    "display": false
+  },
+  {
+    "file": "inline-8f6a69814a7a.png",
+    "latex": "\\eta=0.2",
+    "width": 72,
+    "display": false
+  },
+  {
+    "file": "inline-32c9b457a4f5.png",
+    "latex": "s_i=40(400)/(400-40)=44.44",
+    "width": 315,
+    "display": false
+  },
+  {
+    "file": "inline-18ebe31d8535.png",
+    "latex": "|m|=44.44/400\\approx0.111",
+    "width": 246,
+    "display": false
+  },
+  {
+    "file": "inline-974640fde89d.png",
+    "latex": "81/9=9",
+    "width": 84,
+    "display": false
+  },
+  {
+    "file": "inline-b7f51399e6c0.png",
+    "latex": "12/15=0.8",
+    "width": 118,
+    "display": false
+  },
+  {
+    "file": "inline-f9a2176c3ee2.png",
+    "latex": "=60/65\\approx0.923",
+    "width": 168,
+    "display": false
+  },
+  {
+    "file": "inline-09cccb9f4f26.png",
+    "latex": "=60/80=0.75",
+    "width": 153,
+    "display": false
+  },
+  {
+    "file": "inline-8e49a80bb10b.png",
+    "latex": "=5/20=0.25",
+    "width": 141,
+    "display": false
+  },
+  {
+    "file": "inline-7fa16f090fab.png",
+    "latex": "w_{\\mathrm{new}}=1-0.2(-3)=1.6",
+    "width": 244,
+    "display": false
+  },
+  {
+    "file": "inline-332912281285.png",
+    "latex": "(5\\cdot5\\cdot3+1)8=608",
+    "width": 199,
+    "display": false
+  },
+  {
+    "file": "inline-fbb6949cdd02.png",
+    "latex": "=60/160=0.375",
+    "width": 181,
+    "display": false
+  },
+  {
+    "file": "inline-a89b5d249044.png",
+    "latex": "TS=\\begin{bmatrix}2&0&3\\\\0&2&-1\\\\0&0&1\\end{bmatrix}",
+    "width": 148,
+    "display": false
+  },
+  {
+    "file": "inline-3021243ddd9d.png",
+    "latex": "Z=600(0.2)/30=4",
+    "width": 197,
+    "display": false
+  },
+  {
+    "file": "inline-9f58d1c4a8e8.png",
+    "latex": "K[R|t]",
+    "width": 61,
+    "display": false
+  }
+]

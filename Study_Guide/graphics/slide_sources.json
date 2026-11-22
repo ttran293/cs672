@@ -1,0 +1,212 @@
+[
+  {
+    "deck": "01_intro.pdf",
+    "page": 13,
+    "file": "01-scene-understanding.png",
+    "caption": "Scene understanding involves objects, actions, and affordances."
+  },
+  {
+    "deck": "02_image-formation.pdf",
+    "page": 10,
+    "file": "02-pinhole-rays.png",
+    "caption": "Pinhole ray geometry and the inverted image."
+  },
+  {
+    "deck": "02_image-formation.pdf",
+    "page": 43,
+    "file": "02-thin-lens.png",
+    "caption": "Thin-lens geometry: relate focal length, object distance, and image distance."
+  },
+  {
+    "deck": "02_image-formation.pdf",
+    "page": 68,
+    "file": "02-bayer-pattern.png",
+    "caption": "Bayer sampling: half the sensor sites measure green."
+  },
+  {
+    "deck": "03_image-filtering-i.pdf",
+    "page": 89,
+    "file": "03-gaussian-kernel.png",
+    "caption": "Gaussian filter weights emphasize nearby pixels."
+  },
+  {
+    "deck": "03_image-filtering-i.pdf",
+    "page": 116,
+    "file": "03-sobel-edges.png",
+    "caption": "Derivative filters detect changes in intensity."
+  },
+  {
+    "deck": "04_image-filtering-ii.pdf",
+    "page": 31,
+    "file": "04-magnitude-phase.png",
+    "caption": "Fourier magnitude and phase describe different parts of an image representation."
+  },
+  {
+    "deck": "04_image-filtering-ii.pdf",
+    "page": 64,
+    "file": "04-image-pyramids.png",
+    "caption": "Gaussian pyramid levels and Laplacian detail bands."
+  },
+  {
+    "deck": "04_image-filtering-ii.pdf",
+    "page": 73,
+    "file": "04-pyramid-blending.png",
+    "caption": "Combine image bands using masks at matching scales."
+  },
+  {
+    "deck": "05_image-features-i.pdf",
+    "page": 15,
+    "file": "05-harris-intuition.png",
+    "caption": "A corner changes significantly under shifts in every direction."
+  },
+  {
+    "deck": "05_image-features-i.pdf",
+    "page": 55,
+    "file": "05-harris-eigenvalues.png",
+    "caption": "Harris eigenvalues distinguish flat patches, edges, and corners."
+  },
+  {
+    "deck": "06_image-features-ii.pdf",
+    "page": 56,
+    "file": "06-sift-descriptor.png",
+    "caption": "SIFT stores orientation histograms over spatial cells."
+  },
+  {
+    "deck": "06_image-features-ii.pdf",
+    "page": 66,
+    "file": "06-ratio-test.png",
+    "caption": "Compare the best descriptor match with the runner-up to reject ambiguity."
+  },
+  {
+    "deck": "07_ml-for-cv.pdf",
+    "page": 47,
+    "file": "07-least-squares.png",
+    "caption": "Learning selects parameters by minimizing prediction error."
+  },
+  {
+    "deck": "07_ml-for-cv.pdf",
+    "page": 107,
+    "file": "07-overfitting.png",
+    "caption": "A high-capacity model can follow training samples while missing the underlying trend."
+  },
+  {
+    "deck": "08_ml-for-cv-ii.pdf",
+    "page": 59,
+    "file": "08-nonlinearity.png",
+    "caption": "A nonlinear activation follows the weighted linear computation."
+  },
+  {
+    "deck": "09_ml-for-cv-iii.pdf",
+    "page": 51,
+    "file": "09-learning-rate.png",
+    "caption": "The learning rate controls optimization step size."
+  },
+  {
+    "deck": "09_ml-for-cv-iii.pdf",
+    "page": 80,
+    "file": "09-backpropagation.png",
+    "caption": "The chain rule reuses downstream derivatives during backpropagation."
+  },
+  {
+    "deck": "10_cnn.pdf",
+    "page": 40,
+    "file": "10-convolution-volume.png",
+    "caption": "A convolution filter spans the input channels and produces spatial responses."
+  },
+  {
+    "deck": "10_cnn.pdf",
+    "page": 73,
+    "file": "10-pooling.png",
+    "caption": "Pooling makes responses more stable under small shifts."
+  },
+  {
+    "deck": "11_object-detection.pdf",
+    "page": 39,
+    "file": "11-fast-rcnn.png",
+    "caption": "Fast R-CNN shares convolutional features across region proposals."
+  },
+  {
+    "deck": "11_object-detection.pdf",
+    "page": 62,
+    "file": "11-iou.png",
+    "caption": "Intersection over union measures bounding-box overlap."
+  },
+  {
+    "deck": "12_image-transformations.pdf",
+    "page": 53,
+    "file": "12-transform-composition.png",
+    "caption": "With column vectors, the rightmost transformation acts first."
+  },
+  {
+    "deck": "13_homographies.pdf",
+    "page": 44,
+    "file": "13-homography.png",
+    "caption": "Apply a homography in homogeneous coordinates, then divide by the last coordinate."
+  },
+  {
+    "deck": "13_homographies.pdf",
+    "page": 80,
+    "file": "13-ransac.png",
+    "caption": "Estimate a candidate homography from four pairs, score inliers, and refit."
+  },
+  {
+    "deck": "14_camera-models.pdf",
+    "page": 26,
+    "file": "14-camera-matrix.png",
+    "caption": "Intrinsics and extrinsics combine in the camera projection matrix."
+  },
+  {
+    "deck": "15_epipolar-geometry.pdf",
+    "page": 30,
+    "file": "15-epipolar-geometry.png",
+    "caption": "The camera centers and scene point define an epipolar plane and image lines."
+  },
+  {
+    "deck": "15_epipolar-geometry.pdf",
+    "page": 53,
+    "file": "15-essential-vs-homography.png",
+    "caption": "A homography maps point to point; an essential matrix gives an epipolar line."
+  },
+  {
+    "deck": "16_stereo.pdf",
+    "page": 40,
+    "file": "16-disparity-depth.png",
+    "caption": "For rectified stereo, disparity is inversely proportional to depth."
+  },
+  {
+    "deck": "16_stereo.pdf",
+    "page": 78,
+    "file": "16-stereo-matching.png",
+    "caption": "Search for a corresponding patch along the epipolar scanline."
+  },
+  {
+    "deck": "17_motion.pdf",
+    "page": 25,
+    "file": "17-bundle-adjustment.png",
+    "caption": "Bundle adjustment jointly refines cameras and structure using reprojection error."
+  },
+  {
+    "deck": "17_motion.pdf",
+    "page": 54,
+    "file": "17-optical-flow.png",
+    "caption": "Neighboring brightness-constancy constraints form a least-squares motion estimate."
+  },
+  {
+    "deck": "18_image-synthesis.pdf",
+    "page": 16,
+    "file": "18-autoencoder.png",
+    "caption": "An autoencoder reconstructs its input through a latent representation."
+  },
+  {
+    "deck": "18_image-synthesis.pdf",
+    "page": 64,
+    "file": "18-gan.png",
+    "caption": "A generator and discriminator provide opposing training signals."
+  },
+  {
+    "deck": "18a_text-to-image.pdf",
+    "page": 43,
+    "file": "18a-diffusion.png",
+    "caption": "Forward diffusion adds noise; the learned reverse process denoises."
+  }
+]
