@@ -219,6 +219,15 @@ li { margin: 7px 0; }
 <p>Light travels from a scene point through a small aperture to an image plane. Similar triangles relate projected position to depth. Using a <strong>virtual image plane in front of the camera</strong>:</p>
 <img src="equations/display-01.png" alt="Equation: u = fX / Z v = fY / Z" width="83">
 <p>Here, <strong>u and v</strong> are the horizontal and vertical positions in the image. <strong>X and Y</strong> locate the scene point relative to the camera, <strong>Z</strong> is its depth, and <strong>f</strong> is the focal length. Divide each scene coordinate by depth, then multiply by focal length to obtain its projected image coordinate.</p>
+<p><img src="graphics/02-pinhole-labeled.png" alt="Labeled pinhole diagram showing focal distance f, scene offset X, depth Z, and image coordinate u" /></p>
+<p><strong>Read the diagram from the camera center:</strong></p>
+<ul>
+<li><strong>f (short blue arrow):</strong> go straight along the optical axis from the pinhole to the virtual image plane.</li>
+<li><strong>Z (long orange arrow):</strong> keep going along that same axis until you reach the scene point's depth. Z measures depth along the axis; the slanted ray is a different distance.</li>
+<li><strong>X (green arrow):</strong> at that depth, measure sideways from the optical axis to the scene point.</li>
+<li><strong>u (small blue arrow):</strong> where the ray crosses the image plane, measure from the optical axis to that projected point.</li>
+</ul>
+<p>The small image triangle and the large scene triangle have the same shape. Their sideways-offset-to-depth ratios are equal, which gives the projection formula. For the vertical coordinate, use the same construction with <strong>Y</strong> and <strong>v</strong>.</p>
 <p>On the physical image plane behind the pinhole, the image is inverted and the coordinates acquire a minus sign under the corresponding convention. State which drawing you use.</p>
 <ul>
 <li>Larger depth Z → smaller projected size.</li>
@@ -260,7 +269,24 @@ li { margin: 7px 0; }
 </tr>
 </tbody>
 </table>
+<h4 id="depth-of-field-which-distances-are-sharp">Depth of field: which distances are sharp?</h4>
+<p><img src="graphics/02-depth-of-field.png" alt="Depth of field comparison: a large aperture gives a narrow sharp range, while a small aperture gives a wider sharp range" /></p>
+<p>The green band is the <strong>depth of field</strong>: the range of distances from the camera that look acceptably sharp. The orange dashed line is the distance you focused on, which stays the same in both drawings.</p>
+<ul>
+<li>With a <strong>large aperture</strong>, the focused tree is sharp while the foreground and background look blurry.</li>
+<li>With a <strong>small aperture</strong>, the range expands so the foreground, focused tree, and background can all look acceptably sharp.</li>
+</ul>
+<p>Keep focal length and focus distance fixed when making this comparison. A smaller aperture also admits less light.</p>
+<h4 id="field-of-view-how-wide-a-scene-fits">Field of view: how wide a scene fits?</h4>
 <p>For sensor width w, horizontal FoV is approximately <img src="equations/inline-aea8dfa4f340.png" alt="2arctan(w/(2f))" width="156">. A lens can have a wide FoV while still having shallow DoF. The heading on Lecture 2 p. 48 concerns FoV; do not confuse the slide's “DoF” text there with the field-of-view relationship.</p>
+<p><img src="graphics/02-field-of-view.png" alt="Field of view comparison using the same sensor: a 24 mm lens captures a wider angle than a 50 mm lens" /></p>
+<p>The blue wedge is the <strong>field of view</strong>. Its angle tells you how much of the scene fits in the image. Green dots are captured; gray dots fall outside the frame.</p>
+<ul>
+<li>The <strong>24 mm lens</strong> captures a wider angle, about <strong>73.7 degrees</strong>, so more of the scene fits.</li>
+<li>The <strong>50 mm lens</strong> captures a narrower angle, about <strong>39.6 degrees</strong>, so less of the scene fits.</li>
+<li>Both drawings use the <strong>same 36 mm sensor width</strong> and the same camera position. Changing sensor width would also change FoV.</li>
+</ul>
+<p><strong>Remember:</strong> DoF answers <strong>“Which distances look sharp?”</strong> FoV answers <strong>“How wide an angle can the camera see?”</strong></p>
 <h3 id="color-sampling-and-the-bayer-pattern">Color, sampling, and the Bayer pattern</h3>
 <ul>
 <li>Color sensation depends on the spectrum of light and the responses of three cone types. RGB is a three-component representation, not a complete wavelength spectrum.</li>

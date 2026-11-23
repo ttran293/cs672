@@ -107,6 +107,17 @@ $$
 
 Here, **u and v** are the horizontal and vertical positions in the image. **X and Y** locate the scene point relative to the camera, **Z** is its depth, and **f** is the focal length. Divide each scene coordinate by depth, then multiply by focal length to obtain its projected image coordinate.
 
+![Labeled pinhole diagram showing focal distance f, scene offset X, depth Z, and image coordinate u](graphics/02-pinhole-labeled.png)
+
+**Read the diagram from the camera center:**
+
+- **f (short blue arrow):** go straight along the optical axis from the pinhole to the virtual image plane.
+- **Z (long orange arrow):** keep going along that same axis until you reach the scene point's depth. Z measures depth along the axis; the slanted ray is a different distance.
+- **X (green arrow):** at that depth, measure sideways from the optical axis to the scene point.
+- **u (small blue arrow):** where the ray crosses the image plane, measure from the optical axis to that projected point.
+
+The small image triangle and the large scene triangle have the same shape. Their sideways-offset-to-depth ratios are equal, which gives the projection formula. For the vertical coordinate, use the same construction with **Y** and **v**.
+
 On the physical image plane behind the pinhole, the image is inverted and the coordinates acquire a minus sign under the corresponding convention. State which drawing you use.
 
 - Larger depth Z → smaller projected size.
@@ -149,7 +160,30 @@ To derive the lens relationship, draw the central ray that passes through the le
 | Depth of field, DoF | Range of object depths that are acceptably sharp for a focus setting. | Smaller aperture → greater DoF, other conditions held fixed. |
 | Field of view, FoV | Angular extent of the scene captured. | Shorter focal length → wider FoV for a fixed sensor. |
 
+#### Depth of field: which distances are sharp?
+
+![Depth of field comparison: a large aperture gives a narrow sharp range, while a small aperture gives a wider sharp range](graphics/02-depth-of-field.png)
+
+The green band is the **depth of field**: the range of distances from the camera that look acceptably sharp. The orange dashed line is the distance you focused on, which stays the same in both drawings.
+
+- With a **large aperture**, the focused tree is sharp while the foreground and background look blurry.
+- With a **small aperture**, the range expands so the foreground, focused tree, and background can all look acceptably sharp.
+
+Keep focal length and focus distance fixed when making this comparison. A smaller aperture also admits less light.
+
+#### Field of view: how wide a scene fits?
+
 For sensor width w, horizontal FoV is approximately $2\arctan(w/(2f))$. A lens can have a wide FoV while still having shallow DoF. The heading on Lecture 2 p. 48 concerns FoV; do not confuse the slide's “DoF” text there with the field-of-view relationship.
+
+![Field of view comparison using the same sensor: a 24 mm lens captures a wider angle than a 50 mm lens](graphics/02-field-of-view.png)
+
+The blue wedge is the **field of view**. Its angle tells you how much of the scene fits in the image. Green dots are captured; gray dots fall outside the frame.
+
+- The **24 mm lens** captures a wider angle, about **73.7 degrees**, so more of the scene fits.
+- The **50 mm lens** captures a narrower angle, about **39.6 degrees**, so less of the scene fits.
+- Both drawings use the **same 36 mm sensor width** and the same camera position. Changing sensor width would also change FoV.
+
+**Remember:** DoF answers **“Which distances look sharp?”** FoV answers **“How wide an angle can the camera see?”**
 
 ### Color, sampling, and the Bayer pattern
 
