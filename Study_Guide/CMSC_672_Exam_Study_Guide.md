@@ -45,6 +45,14 @@ The board highlights **depth estimation** and **optical flow** with boxes. The M
 
 ## Notation and mathematical tools
 
+> **Remember — Taylor approximation:** Use the value and slope at one point to estimate a nearby value. It works best for small changes.
+
+> **Remember — Least squares:** Choose the answer that makes the total squared error as small as possible.
+
+> **Remember — Homogeneous least squares:** Find a nonzero vector that makes the equations as close to zero as possible. SVD is a common way to find it.
+
+> **Remember — Eigenvalues:** They show how strongly a matrix acts in its main directions. For Harris corners, both must be large.
+
 | Symbol | Meaning in this guide |
 |---|---|
 | I(x,y) | Image intensity at a pixel; color images have multiple channels. |
@@ -68,6 +76,8 @@ The board highlights **depth estimation** and **optical flow** with boxes. The M
 For a symmetric matrix M, eigenvectors identify principal directions and eigenvalues identify variation along them. A large Harris eigenvalue means a large intensity change for shifts in that direction; it does not mean the corner itself has a large spatial extent.
 
 ## Lecture 1: Introduction to computer vision
+
+> **Remember — Computer vision:** Use images to work out what is in a scene, where things are, or how they move. The hard part is that the same scene can look different in different pictures.
 
 **Source:** [Lecture 1](Slides/01_intro.pdf), especially pp. 7–27, 39–48, 79–80.
 
@@ -95,9 +105,15 @@ An image is a measurement, not a complete description of reality. Projecting a 3
 
 ## Lecture 2: Image formation and acquisition
 
+> **Remember — Image formation:** Light from a scene passes through a camera and reaches the sensor. The camera turns a 3D scene into a 2D picture.
+
 **Source:** [Lecture 2](Slides/02_image-formation.pdf), pinhole/lenses pp. 2–48; color and sensors pp. 55–71.
 
 ### Pinhole geometry
+
+> **Remember — Pinhole projection:** Draw a ray from the scene point through the camera center. Its crossing with the image plane tells you where that point appears in the image.
+
+> **Remember — f, X, and Z:** f is the distance from the camera center to the image plane; X is the scene point’s sideways offset; Z is its depth. A point farther away appears closer to the image center.
 
 Light travels from a scene point through a small aperture to an image plane. Similar triangles relate projected position to depth. Using a **virtual image plane in front of the camera**:
 
@@ -133,6 +149,10 @@ On the physical image plane behind the pinhole, the image is inverted and the co
 
 ### Thin lenses and focus
 
+> **Remember — Thin lens:** A lens brings light from a focused scene point together on the sensor. The lens equation links focal length, object distance, and image distance.
+
+> **Remember — Magnification:** It tells you how large the image is compared with the object. A negative sign means the image is upside down.
+
 A lens gathers more light while bringing rays from a focused object point together on the sensor. For a real object and real image under the positive-distance convention:
 
 $$
@@ -155,12 +175,16 @@ To derive the lens relationship, draw the central ray that passes through the le
 
 ### Depth of field versus field of view
 
+> **Remember — DoF versus FoV:** DoF asks which distances look sharp. FoV asks how much of the scene fits in the picture.
+
 | Concept | Definition | Main relationship to remember |
 |---|---|---|
 | Depth of field, DoF | Range of object depths that are acceptably sharp for a focus setting. | Smaller aperture → greater DoF, other conditions held fixed. |
 | Field of view, FoV | Angular extent of the scene captured. | Shorter focal length → wider FoV for a fixed sensor. |
 
 #### Depth of field: which distances are sharp?
+
+> **Remember — Depth of field:** DoF is the range of scene distances that look sharp enough. A smaller aperture gives a larger range when the other settings stay the same.
 
 ![Depth of field comparison: a large aperture gives a narrow sharp range, while a small aperture gives a wider sharp range](graphics/02-depth-of-field.png)
 
@@ -172,6 +196,8 @@ The green band is the **depth of field**: the range of distances from the camera
 Keep focal length and focus distance fixed when making this comparison. A smaller aperture also admits less light.
 
 #### Field of view: how wide a scene fits?
+
+> **Remember — Field of view:** FoV is the angle the camera can see. With the same sensor, a shorter focal length gives a wider view.
 
 For sensor width w, horizontal FoV is approximately $2\arctan(w/(2f))$. A lens can have a wide FoV while still having shallow DoF. The heading on Lecture 2 p. 48 concerns FoV; do not confuse the slide's “DoF” text there with the field-of-view relationship.
 
@@ -187,6 +213,10 @@ The blue wedge is the **field of view**. Its angle tells you how much of the sce
 
 ### Color, sampling, and the Bayer pattern
 
+> **Remember — RGB:** Store a color using red, green, and blue values. A grayscale image uses one value per pixel.
+
+> **Remember — Bayer pattern:** Half the sensor sites measure green, one quarter red, and one quarter blue. Demosaicing fills in the missing colors at each pixel.
+
 - Color sensation depends on the spectrum of light and the responses of three cone types. RGB is a three-component representation, not a complete wavelength spectrum.
 - A grayscale image is a 2D array; an RGB image has three channels. Common layouts are $H\times W\times3$ and $3\times H\times W$.
 - An 8-bit channel has 256 possible integer values, 0–255. Three channels use 24 bits per uncompressed pixel, before file-format overhead.
@@ -201,9 +231,17 @@ The blue wedge is the **field of view**. Its angle tells you how much of the sce
 
 ## Lecture 3: Image filtering I
 
+> **Remember — Image filtering:** A filter uses nearby pixels to make a new pixel value. Different filters can blur an image, sharpen it, or find edges.
+
 **Source:** [Lecture 3](Slides/03_image-filtering-i.pdf), filtering pp. 22–95; edges/sharpening/thresholding pp. 96–123.
 
 ### Point operations versus neighborhood operations
+
+> **Remember — Point operation:** Change a pixel using only its own value, such as making it brighter.
+
+> **Remember — Neighborhood operation:** Change a pixel using values around it, such as taking a local average.
+
+> **Remember — Convolution versus correlation:** Both slide a kernel over the image and add weighted pixel values. Convolution flips the kernel first; correlation does not.
 
 A point operation changes a pixel using its own value, such as brightness adjustment or thresholding. A neighborhood operation uses nearby pixels, such as blur or edge detection. Warping, introduced later, changes where image values are sampled.
 
@@ -218,6 +256,14 @@ Correlation uses I(x+i,y+j) instead. Convolution flips the kernel in both spatia
 **By hand:** identify padding, stride, kernel orientation, and whether the question uses convolution or correlation. Multiply corresponding patch/kernel entries, sum them, move the kernel, repeat. The patch and kernel are not multiplied as ordinary matrices.
 
 ### Kernels to recognize
+
+> **Remember — Kernel:** A kernel is a small set of weights that tells a filter how to combine nearby pixels.
+
+> **Remember — Box filter:** Give all pixels in the window equal weight and average them. This smooths the image.
+
+> **Remember — Edge filters:** Compare values on opposite sides of a pixel. A horizontal intensity change reveals a vertical edge, and a vertical change reveals a horizontal edge.
+
+> **Remember — Sobel filter:** It combines a small amount of smoothing with a directional derivative. This helps find edges without reacting as strongly to noise.
 
 $$
 \mathrm{Box\ blur:}\quad\frac{1}{9}\begin{bmatrix}1&1&1\\1&1&1\\1&1&1\end{bmatrix}
@@ -237,6 +283,8 @@ An x derivative responds to intensity changes across the horizontal direction, s
 The slide names filters by derivative direction. A horizontal intensity derivative responds to vertical edges, and vice versa.
 
 ### Gaussian smoothing
+
+> **Remember — Gaussian filter:** Average nearby pixels, giving more weight to the ones closest to the center. A larger sigma gives more blur.
 
 $$
 G_\sigma(x,y)=\frac{1}{2\pi\sigma^2}\exp\left(-\frac{x^2+y^2}{2\sigma^2}\right).
@@ -258,6 +306,12 @@ the box-filter output at the center is 10. The Gaussian approximation above give
 
 ### Gradients, sharpening, and thresholding
 
+> **Remember — Gradient:** It tells you how fast image intensity changes and in which direction. A large gradient often marks an edge.
+
+> **Remember — Sharpening:** Subtract a blurred image to get the fine detail, then add some of that detail back to the original.
+
+> **Remember — Thresholding:** Turn values above a chosen cutoff into one group and the rest into another. A binary mask uses just two values.
+
 $$
 \nabla I=(I_x,I_y)^T,\qquad |\nabla I|=\sqrt{I_x^2+I_y^2},\qquad \theta=\mathrm{atan2}(I_y,I_x).
 $$
@@ -276,9 +330,17 @@ Thresholding produces a mask, for example B(x,y) = 1 when $I(x,y)>T$, otherwise 
 
 ## Lecture 4: Image filtering II and the Fourier domain
 
+> **Remember — Frequency view:** Describe an image using broad changes and fine repeating patterns. Filtering can keep or remove these different scales of detail.
+
 **Source:** [Lecture 4](Slides/04_image-filtering-ii.pdf), Fourier pp. 3–40; filtering pp. 41–56; pyramids/blending pp. 57–75.
 
 ### What the Fourier transform represents
+
+> **Remember — Fourier transform:** Break an image into waves with different frequencies and directions.
+
+> **Remember — Magnitude and phase:** Magnitude tells you how much of each wave is present. Phase tells you how those waves line up to form the image.
+
+> **Remember — Low and high frequencies:** Low frequencies describe slow changes and broad shapes. High frequencies describe fast changes, fine texture, and sharp edges.
 
 An image is expressed as a combination of sinusoidal patterns at different frequencies, orientations, amplitudes, and phases. The 2D DFT of an $M\times N$ image can be written
 
@@ -302,6 +364,14 @@ In a centered spectrum (fftshift):
 
 ### Convolution theorem and frequency filtering
 
+> **Remember — Convolution theorem:** Convolving images or signals in the spatial view becomes multiplication in the frequency view.
+
+> **Remember — Low-pass filter:** Keep slow changes and remove fine detail. The image becomes smoother.
+
+> **Remember — High-pass filter:** Remove slow changes and keep fast changes. Edges and fine detail stand out.
+
+> **Remember — Band-pass filter:** Keep only a chosen range of frequencies. This selects detail at certain scales.
+
 $$
 \mathcal{F}\{I*k\}=\mathcal{F}\{I\}\mathcal{F}\{k\}.
 $$
@@ -318,6 +388,12 @@ Multiply spectra point by point, then inverse transform. A DFT implements circul
 
 ### Three meanings that must be kept distinct
 
+> **Remember — Laplacian derivative:** Use second derivatives to measure how the intensity slope changes.
+
+> **Remember — Detail residual:** Original minus blurred image gives the detail removed by the blur.
+
+> **Remember — Laplacian pyramid band:** Subtract the expanded next Gaussian level from the current level. This stores detail at one scale.
+
 1. **Laplacian derivative:** $\nabla^2 I=I_{xx}+I_{yy}$, a second-derivative operator. A smoothed version is $(\nabla^2G_\sigma)*I$.
 2. **High-frequency residual used in this lecture:** $I-G_\sigma*I$, original minus blurred image. This is the expression to recognize for the quiz prompt that gives only an image and a Gaussian blur kernel.
 3. **Laplacian pyramid band:** $L_k=G_k-\mathrm{Expand}(G_{k+1})$, subtracting the expanded next Gaussian level.
@@ -325,6 +401,12 @@ Multiply spectra point by point, then inverse transform. A DFT implements circul
 They are related ways to expose detail but are not identical formulas. Follow the construction specified in the question.
 
 ### Gaussian and Laplacian pyramids
+
+> **Remember — Gaussian pyramid:** Blur the image, then shrink it, and repeat. Each level shows the image at a coarser scale.
+
+> **Remember — Laplacian pyramid:** Store the detail lost between Gaussian levels. Expand and add the bands back to rebuild the image.
+
+> **Remember — Pyramid blending:** Blend broad changes over a wide area and fine detail over a smaller area. This helps hide the join between images.
 
 **Gaussian pyramid:** blur, then downsample at each level. Blurring first reduces aliasing; blurring after subsampling cannot undo aliasing already introduced.
 
@@ -352,9 +434,15 @@ Expansion includes upsampling and the appropriate interpolation filter, not mere
 
 ## Lecture 5: Image features I: Harris corners
 
+> **Remember — Harris corners:** Look for small patches that change a lot when shifted in any direction. These points are easier to find again in another image.
+
 **Source:** [Lecture 5](Slides/05_image-features-i.pdf), motivations pp. 2–13; Harris derivation and selection pp. 14–69.
 
 ### Why features?
+
+> **Remember — Local features:** Use small, easy-to-recognize parts of an image to match pictures of the same scene.
+
+> **Remember — Detect, describe, match:** Find useful points, turn each nearby patch into numbers, then compare those numbers across images.
 
 Local features support stitching, correspondence, recognition, tracking, and reconstruction. A useful feature is repeatable across views, distinctive enough to match, localized accurately, and robust to relevant transformations.
 
@@ -365,6 +453,10 @@ The pipeline is **detect → describe → match**. A detector locates a point; a
 *[Lecture 5, PDF p. 15](Slides/05_image-features-i.pdf) — A corner changes significantly under shifts in every direction.*
 
 ### Derive the Harris approximation
+
+> **Remember — Harris idea:** Compare a patch with a slightly shifted copy. Use image gradients to estimate the change without trying every shift.
+
+> **Remember — Harris eigenvalues:** Both small means flat; one large means an edge; both large means a corner.
 
 Compare a window to itself after a small shift (u,v):
 
@@ -399,6 +491,10 @@ For level sets E = 1, the ellipse's principal semi-axis lengths are proportional
 
 ### Detection recipe
 
+> **Remember — Harris steps:** Find gradients, combine their products over a window, and score the result. Keep strong local peaks where both directions have enough change.
+
+> **Remember — Non-maximum suppression:** Keep the strongest response in a neighborhood and remove nearby weaker ones. This avoids keeping many points for the same corner.
+
 1. Compute $I_x,I_y$.
 2. Form $I_x^2,I_xI_y,I_y^2$.
 3. Smooth/sum these products over a local window to form M at each pixel.
@@ -411,9 +507,19 @@ The photos and slides emphasize eigenvalue thresholding. The determinant/trace e
 
 ## Lecture 6: Image features II: scale, SIFT, and matching
 
+> **Remember — Feature matching:** Describe a useful patch so it can still be matched after the image changes. Reject matches that are too uncertain.
+
 **Source:** [Lecture 6](Slides/06_image-features-ii.pdf), invariance/scale pp. 6–34; descriptors/SIFT pp. 39–61; matching/evaluation pp. 64–77.
 
 ### Invariance, covariance, and scale
+
+> **Remember — Invariant descriptor:** The description stays nearly the same after a supported image change.
+
+> **Remember — Covariant detector:** The detected point moves with the image. Rotate the image and the detected corner should rotate with it.
+
+> **Remember — Geometric versus photometric changes:** Geometric changes move or reshape image content. Photometric changes alter brightness, contrast, or color.
+
+> **Remember — Scale selection:** Try several patch sizes and keep the size with a strong response. This helps match the same feature when it appears larger or smaller.
 
 - **Invariant descriptor:** its values remain approximately unchanged under a supported image transformation.
 - **Covariant detector:** detected locations move consistently with the transformed image. A rotated corner should be detected at its rotated location, not its old pixel coordinates.
@@ -427,6 +533,8 @@ For scale selection, examine multiple scales and find extrema both spatially and
 **Distinguish:** a Laplacian pyramid stores residual image bands; a scale-space blob detector searches responses for characteristic extrema. Both use multiple scales, but their outputs and purposes differ.
 
 ### SIFT: what to remember
+
+> **Remember — SIFT:** Describe a patch using local edge directions after adjusting for its scale and rotation. The usual descriptor has 16 cells with 8 direction bins each, giving 128 numbers.
 
 SIFT normalizes local appearance with respect to scale and orientation, then describes spatial distributions of orientations. It is robust to substantial illumination and moderate viewpoint changes, not invariant to arbitrary deformation or occlusion.
 
@@ -448,6 +556,10 @@ The slides describe edge orientation as gradient angle minus 90°. Standard desc
 
 ### Matching and ambiguity
 
+> **Remember — Descriptor distance:** A smaller distance means two feature descriptions are more alike.
+
+> **Remember — Ratio test:** Compare the best match with the second-best match. Keep it when the best is clearly better, so a small ratio is good.
+
 For descriptors f,g, Euclidean distance is $\Vert f-g\Vert _2$. A small absolute distance can still be ambiguous when many features look alike.
 
 The nearest-neighbor ratio is
@@ -466,6 +578,14 @@ Accept if $r<\tau$. A small ratio means the best candidate is substantially bett
 
 ### Evaluation
 
+> **Remember — Precision:** Of the matches you kept, how many are correct?
+
+> **Remember — Recall:** Of all the true matches, how many did you find?
+
+> **Remember — False positive rate:** Of the wrong candidate matches, how many did you wrongly keep?
+
+> **Remember — ROC and AUC:** An ROC curve compares true positive rate with false positive rate as the cutoff changes. A larger area under the curve is better.
+
 $$
 \mathrm{Precision}=\frac{TP}{TP+FP},\qquad
 \mathrm{Recall}=\mathrm{TPR}=\frac{TP}{TP+FN},\qquad
@@ -480,9 +600,19 @@ When accepting distances **below** a threshold, increasing that threshold admits
 
 ## Lecture 7: Machine learning for computer vision
 
+> **Remember — Machine learning:** Choose a model’s settings using examples instead of writing every rule by hand. The goal is to work well on new examples too.
+
 **Source:** [Lecture 7](Slides/07_ml-for-cv.pdf), learning and least squares pp. 18–75; classification/loss pp. 76–92; generalization pp. 93–113.
 
 ### Learning setup
+
+> **Remember — Supervised learning:** Learn from examples that include the desired answer.
+
+> **Remember — Unsupervised learning:** Learn patterns without supplied task labels.
+
+> **Remember — Regression versus classification:** Regression predicts a number, such as depth. Classification picks a category, such as cat or dog.
+
+> **Remember — Nearest neighbor:** Find a similar stored example and use its label as the prediction.
 
 Learning chooses parameters of a function using examples. Identify the **data, input/output representation, hypothesis space, loss, and optimizer**.
 
@@ -494,6 +624,12 @@ Learning chooses parameters of a function using examples. Identify the **data, i
 Nearest-neighbor classification predicts using a nearby training example under a distance metric. Raw pixel distances are sensitive to shifts and appearance changes; good features can provide a more useful representation.
 
 ### Linear and polynomial regression
+
+> **Remember — Linear regression:** Fit a weighted sum of the inputs to predict a number.
+
+> **Remember — Polynomial regression:** Add powers of the input so the fitted curve can bend. Too many powers can make it fit noise.
+
+> **Remember — Squared-error loss:** Square each prediction error and add or average the results. Large mistakes get a larger penalty.
 
 For $\hat y=w^Tx+b$, least squares minimizes
 
@@ -511,6 +647,12 @@ Polynomial regression uses features such as $[1,x,x^2,\ldots,x^d]$. It is nonlin
 
 ### Classification and loss
 
+> **Remember — Class scores:** Give each class a score and choose the strongest one.
+
+> **Remember — Softmax:** Turn class scores into positive probabilities that add to one.
+
+> **Remember — Cross-entropy:** Penalize the model when it gives the true class a low probability. A higher probability for the correct class gives a smaller loss.
+
 A linear classifier computes scores z = Wx+b. For C classes, W has shape $C\times D$ when $x\in\mathbb{R}^D$ is a column vector.
 
 $$
@@ -520,6 +662,16 @@ $$
 For a one-hot target, cross-entropy is $-\log p_{\mathrm{true}}$. A correct-class probability of 0.8 gives loss about 0.223; 0.1 gives about 2.303. Softmax converts logits to a probability vector; cross-entropy compares that vector with the target. Cross-entropy being a useful surrogate does not make neural-network training convex in all network parameters.
 
 ### Generalization
+
+> **Remember — Generalization:** Do well on new examples, not just the ones used for training.
+
+> **Remember — Underfitting:** The model misses the main pattern and does badly even on the training data.
+
+> **Remember — Overfitting:** The model fits the training data very closely but does worse on new data.
+
+> **Remember — Distribution shift:** New data differ from training data, so a model that worked before may fail.
+
+> **Remember — Training, validation, and test data:** Train to fit the model, validate to choose settings, and test to measure the final result.
 
 | Situation | Training behavior | Behavior on new data | Typical response |
 |---|---|---|---|
@@ -536,6 +688,12 @@ Training data fit parameters; validation data guide choices such as learning rat
 *[Lecture 7, PDF p. 107](Slides/07_ml-for-cv.pdf) — A high-capacity model can follow training samples while missing the underlying trend.*
 
 ## Lecture 8: Neural networks
+
+> **Remember — Neural network:** Each layer takes weighted inputs, adds biases, and applies an activation. Several layers can build useful patterns from simpler ones.
+
+> **Remember — Nonlinear activation:** A nonlinear step lets the network learn curved decision boundaries. Without it, a stack of linear layers still acts like one linear layer.
+
+> **Remember — XOR:** Its classes cannot be split by one straight line. It shows why a network needs nonlinear hidden units.
 
 **Source:** [Lecture 8](Slides/08_ml-for-cv-ii.pdf), linear limitations pp. 24–27; scores, neurons, and networks pp. 45–89.
 
@@ -561,6 +719,8 @@ Without nonlinear activations, multiple affine layers collapse into one affine m
 
 ### Parameter counting
 
+> **Remember — Dense-layer parameters:** Count one weight for every input–output connection, then add one bias per output. Add the counts from all layers.
+
 A fully connected layer from $n_{\mathrm{in}}$ to $n_{\mathrm{out}}$ has
 
 $$
@@ -575,9 +735,19 @@ trainable parameters when each output has a bias. The input values themselves ar
 
 ## Lecture 9: Gradient descent and backpropagation
 
+> **Remember — Learning weights:** Measure the prediction error, work out how each weight affects it, and move the weights toward lower error.
+
 **Source:** [Lecture 9](Slides/09_ml-for-cv-iii.pdf), parameter counts pp. 14–19; optimization pp. 28–54; backpropagation pp. 55–86.
 
 ### Training loop
+
+> **Remember — Forward pass:** Run the input through the network to get a prediction and its loss.
+
+> **Remember — Gradient descent:** Move each parameter a small step opposite the loss gradient.
+
+> **Remember — Learning rate:** It controls step size. Too small is slow; too large can overshoot.
+
+> **Remember — Batch and mini-batch learning:** A full batch uses all training examples for one update. A mini-batch uses a smaller group.
 
 1. Forward pass: compute predictions.
 2. Compute the loss.
@@ -600,6 +770,8 @@ The gradient points toward local steepest increase; its negative points toward d
 *[Lecture 9, PDF p. 51](Slides/09_ml-for-cv-iii.pdf) — The learning rate controls optimization step size.*
 
 ### Backpropagation is the chain rule
+
+> **Remember — Backpropagation:** Work backward through the network using the chain rule to find each parameter’s effect on loss. The optimizer then uses those gradients to update the parameters.
 
 For a scalar neuron z = wx+b, $a=\phi(z)$, $L=\frac{1}{2}(a-y)^2$:
 
@@ -628,9 +800,13 @@ At a branch in a computation graph, sum the gradient contributions from all down
 
 ## Lecture 10: Convolutional neural networks
 
+> **Remember — CNN:** Use small shared filters to find patterns across an image. Later layers combine simpler patterns into more useful ones.
+
 **Source:** [Lecture 10](Slides/10_cnn.pdf), convolution and dimensions pp. 12–70; pooling pp. 73–78; convolution variants and architectures pp. 79–94; interpretation pp. 111–135.
 
 ### Why convolution?
+
+> **Remember — Weight sharing:** Use the same filter weights at every image position. This finds the same kind of pattern in different places with fewer weights.
 
 Convolutional layers use local connections and **share filter weights across spatial positions**. Filters span all input channels in a standard dense convolution. Each output channel has its own filter and usually one bias.
 
@@ -641,6 +817,16 @@ Early layers can learn edges/textures; later layers combine features into more t
 *[Lecture 10, PDF p. 40](Slides/10_cnn.pdf) — A convolution filter spans the input channels and produces spatial responses.*
 
 ### Output dimensions and parameters
+
+> **Remember — Kernel size:** It sets how large a patch one filter looks at in a single layer.
+
+> **Remember — Stride:** It tells you how far the filter moves between output positions. A larger stride usually makes a smaller output.
+
+> **Remember — Padding:** Add a border around the input so the filter can cover edge pixels and control the output size.
+
+> **Remember — Output channels:** Each filter produces one output channel. More filters give more channels.
+
+> **Remember — Convolution parameters:** Count kernel height times width times input channels, add a bias, then multiply by the number of filters.
 
 For input $H\times W\times C_{\mathrm{in}}$, kernel $K_h\times K_w$, symmetric padding $P_h,P_w$, strides $S_h,S_w$, and dilation 1:
 
@@ -672,6 +858,16 @@ The padded input has width 11; valid kernel starts are 0, 3, and 6. The output i
 
 ### Pooling and convolution variants
 
+> **Remember — Pooling:** Replace each small patch with its maximum or average. This often shrinks the image and reduces sensitivity to small shifts.
+
+> **Remember — 1×1 convolution:** Mix the channels at one pixel position. It can change the number of channels.
+
+> **Remember — Dilated convolution:** Space out the filter’s sample points so it covers a larger area without adding more weights.
+
+> **Remember — Transposed convolution:** Use learned weights to increase spatial size. It is not generally the inverse of convolution.
+
+> **Remember — Receptive field:** It is the area of the original input that can affect one output value.
+
 | Operation | Purpose | Important distinction |
 |---|---|---|
 | Max/average pooling | Summarize a spatial neighborhood, often downsample. | Usually no trainable parameters; improves stability to small shifts but loses precise location. |
@@ -689,6 +885,14 @@ A layer's **receptive field** is the input region affecting its output. Stacking
 
 ### Architectures and interpretation
 
+> **Remember — VGG:** Build a deep network by stacking many small convolutions.
+
+> **Remember — ResNet:** Add shortcut paths so a layer can learn a change to its input. These paths help train deeper networks.
+
+> **Remember — U-Net:** Shrink the image to learn broad patterns, then grow it back. Skip connections carry fine detail to the output.
+
+> **Remember — Saliency:** Check which pixels affect a prediction most. This can reveal whether the model is using the right clues.
+
 - **VGG:** deep stacks of small convolutions.
 - **ResNet:** residual/skip paths, conceptually y = x+F(x), support optimization of deep networks.
 - **Autoencoder:** encoder compresses to a latent representation; decoder reconstructs the input.
@@ -699,11 +903,27 @@ A layer's **receptive field** is the input region affecting its output. Stacking
 
 ## Lecture 11: Object detection
 
+> **Remember — Object detection:** Find what objects are present and put a box around each one. One image can contain many detections.
+
 **Source:** [Lecture 11](Slides/11_object-detection.pdf), detector progression pp. 18–58; evaluation/NMS pp. 60–67.
 
 Detection predicts **what** and **where**, potentially for multiple objects. A prediction includes a class, confidence, and box coordinates. Classification assigns an image label; semantic segmentation labels pixels.
 
 ### How the architectures differ
+
+> **Remember — Sliding window and HOG:** Check many image windows for an object. HOG describes each window using edge directions.
+
+> **Remember — R-CNN:** Propose regions, then run a CNN on each region separately.
+
+> **Remember — Fast R-CNN:** Run the CNN once on the whole image and reuse its features for each proposed region.
+
+> **Remember — Faster R-CNN:** Also learn the region proposals with a network that shares image features.
+
+> **Remember — YOLO:** Predict boxes and class scores directly in one stage.
+
+> **Remember — RoI pooling:** Turn features from different-sized regions into the same output size.
+
+> **Remember — Anchor box:** Start from a reference box and predict how to move and resize it.
 
 | Method | Main pipeline | Main limitation or improvement |
 |---|---|---|
@@ -723,6 +943,12 @@ The lecture's original YOLO example uses a 7 × 7 grid, 20 class scores, and 2 b
 *[Lecture 11, PDF p. 39](Slides/11_object-detection.pdf) — Fast R-CNN shares convolutional features across region proposals.*
 
 ### Evaluation and duplicate removal
+
+> **Remember — IoU:** Divide the area where two boxes overlap by the total area covered by either box.
+
+> **Remember — AP and mAP:** AP summarizes one class’s precision–recall curve. mAP averages AP across classes under the chosen evaluation rules.
+
+> **Remember — Detection NMS:** Keep the strongest box and remove strongly overlapping weaker boxes of the same class. This reduces duplicate detections.
 
 $$
 \mathrm{IoU}(A,B)=\frac{\mathrm{Area}(A\cap B)}{\mathrm{Area}(A\cup B)}.
@@ -745,15 +971,23 @@ A correct detection requires the correct class and sufficient overlap under the 
 
 ## Lecture 12: Image transformations
 
+> **Remember — Image transformation:** Move image points using a rule. Different rules preserve different parts of a shape.
+
 **Source:** [Lecture 12](Slides/12_image-transformations.pdf), linear transforms pp. 19–34; homogeneous coordinates pp. 35–53; transformation families pp. 54–69.
 
 ### Homogeneous coordinates
+
+> **Remember — Homogeneous coordinates:** Add an extra coordinate so translation can be written as a matrix multiply. Divide by the last coordinate to return to ordinary coordinates.
 
 Represent (x,y) by $(x,y,1)^T$. Any nonzero scalar multiple represents the same point: $(2x,2y,2)^T\sim(x,y,1)^T$. Convert $(a,b,c)^T$ back to Cartesian coordinates as $(a/c,b/c)$ if $c\ne0$. A nonzero vector with last coordinate 0 represents a point at infinity; the all-zero vector is invalid.
 
 Translation cannot be represented by a 2 × 2 linear matrix acting on (x,y) because a linear map must send the origin to the origin. Adding the homogeneous coordinate makes translation a matrix operation.
 
 ### Matrices to write from memory
+
+> **Remember — Transform order:** With column vectors, the rightmost matrix acts first. Changing the order usually changes the result.
+
+> **Remember — Rotate around a point:** Move that point to the origin, rotate, then move it back.
 
 $$
 T(t_x,t_y)=\begin{bmatrix}1&0&t_x\\0&1&t_y\\0&0&1\end{bmatrix},\quad
@@ -777,6 +1011,16 @@ With column vectors, the **rightmost transform acts first**. Scale, then rotate,
 
 ### Families and preserved properties
 
+> **Remember — Translation:** Move every point by the same amount.
+
+> **Remember — Rigid transformation:** Rotate and move the shape while keeping lengths and angles.
+
+> **Remember — Similarity transformation:** Rotate, move, and scale equally in every direction. Angles stay the same.
+
+> **Remember — Affine transformation:** Keep straight lines straight and parallel lines parallel. Lengths and angles can change.
+
+> **Remember — Projective transformation:** Keep straight lines straight, but parallel lines can meet. This models a change in the view of a plane.
+
 | Family | Form | Degrees of freedom | What is preserved? |
 |---|---|---:|---|
 | Translation | $x'=x+t$ | 2 | Lengths, angles, orientation, parallelism. |
@@ -791,9 +1035,13 @@ Assume nonsingular transforms. General projective transforms need not preserve c
 
 ## Lecture 13: Homographies, fitting, RANSAC, and stitching
 
+> **Remember — Image alignment:** Match points in two pictures, estimate their mapping, and use it to line the pictures up.
+
 **Source:** [Lecture 13](Slides/13_homographies.pdf), affine fitting pp. 2–12; homographies pp. 40–60; RANSAC pp. 61–80.
 
 ### Affine estimation
+
+> **Remember — Fit an affine map:** Use matched points to solve for six unknowns. Three non-collinear point pairs are enough in the ideal case.
 
 For a correspondence $(x,y)\leftrightarrow(u,v)$,
 
@@ -804,6 +1052,12 @@ $$
 Stack equations for the six unknowns $(a,b,t_x,c,d,t_y)$. Each pair supplies two equations. **Three non-collinear pairs** suffice in the ideal case; use more and least squares with noisy data. Collinear data do not constrain a general 2D affine transformation fully.
 
 ### Applying and estimating a homography
+
+> **Remember — Homography:** A 3×3 matrix maps points between two views of a plane. Estimate it from at least four point pairs in general position.
+
+> **Remember — Homography limits:** One homography works for a flat scene or pure camera rotation. Camera translation through a scene with different depths usually causes parallax.
+
+> **Remember — DLT:** Turn point matches into linear equations and use SVD to find the homography.
 
 Let $H=[h_{ij}]$. Then
 
@@ -830,6 +1084,10 @@ Stack rows into A, solve $Ah\approx0$ with SVD and a norm constraint, and reshap
 
 ### RANSAC
 
+> **Remember — RANSAC:** Fit a model from a few random matches, then count how many other matches agree. Repeat and keep the model with the strongest support.
+
+> **Remember — Inliers and outliers:** Inliers agree with the fitted model within a chosen error limit. Outliers do not.
+
 Least squares can be pulled badly by incorrect matches. RANSAC estimates a model from random small subsets and checks agreement with all data:
 
 1. Randomly choose a minimal nondegenerate subset.
@@ -855,6 +1113,10 @@ where p is desired probability of at least one all-inlier sample, w is inlier fr
 
 ### Stitching pipeline
 
+> **Remember — Image stitching:** Find matches, estimate a reliable mapping, warp the images, and blend their overlap.
+
+> **Remember — Inverse warping:** For each output pixel, work backward to find where to sample the input. This helps avoid holes in the output.
+
 **Detect → describe → match → reject ambiguous matches → estimate H robustly → warp → blend.**
 
 Geometric alignment and photometric blending solve different problems. A perfect seam cannot repair large parallax errors. For inverse warping, visit an output pixel, map it back through $H^{-1}$, and interpolate the source image. This helps avoid the holes that forward mapping can leave.
@@ -863,9 +1125,17 @@ Geometric alignment and photometric blending solve different problems. A perfect
 
 ## Lecture 14: Camera models and calibration
 
+> **Remember — Camera model:** A camera matrix maps 3D world points to 2D image points. Calibration finds the camera’s unknown settings.
+
 **Source:** [Lecture 14](Slides/14_camera-models.pdf), projection/decomposition pp. 2–30; alternate models pp. 40–55; calibration pp. 57–92.
 
 ### World → camera → image
+
+> **Remember — Extrinsics:** Rotation and translation tell you where the camera is and which way it faces.
+
+> **Remember — Intrinsics:** Focal scales and the image center tell you how camera coordinates become pixel coordinates.
+
+> **Remember — Perspective divide:** Divide by depth to turn a 3D camera point into a 2D image position.
 
 $$
 \mathbf{x}\sim P\mathbf{X},\qquad P=K[R\mid\mathbf{t}],\qquad \mathbf{t}=-R\mathbf{C}.
@@ -891,9 +1161,21 @@ For zero skew, $u=f_xX_c/Z_c+c_x$ and $v=f_yY_c/Z_c+c_y$. The perspective divide
 
 ### Perspective versus weak perspective
 
+> **Remember — Perspective:** Use each point’s own depth, so farther objects look smaller.
+
+> **Remember — Weak perspective:** Use one average depth for an object. This works when its depth range is small compared with its distance from the camera.
+
+> **Remember — Orthographic projection:** Project along parallel lines. Image size does not shrink with depth.
+
 Perspective divides by each point's own Z. Weak perspective replaces that depth by a representative $Z_0$, giving approximately a uniform scale $f/Z_0$ across an object. It is appropriate when depth variation is small relative to mean viewing distance. Orthographic projection is a special parallel-projection case; in aligned normalized coordinates it keeps X,Y and drops Z.
 
 ### Geometric calibration
+
+> **Remember — Camera calibration:** Use known scene points and their image locations to estimate camera parameters.
+
+> **Remember — Camera center:** It is the camera’s 3D position. All viewing rays start there.
+
+> **Remember — Lens distortion:** Real lenses can bend the image of a straight line. Extra parameters model this bending.
 
 Given known 3D points and their image correspondences, estimate P, then recover intrinsic/extrinsic parameters. A general P has 11 DoF up to scale; each 3D–2D pair gives two independent constraints, so the linear formulation needs at least **six suitably arranged pairs**. Degenerate configurations, such as all points on a single plane for unconstrained one-view estimation of a general P, cannot determine everything.
 
@@ -909,9 +1191,13 @@ Practical checkerboard calibration uses a known planar pattern viewed from sever
 
 ## Lecture 15: Triangulation and epipolar geometry
 
+> **Remember — Two-view geometry:** Two views give more information about depth than one view. Matching points and the camera positions let you connect the views.
+
 **Source:** [Lecture 15](Slides/15_epipolar-geometry.pdf), triangulation pp. 8–24; epipolar geometry pp. 25–47; essential matrix pp. 48–75; fundamental matrix/eight-point algorithm pp. 82–100.
 
 ### Triangulation: recover a point from two rays
+
+> **Remember — Triangulation:** Trace viewing rays from two cameras toward the same scene point. Their intersection, or best fit with noisy data, estimates the 3D point.
 
 Given camera matrices $P,P'$ and corresponding image points $x,x'$, estimate 3D X. Ideally the two viewing rays intersect; with noise, they usually do not intersect exactly.
 
@@ -925,6 +1211,12 @@ Two views provide four rows of a 4 × 4 homogeneous system. Solve with SVD and d
 
 ### Geometry vocabulary
 
+> **Remember — Baseline:** It is the line joining the two camera centers.
+
+> **Remember — Epipole:** It is where the other camera center projects into an image. All epipolar lines in that image meet there.
+
+> **Remember — Epipolar plane and line:** The two camera centers and a scene point define a plane. That plane cuts each image plane along an epipolar line.
+
 - **Baseline:** line joining the camera centers.
 - **Epipole:** image of the other camera center; it may lie outside the visible image or at infinity.
 - **Epipolar plane:** plane containing the two centers and a scene point.
@@ -937,6 +1229,12 @@ The corresponding point in the second image must lie on the epipolar line. This 
 *[Lecture 15, PDF p. 30](Slides/15_epipolar-geometry.pdf) — The camera centers and scene point define an epipolar plane and image lines.*
 
 ### Essential and fundamental matrices
+
+> **Remember — Essential matrix:** Map a normalized camera point to the line where its match must lie in the other view.
+
+> **Remember — Fundamental matrix:** Do the same point-to-line mapping using pixel coordinates.
+
+> **Remember — Homography versus epipolar matrix:** A homography gives a matching point. An essential or fundamental matrix gives a line of possible matches.
 
 For normalized camera coordinates, $\hat x'^TE\hat x=0$. For pixel coordinates,
 
@@ -963,6 +1261,8 @@ To understand the derivation, draw the two rays and the baseline in one plane. A
 
 ### Normalized eight-point algorithm
 
+> **Remember — Eight-point algorithm:** Use at least eight matched point pairs to estimate the fundamental matrix. Normalize the coordinates, solve with SVD, enforce rank two, and undo the normalization.
+
 For $(u,v,1)^T\leftrightarrow(u',v',1)^T$, one row of A is
 
 $$
@@ -982,9 +1282,17 @@ $$
 
 ## Lecture 16: Stereo vision and depth
 
+> **Remember — Stereo vision:** Find the same scene point in two images and use the shift between them to estimate depth.
+
 **Source:** [Lecture 16](Slides/16_stereo.pdf), stereo/triangulation pp. 18–24; disparity geometry pp. 25–40; rectification pp. 54–68; matching pp. 70–78.
 
 ### Rectified stereo
+
+> **Remember — Rectification:** Warp the views so matching points lie on the same image row. This makes the search simpler.
+
+> **Remember — Disparity:** It is the horizontal shift between matching points in rectified views. A larger shift means the point is closer.
+
+> **Remember — Stereo depth:** Multiply focal length by baseline and divide by disparity. Small disparity means large depth and greater sensitivity to matching errors.
 
 Rectification warps the two views so corresponding epipolar lines become horizontal, allowing same-row correspondence search. It does not mean the original cameras must have been physically parallel. After rectification, use the intrinsics/focal scales appropriate to the rectified views.
 
@@ -1017,6 +1325,12 @@ Thus a one-pixel disparity error is much more harmful for distant objects. A lar
 
 ### Dense disparity estimation
 
+> **Remember — Stereo matching:** Slide a patch along the matching row and choose the best match. Flat patches, repeated patterns, and hidden points make this hard.
+
+> **Remember — Window size:** Small windows keep more detail but can be noisy. Large windows give more evidence but can mix different depths.
+
+> **Remember — Monocular depth:** A model guesses depth from one image using patterns learned from data. Metric depth needs extra information or learned assumptions.
+
 1. Rectify the views.
 2. For each reference pixel/window, search along its epipolar scanline over plausible disparities.
 3. Compute a matching cost such as SSD, SAD, or normalized correlation.
@@ -1033,9 +1347,17 @@ A learned monocular depth estimator uses cues and priors from training data. Ste
 
 ## Lecture 17: Structure from motion and optical flow
 
+> **Remember — Motion across images:** Use changes between views to estimate camera movement, scene shape, or the movement of image patterns.
+
 **Source:** [Lecture 17](Slides/17_motion.pdf), SfM pp. 5–31; flow and assumptions pp. 39–58; coarse-to-fine and applications pp. 65–78.
 
 ### Structure from motion
+
+> **Remember — SfM:** Estimate camera poses and 3D scene points from overlapping images.
+
+> **Remember — Bundle adjustment:** Adjust camera parameters and 3D points together so their projected image locations match the observed ones.
+
+> **Remember — Scale ambiguity:** A larger scene farther away can produce the same images as a smaller scene nearby. A known size or distance is needed to fix absolute scale.
 
 SfM estimates both 3D scene structure and camera motion/poses from overlapping images. It differs from triangulation with already-known cameras because camera parameters must also be recovered.
 
@@ -1063,12 +1385,20 @@ where O is the observed point–image set and $\pi$ includes the perspective div
 
 ### Motion field versus optical flow
 
+> **Remember — Motion field:** It is actual 3D motion projected into the image.
+
+> **Remember — Optical flow:** It is the apparent movement of brightness patterns. Lighting changes can make it differ from actual object motion.
+
 - **Motion field:** projection of actual 3D motion into image coordinates.
 - **Optical flow:** apparent motion of brightness/image patterns.
 
 They can differ. Changing illumination can move a brightness pattern without moving the surface; a rotating uniform object may have physical motion with little visible intensity motion.
 
 ### Brightness constancy and the aperture problem
+
+> **Remember — Brightness constancy:** Assume the same moving scene point keeps about the same brightness between frames.
+
+> **Remember — Aperture problem:** A small patch on a straight edge cannot reveal motion along that edge. One pixel gives only one equation for two motion values.
 
 Assume a point's intensity is approximately unchanged between frames:
 
@@ -1085,6 +1415,10 @@ $$
 There is one equation for two unknowns. Along a straight edge, motion parallel to the edge is not determined by local brightness changes. This is the **aperture problem**.
 
 ### Lucas–Kanade flow
+
+> **Remember — Lucas–Kanade:** Assume nearby pixels move together and solve their brightness equations as one least-squares problem. Corners give useful information in both directions.
+
+> **Remember — Coarse-to-fine flow:** Estimate motion on small images first, then enlarge and refine it. Large motion becomes smaller in pixels at coarse scales.
 
 Assume neighboring pixels have the same displacement (u,v). Stack their equations:
 
@@ -1114,9 +1448,17 @@ Applications include tracking, stabilization, frame interpolation, restoration, 
 
 ## Lecture 18: Image synthesis
 
+> **Remember — Image synthesis:** Learn how images vary, then use that knowledge to make new images.
+
 **Source:** [Lecture 18](Slides/18_image-synthesis.pdf), modeling pp. 3–11; AE/VAE pp. 13–48; GANs pp. 49–94.
 
 ### Discriminative versus generative modeling
+
+> **Remember — Discriminative model:** Given an image, predict its label or another answer.
+
+> **Remember — Generative model:** Learn a model of images so you can make new ones.
+
+> **Remember — Conditional generation:** Make an image while following an input, such as a label, another image, or a text prompt.
 
 - A discriminative model estimates $p(y\mid x)$, such as an object class given an image.
 - An unconditional generative model represents/generates from p(x).
@@ -1125,6 +1467,10 @@ Applications include tracking, stabilization, frame interpolation, restoration, 
 The goal is both plausible individual samples and coverage of the data's variation. Generating a few realistic examples does not show that the full distribution has been learned.
 
 ### Autoencoders
+
+> **Remember — Autoencoder:** Compress an image into a hidden code, then rebuild it. Train by comparing the rebuilt image with the original.
+
+> **Remember — Denoising autoencoder:** Give the model a damaged image and train it to recover the clean one.
 
 $$
 z=\mathrm{Encoder}(x),\qquad \hat x=\mathrm{Decoder}(z),\qquad
@@ -1141,11 +1487,19 @@ A bottleneck encourages compression/useful features. A denoising autoencoder tak
 
 ### Variational autoencoders
 
+> **Remember — VAE:** Shape the hidden codes around a known distribution. Then sample a new code and decode it into a new image.
+
 A VAE imposes a probabilistic latent structure, commonly with a standard-normal prior p(z) = N(0,I). Its encoder represents a distribution over latent codes, and its decoder maps sampled codes toward image distributions. After training, sample a new z from the prior and decode.
 
 For this lecture, focus on **why a latent prior enables sampling** and how an AE and VAE differ. As optional mathematical context, a VAE balances reconstruction against a KL penalty that encourages the approximate posterior to match the prior. Full ELBO derivations are not developed in the supplied lecture. A Gaussian prior alone does not guarantee interpretable/disentangled latent factors.
 
 ### Generative adversarial networks
+
+> **Remember — GAN:** A generator makes fake images and a discriminator tries to spot them. Each learns from the other.
+
+> **Remember — Mode collapse:** The generator keeps making only a few kinds of images instead of covering the full range.
+
+> **Remember — GAN training problems:** One player can get too strong, gradients can become weak, or the two players can keep chasing each other without settling.
 
 - Generator G: random latent z → synthetic image G(z).
 - Discriminator D: image → score for real versus fake.
@@ -1173,6 +1527,20 @@ The lecture mentions Wasserstein GANs as an alternative objective/framework for 
 *[Lecture 18, PDF p. 64](Slides/18_image-synthesis.pdf) — A generator and discriminator provide opposing training signals.*
 
 ### Lecture 18a companion: text-to-image
+
+> **Remember — Text-to-image:** Use a text prompt to guide what an image model generates.
+
+> **Remember — Autoregressive generation:** Make one pixel or image token at a time, using what has already been made.
+
+> **Remember — Discrete image codes:** Replace an image with a smaller grid of learned codebook entries. Generate that grid, then decode it into pixels.
+
+> **Remember — Diffusion:** Learn to remove added noise. To make a new image, start with noise and remove it step by step.
+
+> **Remember — Latent diffusion:** Run the denoising steps on a smaller hidden image code, then decode it. This reduces the work needed.
+
+> **Remember — Cross-attention:** Let parts of the image use the relevant words in the prompt.
+
+> **Remember — Prompt accuracy:** A realistic-looking picture can still have the wrong object count or put things in the wrong places.
 
 **Source:** [Text-to-image deck](Slides/18a_text-to-image.pdf), conditional GANs pp. 12–23; autoregressive/latent models pp. 28–40; diffusion pp. 41–58; evaluation pp. 59–66.
 
