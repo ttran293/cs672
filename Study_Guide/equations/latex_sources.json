@@ -25,7 +25,7 @@
   },
   {
     "file": "display-05.png",
-    "latex": "\\mathrm{Box\\ blur:}\\quad\\frac{1}{9}\\begin{bmatrix}1&1&1\\\\1&1&1\\\\1&1&1\\end{bmatrix}\n\\mathrm{Gaussian:}\\quad\\frac{1}{16}\\begin{bmatrix}1&2&1\\\\2&4&2\\\\1&2&1\\end{bmatrix}\n\\mathrm{Vertical\\ edges:}\\quad\\begin{bmatrix}-1&0&1\\\\-1&0&1\\\\-1&0&1\\end{bmatrix}\n\\mathrm{Horizontal\\ edges:}\\quad\\begin{bmatrix}-1&-1&-1\\\\0&0&0\\\\1&1&1\\end{bmatrix}\n\\mathrm{Sobel}\\ x:\\quad\\begin{bmatrix}-1&0&1\\\\-2&0&2\\\\-1&0&1\\end{bmatrix}\n\\mathrm{Sobel}\\ y:\\quad\\begin{bmatrix}-1&-2&-1\\\\0&0&0\\\\1&2&1\\end{bmatrix}",
+    "latex": "\\mathrm{Box\\ blur:}\\quad\\frac{1}{9}\\begin{bmatrix}1&1&1\\\\ 1&1&1\\\\ 1&1&1\\end{bmatrix}\n\\mathrm{Gaussian:}\\quad\\frac{1}{16}\\begin{bmatrix}1&2&1\\\\ 2&4&2\\\\ 1&2&1\\end{bmatrix}\n\\mathrm{Vertical\\ edges:}\\quad\\begin{bmatrix}-1&0&1\\\\ -1&0&1\\\\ -1&0&1\\end{bmatrix}\n\\mathrm{Horizontal\\ edges:}\\quad\\begin{bmatrix}-1&-1&-1\\\\ 0&0&0\\\\ 1&1&1\\end{bmatrix}\n\\mathrm{Sobel}\\ x:\\quad\\begin{bmatrix}-1&0&1\\\\ -2&0&2\\\\ -1&0&1\\end{bmatrix}\n\\mathrm{Sobel}\\ y:\\quad\\begin{bmatrix}-1&-2&-1\\\\ 0&0&0\\\\ 1&2&1\\end{bmatrix}",
     "width": 212,
     "display": true
   },
@@ -37,7 +37,7 @@
   },
   {
     "file": "display-07.png",
-    "latex": "\\begin{bmatrix}0&0&0\\\\0&90&0\\\\0&0&0\\end{bmatrix}",
+    "latex": "\\begin{bmatrix}0&0&0\\\\ 0&90&0\\\\ 0&0&0\\end{bmatrix}",
     "width": 114,
     "display": true
   },
@@ -85,13 +85,13 @@
   },
   {
     "file": "display-15.png",
-    "latex": "E(u,v)\\approx\\sum w(I_xu+I_yv)^2\n=\\begin{bmatrix}u&v\\end{bmatrix}M\\begin{bmatrix}u\\\\v\\end{bmatrix},",
+    "latex": "E(u,v)\\approx\\sum w(I_xu+I_yv)^2\n=\\begin{bmatrix}u&v\\end{bmatrix}M\\begin{bmatrix}u\\\\ v\\end{bmatrix},",
     "width": 255,
     "display": true
   },
   {
     "file": "display-16.png",
-    "latex": "M=\\sum w\\begin{bmatrix}I_x^2&I_xI_y\\\\I_xI_y&I_y^2\\end{bmatrix}.",
+    "latex": "M=\\sum w\\begin{bmatrix}I_x^2&I_xI_y\\\\ I_xI_y&I_y^2\\end{bmatrix}.",
     "width": 194,
     "display": true
   },
@@ -187,13 +187,13 @@
   },
   {
     "file": "display-32.png",
-    "latex": "T(t_x,t_y)=\\begin{bmatrix}1&0&t_x\\\\0&1&t_y\\\\0&0&1\\end{bmatrix},\\quad\nS(s_x,s_y)=\\begin{bmatrix}s_x&0&0\\\\0&s_y&0\\\\0&0&1\\end{bmatrix},",
+    "latex": "T(t_x,t_y)=\\begin{bmatrix}1&0&t_x\\\\ 0&1&t_y\\\\ 0&0&1\\end{bmatrix},\\quad\nS(s_x,s_y)=\\begin{bmatrix}s_x&0&0\\\\ 0&s_y&0\\\\ 0&0&1\\end{bmatrix},",
     "width": 221,
     "display": true
   },
   {
     "file": "display-33.png",
-    "latex": "R(\\theta)=\\begin{bmatrix}\\cos\\theta&-\\sin\\theta&0\\\\\\sin\\theta&\\cos\\theta&0\\\\0&0&1\\end{bmatrix},\\quad\n\\mathrm{Shear}_x(a)=\\begin{bmatrix}1&a&0\\\\0&1&0\\\\0&0&1\\end{bmatrix}.",
+    "latex": "R(\\theta)=\\begin{bmatrix}\\cos\\theta&-\\sin\\theta&0\\\\ \\sin\\theta&\\cos\\theta&0\\\\ 0&0&1\\end{bmatrix},\\quad\n\\mathrm{Shear}_x(a)=\\begin{bmatrix}1&a&0\\\\ 0&1&0\\\\ 0&0&1\\end{bmatrix}.",
     "width": 257,
     "display": true
   },
@@ -211,7 +211,7 @@
   },
   {
     "file": "display-36.png",
-    "latex": "\\begin{bmatrix}x&y&1&0&0&0&-ux&-uy&-u\\\\0&0&0&x&y&1&-vx&-vy&-v\\end{bmatrix}",
+    "latex": "\\begin{bmatrix}x&y&1&0&0&0&-ux&-uy&-u\\\\ 0&0&0&x&y&1&-vx&-vy&-v\\end{bmatrix}",
     "width": 313,
     "display": true
   },
@@ -229,7 +229,7 @@
   },
   {
     "file": "display-39.png",
-    "latex": "K=\\begin{bmatrix}f_x&s&c_x\\\\0&f_y&c_y\\\\0&0&1\\end{bmatrix}.",
+    "latex": "K=\\begin{bmatrix}f_x&s&c_x\\\\ 0&f_y&c_y\\\\ 0&0&1\\end{bmatrix}.",
     "width": 156,
     "display": true
   },
@@ -241,8 +241,8 @@
   },
   {
     "file": "display-41.png",
-    "latex": "x'^TFx=0,\\qquad F=K'^{-T}EK^{-1}.",
-    "width": 153,
+    "latex": "(x')^TFx=0,\\qquad F=(K')^{-T}EK^{-1}.",
+    "width": 168,
     "display": true
   },
   {
@@ -283,13 +283,13 @@
   },
   {
     "file": "display-48.png",
-    "latex": "A\\begin{bmatrix}u\\\\v\\end{bmatrix}=b,\\qquad\nA=\\begin{bmatrix}I_x(p_1)&I_y(p_1)\\\\\\vdots&\\vdots\\\\I_x(p_n)&I_y(p_n)\\end{bmatrix},\\quad\nb=-\\begin{bmatrix}I_t(p_1)\\\\\\vdots\\\\I_t(p_n)\\end{bmatrix}.",
+    "latex": "A\\begin{bmatrix}u\\\\ v\\end{bmatrix}=b,\\qquad\nA=\\begin{bmatrix}I_x(p_1)&I_y(p_1)\\\\ \\vdots&\\vdots\\\\ I_x(p_n)&I_y(p_n)\\end{bmatrix},\\quad\nb=-\\begin{bmatrix}I_t(p_1)\\\\ \\vdots\\\\ I_t(p_n)\\end{bmatrix}.",
     "width": 201,
     "display": true
   },
   {
     "file": "display-49.png",
-    "latex": "A^TA=\\begin{bmatrix}\\sum I_x^2&\\sum I_xI_y\\\\\\sum I_xI_y&\\sum I_y^2\\end{bmatrix}.",
+    "latex": "A^TA=\\begin{bmatrix}\\sum I_x^2&\\sum I_xI_y\\\\ \\sum I_xI_y&\\sum I_y^2\\end{bmatrix}.",
     "width": 217,
     "display": true
   },
@@ -307,7 +307,7 @@
   },
   {
     "file": "display-52.png",
-    "latex": "\\begin{bmatrix}x'\\\\y'\\\\1\\end{bmatrix}=\\begin{bmatrix}1&0&2\\\\0&1&1\\\\0&0&1\\end{bmatrix}\\begin{bmatrix}x\\\\y\\\\1\\end{bmatrix}.",
+    "latex": "\\begin{bmatrix}x'\\\\ y'\\\\ 1\\end{bmatrix}=\\begin{bmatrix}1&0&2\\\\ 0&1&1\\\\ 0&0&1\\end{bmatrix}\\begin{bmatrix}x\\\\ y\\\\ 1\\end{bmatrix}.",
     "width": 197,
     "display": true
   },
@@ -973,8 +973,8 @@
   },
   {
     "file": "inline-ea0cd618b005.png",
-    "latex": "\\hat x'^TE\\hat x=0",
-    "width": 93,
+    "latex": "(\\hat{x}')^TE\\hat x=0",
+    "width": 108,
     "display": false
   },
   {
@@ -1057,8 +1057,8 @@
   },
   {
     "file": "inline-bae442bdfdd3.png",
-    "latex": "F=T'^TF_nT",
-    "width": 101,
+    "latex": "F=(T')^TF_nT",
+    "width": 117,
     "display": false
   },
   {
@@ -1267,14 +1267,14 @@
   },
   {
     "file": "inline-4607431bba58.png",
-    "latex": "x'^TFx=0",
-    "width": 92,
+    "latex": "(x')^TFx=0",
+    "width": 107,
     "display": false
   },
   {
     "file": "inline-3589a5a5f71f.png",
-    "latex": "F=K'^{-T}EK^{-1}",
-    "width": 129,
+    "latex": "F=(K')^{-T}EK^{-1}",
+    "width": 144,
     "display": false
   },
   {
@@ -1417,7 +1417,7 @@
   },
   {
     "file": "inline-a89b5d249044.png",
-    "latex": "TS=\\begin{bmatrix}2&0&3\\\\0&2&-1\\\\0&0&1\\end{bmatrix}",
+    "latex": "TS=\\begin{bmatrix}2&0&3\\\\ 0&2&-1\\\\ 0&0&1\\end{bmatrix}",
     "width": 148,
     "display": false
   },
@@ -1432,5 +1432,41 @@
     "latex": "K[R|t]",
     "width": 61,
     "display": false
+  },
+  {
+    "file": "filter-box.png",
+    "latex": "\\frac{1}{9}\\begin{bmatrix}1&1&1\\\\ 1&1&1\\\\ 1&1&1\\end{bmatrix}",
+    "width": 117,
+    "display": true
+  },
+  {
+    "file": "filter-gaussian.png",
+    "latex": "\\frac{1}{16}\\begin{bmatrix}1&2&1\\\\ 2&4&2\\\\ 1&2&1\\end{bmatrix}",
+    "width": 126,
+    "display": true
+  },
+  {
+    "file": "filter-vertical-edges.png",
+    "latex": "\\begin{bmatrix}-1&0&1\\\\ -1&0&1\\\\ -1&0&1\\end{bmatrix}",
+    "width": 118,
+    "display": true
+  },
+  {
+    "file": "filter-horizontal-edges.png",
+    "latex": "\\begin{bmatrix}-1&-1&-1\\\\ 0&0&0\\\\ 1&1&1\\end{bmatrix}",
+    "width": 152,
+    "display": true
+  },
+  {
+    "file": "filter-sobel-x.png",
+    "latex": "\\begin{bmatrix}-1&0&1\\\\ -2&0&2\\\\ -1&0&1\\end{bmatrix}",
+    "width": 118,
+    "display": true
+  },
+  {
+    "file": "filter-sobel-y.png",
+    "latex": "\\begin{bmatrix}-1&-2&-1\\\\ 0&0&0\\\\ 1&2&1\\end{bmatrix}",
+    "width": 152,
+    "display": true
   }
 ]

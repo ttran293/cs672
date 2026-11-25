@@ -390,7 +390,18 @@ blockquote p { margin: 0; }
 <p><strong>Remember — Sobel filter:</strong> It combines a small amount of smoothing with a directional derivative. This helps find edges without reacting as strongly to noise.</p>
 </blockquote>
 
-<img src="equations/display-05.png" alt="Equation: Box blur Small Gaussian approximation [1 1 1] [1 2 1] (1/9) [1 1 1] (1/16) [2 4 2] [1 1 1] [1 2 1] x-derivative / vertical edges y-derivative / horizontal edges [-1 0 1] [-1 -1 -1] [-1 0 1] [ 0 0 0] [-1 0 1] [ 1 1 1] Sobel x Sobel y [-1 0 1] [-1 -2 -1] [-2 0 2] [ 0 0 0] [-1 0 1] [ 1 2 1]" width="212">
+<p><strong>Box blur</strong></p>
+<p><img src="equations/filter-box.png" alt="Box blur kernel" width="117"></p>
+<p><strong>Small Gaussian approximation</strong></p>
+<p><img src="equations/filter-gaussian.png" alt="Small Gaussian approximation kernel" width="126"></p>
+<p><strong>x-derivative: vertical edges</strong></p>
+<p><img src="equations/filter-vertical-edges.png" alt="x-derivative: vertical edges kernel" width="118"></p>
+<p><strong>y-derivative: horizontal edges</strong></p>
+<p><img src="equations/filter-horizontal-edges.png" alt="y-derivative: horizontal edges kernel" width="152"></p>
+<p><strong>Sobel x</strong></p>
+<p><img src="equations/filter-sobel-x.png" alt="Sobel x kernel" width="118"></p>
+<p><strong>Sobel y</strong></p>
+<p><img src="equations/filter-sobel-y.png" alt="Sobel y kernel" width="152"></p>
 <p>An x derivative responds to intensity changes across the horizontal direction, so it detects <strong>vertical edges</strong>. An edge's tangent direction is perpendicular to the gradient.</p>
 <p><img src="graphics/03-sobel-edges.png" alt="Derivative filters detect changes in intensity" /></p>
 <p><em><a href="Slides/03_image-filtering-i.pdf">Lecture 3, PDF p. 116</a> — Derivative filters detect changes in intensity.</em></p>
@@ -1361,8 +1372,8 @@ blockquote p { margin: 0; }
 <p><strong>Remember — Homography versus epipolar matrix:</strong> A homography gives a matching point. An essential or fundamental matrix gives a line of possible matches.</p>
 </blockquote>
 
-<p>For normalized camera coordinates, <img src="equations/inline-ea0cd618b005.png" alt="x_hat&#x27;^T × E × x_hat = 0" width="93">. For pixel coordinates,</p>
-<img src="equations/display-41.png" alt="Equation: x&#x27;^T F x = 0 F = K&#x27;^(-T) E K^(-1)" width="153">
+<p>For normalized camera coordinates, <img src="equations/inline-ea0cd618b005.png" alt="x_hat&#x27;^T × E × x_hat = 0" width="108">. For pixel coordinates,</p>
+<img src="equations/display-41.png" alt="Equation: x&#x27;^T F x = 0 F = K&#x27;^(-T) E K^(-1)" width="168">
 <p>Then <img src="equations/inline-bdc6eb718a17.png" alt="l&#x27;=Fx" width="64"> is the corresponding line in image 2 and <img src="equations/inline-2df4381b65de.png" alt="l=F^Tx&#x27;" width="74"> is the line in image 1. A line <img src="equations/inline-7198e75af8a2.png" alt="l&#x27;=(a,b,c)^T" width="122"> contains points satisfying <img src="equations/inline-09f14c1ce06c.png" alt="au&#x27;+bv&#x27;+c=0" width="162">.</p>
 <table>
 <thead>
@@ -1416,7 +1427,7 @@ blockquote p { margin: 0; }
 <li>Build A from at least eight correspondences in a nondegenerate configuration.</li>
 <li>Solve <img src="equations/inline-f3497f64799e.png" alt="Af ≈ 0" width="62"> using SVD and reshape into a 3 × 3 estimate.</li>
 <li>Enforce rank 2 by replacing the smallest singular value of that matrix with zero.</li>
-<li>Undo coordinate normalization: if <img src="equations/inline-079d0e05a5a0.png" alt="x_n=Tx" width="74"> and <img src="equations/inline-10f8f9af2d03.png" alt="x&#x27;_n=T&#x27;x&#x27;" width="91">, then <img src="equations/inline-bae442bdfdd3.png" alt="F=T&#x27;^TF_nT" width="101">.</li>
+<li>Undo coordinate normalization: if <img src="equations/inline-079d0e05a5a0.png" alt="x_n=Tx" width="74"> and <img src="equations/inline-10f8f9af2d03.png" alt="x&#x27;_n=T&#x27;x&#x27;" width="91">, then <img src="equations/inline-bae442bdfdd3.png" alt="F=T&#x27;^TF_nT" width="117">.</li>
 <li>Use RANSAC to handle mismatches.</li>
 </ol>
 <p><strong>Why eight pairs if F has seven DoF?</strong> The linear solver treats 9 entries up to scale and uses eight linear constraints, then enforces rank 2. A different seven-point method exists; it is not the linear eight-point algorithm in the review.</p>
@@ -1757,9 +1768,9 @@ Intersection area / union area.</p>
 <p><strong>Camera center</strong><br />
 <img src="equations/inline-5ad00143c624.png" alt="PC_h=0" width="77">.</p>
 <p><strong>Epipolar constraint</strong><br />
-<img src="equations/inline-ea0cd618b005.png" alt="x_hat&#x27;^T × E × x_hat = 0" width="93">; <img src="equations/inline-4607431bba58.png" alt="x&#x27;^T × F × x = 0" width="92">.</p>
+<img src="equations/inline-ea0cd618b005.png" alt="x_hat&#x27;^T × E × x_hat = 0" width="108">; <img src="equations/inline-4607431bba58.png" alt="x&#x27;^T × F × x = 0" width="107">.</p>
 <p><strong>Intrinsics conversion</strong><br />
-<img src="equations/inline-3589a5a5f71f.png" alt="F = K&#x27;^(-T) × E × K^(-1)" width="129">.</p>
+<img src="equations/inline-3589a5a5f71f.png" alt="F = K&#x27;^(-T) × E × K^(-1)" width="144">.</p>
 <p><strong>Epipolar lines</strong><br />
 <img src="equations/inline-bdc6eb718a17.png" alt="l&#x27;=Fx" width="64">, <img src="equations/inline-2df4381b65de.png" alt="l=F^Tx&#x27;" width="74">.</p>
 <p><strong>Rectified stereo depth</strong><br />

@@ -265,13 +265,40 @@ Correlation uses I(x+i,y+j) instead. Convolution flips the kernel in both spatia
 
 > **Remember — Sobel filter:** It combines a small amount of smoothing with a directional derivative. This helps find edges without reacting as strongly to noise.
 
+**Box blur**
+
 $$
-\mathrm{Box\ blur:}\quad\frac{1}{9}\begin{bmatrix}1&1&1\\1&1&1\\1&1&1\end{bmatrix}
-\mathrm{Gaussian:}\quad\frac{1}{16}\begin{bmatrix}1&2&1\\2&4&2\\1&2&1\end{bmatrix}
-\mathrm{Vertical\ edges:}\quad\begin{bmatrix}-1&0&1\\-1&0&1\\-1&0&1\end{bmatrix}
-\mathrm{Horizontal\ edges:}\quad\begin{bmatrix}-1&-1&-1\\0&0&0\\1&1&1\end{bmatrix}
-\mathrm{Sobel}\ x:\quad\begin{bmatrix}-1&0&1\\-2&0&2\\-1&0&1\end{bmatrix}
-\mathrm{Sobel}\ y:\quad\begin{bmatrix}-1&-2&-1\\0&0&0\\1&2&1\end{bmatrix}
+\frac{1}{9}\begin{bmatrix}1&1&1\\ 1&1&1\\ 1&1&1\end{bmatrix}
+$$
+
+**Small Gaussian approximation**
+
+$$
+\frac{1}{16}\begin{bmatrix}1&2&1\\ 2&4&2\\ 1&2&1\end{bmatrix}
+$$
+
+**x-derivative: vertical edges**
+
+$$
+\begin{bmatrix}-1&0&1\\ -1&0&1\\ -1&0&1\end{bmatrix}
+$$
+
+**y-derivative: horizontal edges**
+
+$$
+\begin{bmatrix}-1&-1&-1\\ 0&0&0\\ 1&1&1\end{bmatrix}
+$$
+
+**Sobel x**
+
+$$
+\begin{bmatrix}-1&0&1\\ -2&0&2\\ -1&0&1\end{bmatrix}
+$$
+
+**Sobel y**
+
+$$
+\begin{bmatrix}-1&-2&-1\\ 0&0&0\\ 1&2&1\end{bmatrix}
 $$
 
 An x derivative responds to intensity changes across the horizontal direction, so it detects **vertical edges**. An edge's tangent direction is perpendicular to the gradient.
@@ -295,7 +322,7 @@ Nearby pixels receive larger weights. Increasing $\sigma$ increases blur and rem
 **Worked patch:** For
 
 $$
-\begin{bmatrix}0&0&0\\0&90&0\\0&0&0\end{bmatrix}
+\begin{bmatrix}0&0&0\\ 0&90&0\\ 0&0&0\end{bmatrix}
 $$
 
 the box-filter output at the center is 10. The Gaussian approximation above gives $4(90)/16=22.5$, because it gives more weight to the center.
@@ -468,11 +495,11 @@ For small shifts, $I(x+u,y+v)\approx I(x,y)+I_xu+I_yv$. Therefore
 
 $$
 E(u,v)\approx\sum w(I_xu+I_yv)^2
-=\begin{bmatrix}u&v\end{bmatrix}M\begin{bmatrix}u\\v\end{bmatrix},
+=\begin{bmatrix}u&v\end{bmatrix}M\begin{bmatrix}u\\ v\end{bmatrix},
 $$
 
 $$
-M=\sum w\begin{bmatrix}I_x^2&I_xI_y\\I_xI_y&I_y^2\end{bmatrix}.
+M=\sum w\begin{bmatrix}I_x^2&I_xI_y\\ I_xI_y&I_y^2\end{bmatrix}.
 $$
 
 M is the second-moment/structure matrix. Do not substitute the image Hessian of second derivatives for it.
@@ -990,13 +1017,13 @@ Translation cannot be represented by a 2 × 2 linear matrix acting on (x,y) beca
 > **Remember — Rotate around a point:** Move that point to the origin, rotate, then move it back.
 
 $$
-T(t_x,t_y)=\begin{bmatrix}1&0&t_x\\0&1&t_y\\0&0&1\end{bmatrix},\quad
-S(s_x,s_y)=\begin{bmatrix}s_x&0&0\\0&s_y&0\\0&0&1\end{bmatrix},
+T(t_x,t_y)=\begin{bmatrix}1&0&t_x\\ 0&1&t_y\\ 0&0&1\end{bmatrix},\quad
+S(s_x,s_y)=\begin{bmatrix}s_x&0&0\\ 0&s_y&0\\ 0&0&1\end{bmatrix},
 $$
 
 $$
-R(\theta)=\begin{bmatrix}\cos\theta&-\sin\theta&0\\\sin\theta&\cos\theta&0\\0&0&1\end{bmatrix},\quad
-\mathrm{Shear}_x(a)=\begin{bmatrix}1&a&0\\0&1&0\\0&0&1\end{bmatrix}.
+R(\theta)=\begin{bmatrix}\cos\theta&-\sin\theta&0\\ \sin\theta&\cos\theta&0\\ 0&0&1\end{bmatrix},\quad
+\mathrm{Shear}_x(a)=\begin{bmatrix}1&a&0\\ 0&1&0\\ 0&0&1\end{bmatrix}.
 $$
 
 The rotation above is counterclockwise in mathematical coordinates with y increasing upward. Displayed image coordinates often increase downward, which changes the visual interpretation of the sign.
@@ -1071,7 +1098,7 @@ The denominator is essential. A 3 × 3 matrix has 9 entries but overall scale is
 For row-major $h=(h_{11},h_{12},h_{13},h_{21},h_{22},h_{23},h_{31},h_{32},h_{33})^T$, each pair contributes two DLT rows:
 
 $$
-\begin{bmatrix}x&y&1&0&0&0&-ux&-uy&-u\\0&0&0&x&y&1&-vx&-vy&-v\end{bmatrix}
+\begin{bmatrix}x&y&1&0&0&0&-ux&-uy&-u\\ 0&0&0&x&y&1&-vx&-vy&-v\end{bmatrix}
 $$
 
 Stack rows into A, solve $Ah\approx0$ with SVD and a norm constraint, and reshape h into H. Coordinate normalization improves conditioning. The map is rational in point coordinates, but cross-multiplication gives equations linear in the entries of H.
@@ -1144,7 +1171,7 @@ $$
 In Cartesian 3D coordinates, $X_c=R(X_w-C)=RX_w+t$. The intrinsic matrix is commonly
 
 $$
-K=\begin{bmatrix}f_x&s&c_x\\0&f_y&c_y\\0&0&1\end{bmatrix}.
+K=\begin{bmatrix}f_x&s&c_x\\ 0&f_y&c_y\\ 0&0&1\end{bmatrix}.
 $$
 
 - **Extrinsics:** R,t locate and orient the camera relative to a world frame. R is 3 × 3 and has 3 rotational DoF; t is 3 × 1.
@@ -1236,10 +1263,10 @@ The corresponding point in the second image must lie on the epipolar line. This 
 
 > **Remember — Homography versus epipolar matrix:** A homography gives a matching point. An essential or fundamental matrix gives a line of possible matches.
 
-For normalized camera coordinates, $\hat x'^TE\hat x=0$. For pixel coordinates,
+For normalized camera coordinates, $(\hat{x}')^TE\hat x=0$. For pixel coordinates,
 
 $$
-x'^TFx=0,\qquad F=K'^{-T}EK^{-1}.
+(x')^TFx=0,\qquad F=(K')^{-T}EK^{-1}.
 $$
 
 Then $l'=Fx$ is the corresponding line in image 2 and $l=F^Tx'$ is the line in image 1. A line $l'=(a,b,c)^T$ contains points satisfying $au'+bv'+c=0$.
@@ -1273,7 +1300,7 @@ $$
 2. Build A from at least eight correspondences in a nondegenerate configuration.
 3. Solve $Af\approx0$ using SVD and reshape into a 3 × 3 estimate.
 4. Enforce rank 2 by replacing the smallest singular value of that matrix with zero.
-5. Undo coordinate normalization: if $x_n=Tx$ and $x'_n=T'x'$, then $F=T'^TF_nT$.
+5. Undo coordinate normalization: if $x_n=Tx$ and $x'_n=T'x'$, then $F=(T')^TF_nT$.
 6. Use RANSAC to handle mismatches.
 
 **Why eight pairs if F has seven DoF?** The linear solver treats 9 entries up to scale and uses eight linear constraints, then enforces rank 2. A different seven-point method exists; it is not the linear eight-point algorithm in the review.
@@ -1423,15 +1450,15 @@ There is one equation for two unknowns. Along a straight edge, motion parallel t
 Assume neighboring pixels have the same displacement (u,v). Stack their equations:
 
 $$
-A\begin{bmatrix}u\\v\end{bmatrix}=b,\qquad
-A=\begin{bmatrix}I_x(p_1)&I_y(p_1)\\\vdots&\vdots\\I_x(p_n)&I_y(p_n)\end{bmatrix},\quad
-b=-\begin{bmatrix}I_t(p_1)\\\vdots\\I_t(p_n)\end{bmatrix}.
+A\begin{bmatrix}u\\ v\end{bmatrix}=b,\qquad
+A=\begin{bmatrix}I_x(p_1)&I_y(p_1)\\ \vdots&\vdots\\ I_x(p_n)&I_y(p_n)\end{bmatrix},\quad
+b=-\begin{bmatrix}I_t(p_1)\\ \vdots\\ I_t(p_n)\end{bmatrix}.
 $$
 
 Then solve least squares. The normal matrix is
 
 $$
-A^TA=\begin{bmatrix}\sum I_x^2&\sum I_xI_y\\\sum I_xI_y&\sum I_y^2\end{bmatrix}.
+A^TA=\begin{bmatrix}\sum I_x^2&\sum I_xI_y\\ \sum I_xI_y&\sum I_y^2\end{bmatrix}.
 $$
 
 ![Neighboring brightness-constancy constraints form a least-squares motion estimate](graphics/17-optical-flow.png)
@@ -1642,10 +1669,10 @@ $x\sim K[R\mid t]X$, t = -RC.
 $PC_h=0$.
 
 **Epipolar constraint**  
-$\hat x'^TE\hat x=0$; $x'^TFx=0$.
+$(\hat{x}')^TE\hat x=0$; $(x')^TFx=0$.
 
 **Intrinsics conversion**  
-$F=K'^{-T}EK^{-1}$.
+$F=(K')^{-T}EK^{-1}$.
 
 **Epipolar lines**  
 $l'=Fx$, $l=F^Tx'$.
@@ -1725,7 +1752,7 @@ These are derived study explanations, **not an instructor-provided solution key*
 2. The diagram translates by $t_x=2,t_y=1$. With homogeneous column vectors:
 
 $$
-\begin{bmatrix}x'\\y'\\1\end{bmatrix}=\begin{bmatrix}1&0&2\\0&1&1\\0&0&1\end{bmatrix}\begin{bmatrix}x\\y\\1\end{bmatrix}.
+\begin{bmatrix}x'\\ y'\\ 1\end{bmatrix}=\begin{bmatrix}1&0&2\\ 0&1&1\\ 0&0&1\end{bmatrix}\begin{bmatrix}x\\ y\\ 1\end{bmatrix}.
 $$
 
 ## Self-test: try before reading the answers
@@ -1778,7 +1805,7 @@ These are new practice questions, not predictions or copied exam questions.
 15. Conv output 24 × 24 × 8; parameters $(5\cdot5\cdot3+1)8=608$. Pool output 12 × 12 × 8 with zero additional parameters.
 16. Fast shares full-image convolutional features; Faster replaces external proposals with an RPN. NMS removes highly overlapping lower-score duplicate candidates within a class.
 17. Union  = 100+120-60 = 160; IoU $=60/160=0.375$. Under standard one-to-one matching, a duplicate detection of an already matched ground-truth instance is FP.
-18. $TS=\begin{bmatrix}2&0&3\\0&2&-1\\0&0&1\end{bmatrix}$; output (5,3).
+18. $TS=\begin{bmatrix}2&0&3\\ 0&2&-1\\ 0&0&1\end{bmatrix}$; output (5,3).
 19. Each homography pair provides two independent constraints; each epipolar pair provides one. Collinear homography data are degenerate and do not determine a general planar map.
 20. K describes internal pixel projection; R,t transform world coordinates to camera coordinates; P is 3 × 4; t = -RC.
 21. Depth is unknown, so the corresponding ray projects to a line in the other view. Rectification aligns those lines with rows.
